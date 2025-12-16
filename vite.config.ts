@@ -2,12 +2,12 @@ import { wayfinder } from '@laravel/vite-plugin-wayfinder'
 import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import laravel from 'laravel-vite-plugin'
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
 import { defineConfig } from 'vite'
+import { watch } from 'vite-plugin-watch'
 
-// Auto imports for components in resources/js/components
-// Auto imports for Inertia helpers such as form and deferred
-// Auto imports for Vue and for Vue use
-// Vite watcher to watch the /Data and /Enums folder and re-generate types
+const inertiaComponents = ['Link', 'Form', 'Head', 'Page', 'Deferred']
 
 export default defineConfig({
   plugins: [
@@ -27,6 +27,37 @@ export default defineConfig({
           includeAbsolute: false,
         },
       },
+    }),
+    AutoImport({
+      imports: ['vue', { '@inertiajs/vue3': ['useForm', 'usePage', 'useRemember', 'usePrefetch', 'router'] }],
+      dirs: ['resources/js/composables'],
+    }),
+    Components({
+      dts: true,
+      dirs: ['resources/js/components'],
+      directoryAsNamespace: true,
+      types: [
+        {
+          names: inertiaComponents,
+          from: '@inertiajs/vue3',
+        },
+      ],
+      resolvers: [
+        (component: string) => {
+          if (inertiaComponents.includes(component)) {
+            return {
+              name: component,
+              from: '@inertiajs/vue3',
+            }
+          }
+
+          return undefined
+        },
+      ],
+    }),
+    watch({
+      pattern: 'app/{Data,Enums}/**/*.php',
+      command: 'composer run transform-types',
     }),
   ],
 })
