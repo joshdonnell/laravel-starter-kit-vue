@@ -17,6 +17,8 @@ use Inertia\Inertia;
 // 1. ✅ Add Laravel Data and Spatie Type Transformer
 // 2. ✅ Add Auto Imports
 // 3. Update Vue pages and components to use our DTO/Enum types and use our auto imports
+// Note: we need to update the vite config as Shad CN components are within folders ie: ui/button/Button.vue which is auto
+// imported as UiButtonButton when this should be UiButton
 // 4. Update any actions and tests we see fit
 // 5. Update Laravel Boost/Ai guidelines to use Vue over React and explain the inline composable pattern
 //    in here to allow AI to follow our Vue best practices

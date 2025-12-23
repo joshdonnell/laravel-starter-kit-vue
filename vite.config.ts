@@ -2,6 +2,8 @@ import { wayfinder } from '@laravel/vite-plugin-wayfinder'
 import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import laravel from 'laravel-vite-plugin'
+import path from 'path'
+import RekaResolver from 'reka-ui/resolver'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { defineConfig } from 'vite'
@@ -10,6 +12,11 @@ import { watch } from 'vite-plugin-watch'
 const inertiaComponents = ['Link', 'Form', 'Head', 'Page', 'Deferred']
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'resources/js'),
+    },
+  },
   plugins: [
     laravel({
       input: ['resources/js/app.ts'],
@@ -36,6 +43,7 @@ export default defineConfig({
       dts: true,
       dirs: ['resources/js/components'],
       directoryAsNamespace: true,
+      collapseSamePrefixes: true,
       types: [
         {
           names: inertiaComponents,
@@ -43,6 +51,9 @@ export default defineConfig({
         },
       ],
       resolvers: [
+        RekaResolver({
+          prefix: 'Reka',
+        }),
         (component: string) => {
           if (inertiaComponents.includes(component)) {
             return {

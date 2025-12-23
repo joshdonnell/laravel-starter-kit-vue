@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { dashboard, login, register } from '@/routes'
-import { Head, Link } from '@inertiajs/vue3'
+import { AppPageProps } from '@/types'
+import { ShieldBan } from 'lucide-vue-next'
+
+const pageProps = usePage<AppPageProps>()
+const user = pageProps.props.auth
 
 withDefaults(
   defineProps<{
@@ -28,7 +32,7 @@ withDefaults(
     <header class="mb-6 w-full max-w-[335px] text-sm not-has-[nav]:hidden lg:max-w-4xl">
       <nav class="flex items-center justify-end gap-4">
         <Link
-          v-if="$page.props.auth.user"
+          v-if="user"
           :href="dashboard()"
           class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
         >
@@ -57,6 +61,15 @@ withDefaults(
           class="flex-1 rounded-br-lg rounded-bl-lg bg-white p-6 pb-12 text-[13px] leading-[20px] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] lg:rounded-tl-lg lg:rounded-br-none lg:p-20 dark:bg-[#161615] dark:text-[#EDEDEC] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]"
         >
           <h1 class="mb-1 font-medium">Let's get started</h1>
+
+          <UiButton
+            variant="destructive"
+            type="submit"
+          >
+            <ShieldBan />
+            Disable 2FA
+          </UiButton>
+
           <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A]">
             Laravel has an incredibly rich ecosystem. <br />We suggest starting with the following.
           </p>

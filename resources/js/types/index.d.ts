@@ -2,7 +2,7 @@ import { InertiaLinkProps } from '@inertiajs/vue3'
 import type { LucideIcon } from 'lucide-vue-next'
 
 export interface Auth {
-  user: User
+  user: App.Data.UserData
 }
 
 export interface BreadcrumbItem {
