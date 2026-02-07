@@ -13,21 +13,10 @@ use App\Http\Controllers\UserTwoFactorAuthenticationController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-// TODO List
-// 1. ✅ Add Laravel Data and Spatie Type Transformer
-// 2. ✅ Add Auto Imports
-// 3. Update Vue pages and components to use our DTO/Enum types and use our auto imports
-// Note: we need to update the vite config as Shad CN components are within folders ie: ui/button/Button.vue which is auto
-// imported as UiButtonButton when this should be UiButton
-// 4. Update any actions and tests we see fit
-// 5. Update Laravel Boost/Ai guidelines to use Vue over React and explain the inline composable pattern
-//    in here to allow AI to follow our Vue best practices
-// 6. Add a readme to the project
-
 Route::get('/', fn () => Inertia::render('Welcome'))->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function (): void {
-    Route::get('dashboard', fn () => Inertia::render('dashboard'))->name('dashboard');
+    Route::get('dashboard', fn () => Inertia::render('Dashboard'))->name('dashboard');
 });
 
 Route::middleware('auth')->group(function (): void {
@@ -46,7 +35,7 @@ Route::middleware('auth')->group(function (): void {
         ->name('password.update');
 
     // Appearance...
-    Route::get('settings/appearance', fn () => Inertia::render('appearance/update'))->name('appearance.edit');
+    Route::get('settings/appearance', fn () => Inertia::render('appearance/Update'))->name('appearance.edit');
 
     // User Two-Factor Authentication...
     Route::get('settings/two-factor', [UserTwoFactorAuthenticationController::class, 'show'])

@@ -14,6 +14,8 @@ final class UserData extends Data
     public function __construct(
         public string $name,
         #[Optional]
-        public string $email
+        public string $email,
+        #[Optional]
+        public string $avatar
     ) {}
 }

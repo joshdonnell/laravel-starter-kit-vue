@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Data\UserData;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -55,8 +56,8 @@ it('shares authenticated user data', function (): void {
 
     $shared = $middleware->share($request);
 
-    expect($shared['auth']['user'])->not->toBeNull()
-        ->and($shared['auth']['user']->id)->toBe($user->id)
+    expect($shared['auth']['user'])->toBeInstanceOf(UserData::class)
+        ->and($shared['auth']['user'])->not->toBeNull()
         ->and($shared['auth']['user']->name)->toBe('Test User')
         ->and($shared['auth']['user']->email)->toBe('test@example.com');
 });

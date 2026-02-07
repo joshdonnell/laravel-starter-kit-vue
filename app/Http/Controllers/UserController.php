@@ -19,7 +19,7 @@ final readonly class UserController
 {
     public function create(): Response
     {
-        return Inertia::render('user/create');
+        return Inertia::render('user/Create');
     }
 
     public function store(CreateUserRequest $request, CreateUser $action): RedirectResponse

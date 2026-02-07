@@ -21,7 +21,7 @@ final readonly class UserPasswordController
 {
     public function create(Request $request): Response
     {
-        return Inertia::render('user-password/create', [
+        return Inertia::render('user-password/Create', [
             'email' => $request->email,
             'token' => $request->route('token'),
         ]);
@@ -46,7 +46,7 @@ final readonly class UserPasswordController
 
     public function edit(): Response
     {
-        return Inertia::render('user-password/edit');
+        return Inertia::render('user-password/Edit');
     }
 
     public function update(UpdateUserPasswordRequest $request, #[CurrentUser] User $user, UpdateUserPassword $action): RedirectResponse
