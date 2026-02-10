@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AuthLayout from '@/layouts/AuthLayout.vue'
-import { login } from '@/routes'
-import { email } from '@/routes/password'
+import { login } from '@/wayfinder/routes'
+import { email } from '@/wayfinder/routes/password'
 import { Form, Head } from '@inertiajs/vue3'
 
 defineProps<{

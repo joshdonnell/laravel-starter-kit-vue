@@ -1,9 +1,6 @@
 <script setup lang="ts">
-import Heading from '@/components/Heading.vue'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import { edit as editAppearance } from '@/routes/appearance'
-import { show } from '@/routes/two-factor'
+import { edit as editAppearance } from '@/wayfinder/routes/appearance'
+import { show } from '@/wayfinder/routes/two-factor'
 import { type NavItem } from '@/types'
 import { toUrl, urlIsActive } from '@/utils/inertia'
 import { Link } from '@inertiajs/vue3'
@@ -32,10 +29,10 @@ const currentPath = typeof window !== undefined ? window.location.pathname : ''
 
 <template>
   <div class="px-4 py-6">
-    <Heading
-      title="Settings"
-      description="Manage your profile and account settings"
-    />
+    <!--    <Heading-->
+    <!--      title="Settings"-->
+    <!--      description="Manage your profile and account settings"-->
+    <!--    />-->
 
     <div class="flex flex-col lg:flex-row lg:space-x-12">
       <aside class="w-full max-w-xl lg:w-48">
