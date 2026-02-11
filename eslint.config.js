@@ -7,7 +7,16 @@ export default defineConfigWithVueTs(
     vue.configs['flat/recommended'],
     vueTsConfigs.recommended,
     {
-        ignores: ['vendor', 'node_modules', 'public', 'bootstrap/ssr', 'tailwind.config.ts', 'resources/js/wayfinder'],
+        ignores: [
+            'vendor',
+            'node_modules',
+            'public',
+            'bootstrap/ssr',
+            'tailwind.config.ts',
+            'resources/js/actions',
+            'resources/js/routes',
+            'resources/js/wayfinder',
+        ],
     },
     {
         plugins: {
