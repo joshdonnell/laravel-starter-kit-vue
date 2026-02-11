@@ -2,7 +2,6 @@
 import AuthLayout from '@/layouts/AuthLayout.vue'
 import { logout } from '@/routes'
 import { send } from '@/routes/verification'
-import { Form, Head } from '@inertiajs/vue3'
 
 defineProps<{
   status?: string

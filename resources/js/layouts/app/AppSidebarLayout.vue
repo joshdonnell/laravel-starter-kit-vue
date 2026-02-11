@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { BreadcrumbItemType } from '@/types'
 import type { NavigationMenuItem } from '@nuxt/ui'
-import { dashboard } from '@/wayfinder/routes'
+import { dashboard } from '@/routes'
+import type { BreadcrumbItemType } from '@/types'
 
 interface Props {
   breadcrumbs?: BreadcrumbItemType[]

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import AuthBase from '@/layouts/AuthLayout.vue'
-import { register } from '@/wayfinder/routes'
-import { store } from '@/wayfinder/routes/login'
-import { request } from '@/wayfinder/routes/password'
+import { register } from '@/routes'
+import { store } from '@/routes/login'
+import { request } from '@/routes/password'
 
 defineProps<{
   status?: string

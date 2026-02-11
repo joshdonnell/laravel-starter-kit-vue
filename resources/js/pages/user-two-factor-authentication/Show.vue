@@ -1,16 +1,8 @@
 <script setup lang="ts">
-import Heading from '@/components/Heading.vue'
-import TwoFactorRecoveryCodes from '@/components/TwoFactorRecoveryCodes.vue'
-import TwoFactorSetupModal from '@/components/TwoFactorSetupModal.vue'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { useTwoFactorAuth } from '@/composables/useTwoFactorAuth'
 import AppLayout from '@/layouts/AppLayout.vue'
 import SettingsLayout from '@/layouts/settings/Layout.vue'
 import { disable, enable, show } from '@/routes/two-factor'
 import type { BreadcrumbItem } from '@/types'
-import { Form, Head } from '@inertiajs/vue3'
-import { onUnmounted, ref } from 'vue'
 
 type Props = {
   requiresConfirmation?: boolean
@@ -18,7 +10,7 @@ type Props = {
 }
 
 withDefaults(defineProps<Props>(), {
-  requiresConfirmation: false,
+  requiresConfirmation: true,
   twoFactorEnabled: false,
 })
 
@@ -45,7 +37,7 @@ onUnmounted(() => {
 
     <SettingsLayout>
       <div class="space-y-6">
-        <Heading
+        <SharedHeading
           variant="small"
           title="Two-Factor Authentication"
           description="Manage your two-factor authentication settings"
@@ -55,7 +47,7 @@ onUnmounted(() => {
           v-if="!twoFactorEnabled"
           class="flex flex-col items-start justify-start space-y-4"
         >
-          <Badge variant="destructive">Disabled</Badge>
+          <UBadge color="error">Disabled</UBadge>
 
           <p class="text-muted-foreground">
             When you enable two-factor authentication, you will be prompted for a secure pin during login. This pin can be retrieved from a
@@ -63,25 +55,26 @@ onUnmounted(() => {
           </p>
 
           <div>
-            <Button
+            <UButton
               v-if="hasSetupData"
               @click="showSetupModal = true"
             >
-              <ShieldCheck />Continue Setup
-            </Button>
+              Continue Setup
+            </UButton>
             <Form
               v-else
               v-slot="{ processing }"
               v-bind="enable.form()"
               @success="showSetupModal = true"
             >
-              <Button
+              <UButton
                 type="submit"
                 :disabled="processing"
+                icon="i-lucide-shield-check"
               >
-                <ShieldCheck />Enable 2FA</Button
-              ></Form
-            >
+                Enable 2FA
+              </UButton>
+            </Form>
           </div>
         </div>
 
@@ -89,33 +82,33 @@ onUnmounted(() => {
           v-else
           class="flex flex-col items-start justify-start space-y-4"
         >
-          <Badge variant="default">Enabled</Badge>
+          <UBadge color="success">Enabled</UBadge>
 
           <p class="text-muted-foreground">
             With two-factor authentication enabled, you will be prompted for a secure, random pin during login, which you can retrieve from the
             TOTP-supported application on your phone.
           </p>
 
-          <TwoFactorRecoveryCodes />
+          <UserTwoFactorRecoveryCodes />
 
           <div class="relative inline">
             <Form
               v-slot="{ processing }"
               v-bind="disable.form()"
             >
-              <Button
-                variant="destructive"
+              <UButton
+                color="error"
                 type="submit"
-                :disabled="processing"
+                :loading="processing"
+                icon="i-lucide-shield-x"
               >
-                <ShieldBan />
                 Disable 2FA
-              </Button>
+              </UButton>
             </Form>
           </div>
         </div>
 
-        <TwoFactorSetupModal
+        <UserTwoFactorSetupModal
           v-model:is-open="showSetupModal"
           :requires-confirmation="requiresConfirmation"
           :two-factor-enabled="twoFactorEnabled"

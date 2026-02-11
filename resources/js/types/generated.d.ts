@@ -1,6 +1,6 @@
 declare namespace App.Data {
-export type UserData = {
-name: string;
-email: string;
-};
+  export type UserData = {
+    name: string
+    email: string
+  }
 }

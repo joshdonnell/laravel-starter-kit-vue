@@ -15,9 +15,10 @@ use Inertia\Response;
 
 final readonly class UserProfileController
 {
-    public function edit(Request $request): Response
+    public function edit(Request $request, #[CurrentUser] User $user): Response
     {
         return Inertia::render('user-profile/Edit', [
+            'mustVerifyEmail' => $user->hasVerifiedEmail() === false,
             'status' => $request->session()->get('status'),
         ]);
     }

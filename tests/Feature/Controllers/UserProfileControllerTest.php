@@ -13,7 +13,7 @@ it('renders profile edit page', function (): void {
 
     $response->assertOk()
         ->assertInertia(fn ($page) => $page
-            ->component('settings/Profile')
+            ->component('user-profile/Edit')
             ->has('status'));
 });
 

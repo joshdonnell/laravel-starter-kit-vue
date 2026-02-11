@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import LogoIcon from '@/components/LogoIcon.vue'
-import { home } from '@/wayfinder/routes'
-import { Link } from '@inertiajs/vue3'
+import { home } from '@/routes'
 
 defineProps<{
   title?: string
@@ -19,7 +17,7 @@ defineProps<{
             class="flex flex-col items-center gap-2 font-medium"
           >
             <div class="mb-1 flex h-9 w-9 items-center justify-center rounded-md">
-              <LogoIcon class="size-9 fill-current text-[var(--foreground)] dark:text-white" />
+              <AppLogoIcon class="size-9 fill-current text-[var(--foreground)] dark:text-white" />
             </div>
             <span class="sr-only">{{ title }}</span>
           </Link>

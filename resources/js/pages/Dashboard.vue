@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue'
-import { dashboard } from '@/wayfinder/routes'
+import { dashboard } from '@/routes'
 import { type BreadcrumbItem } from '@/types'
-import { Head } from '@inertiajs/vue3'
 
 const breadcrumbs: BreadcrumbItem[] = [
   {

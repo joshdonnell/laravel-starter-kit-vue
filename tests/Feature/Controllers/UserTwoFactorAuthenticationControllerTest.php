@@ -14,7 +14,7 @@ it('renders two factor authentication page', function (): void {
 
     $response->assertOk()
         ->assertInertia(fn ($page) => $page
-            ->component('settings/TwoFactor')
+            ->component('user-two-factor-authentication/Show')
             ->has('twoFactorEnabled'));
 });
 
@@ -28,7 +28,7 @@ it('shows two factor disabled when not enabled', function (): void {
 
     $response->assertOk()
         ->assertInertia(fn ($page) => $page
-            ->component('settings/TwoFactor')
+            ->component('user-two-factor-authentication/Show')
             ->where('twoFactorEnabled', false));
 });
 
@@ -46,6 +46,6 @@ it('shows two factor enabled when enabled', function (): void {
 
     $response->assertOk()
         ->assertInertia(fn ($page) => $page
-            ->component('settings/TwoFactor')
+            ->component('user-two-factor-authentication/Show')
             ->where('twoFactorEnabled', true));
 });

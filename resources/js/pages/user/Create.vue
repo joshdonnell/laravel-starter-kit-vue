@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import AuthBase from '@/layouts/AuthLayout.vue'
-import { login } from '@/wayfinder/routes'
-import { store } from '@/wayfinder/routes/register'
-import { Form, Head } from '@inertiajs/vue3'
+import { login } from '@/routes'
+import { store } from '@/routes/register'
 </script>
 
 <template>

@@ -13,7 +13,7 @@ it('renders login page', function (): void {
 
     $response->assertOk()
         ->assertInertia(fn ($page) => $page
-            ->component('auth/Login')
+            ->component('session/Create')
             ->has('canResetPassword')
             ->has('status'));
 });

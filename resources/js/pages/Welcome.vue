@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { dashboard, login, register } from '@/wayfinder/routes'
+import { dashboard, login, register } from '@/routes'
 
 withDefaults(
   defineProps<{

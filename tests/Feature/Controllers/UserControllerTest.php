@@ -12,7 +12,7 @@ it('renders registration page', function (): void {
         ->get(route('register'));
 
     $response->assertOk()
-        ->assertInertia(fn ($page) => $page->component('auth/Register'));
+        ->assertInertia(fn ($page) => $page->component('user/Create'));
 });
 
 it('may register a new user', function (): void {

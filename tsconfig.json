@@ -122,6 +122,5 @@
         "resources/js/**/*.vue",
         "auto-imports.d.ts",
         "components.d.ts"
-    ],
-    "exclude": ["resources/js/components/ui/**/index.ts"]
+    ]
 }

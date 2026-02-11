@@ -1,11 +1,10 @@
 <script setup lang="ts">
+import ProfileController from '@/actions/App/Http/Controllers/UserProfileController'
 import AppLayout from '@/layouts/AppLayout.vue'
 import SettingsLayout from '@/layouts/settings/Layout.vue'
+import { edit } from '@/routes/user-profile'
+import { send } from '@/routes/verification'
 import { type BreadcrumbItem } from '@/types'
-import ProfileController from '@/wayfinder/App/Http/Controllers/UserProfileController'
-import { edit } from '@/wayfinder/routes/user-profile'
-import { send } from '@/wayfinder/routes/verification'
-import { Form, Head, Link, usePage } from '@inertiajs/vue3'
 
 type Props = {
   mustVerifyEmail: boolean
@@ -33,20 +32,23 @@ const user = page.props.auth.user
 
     <SettingsLayout>
       <div class="flex flex-col space-y-6">
-        <!--        <Heading-->
-        <!--          variant="small"-->
-        <!--          title="Profile information"-->
-        <!--          description="Update your name and email address"-->
-        <!--        />-->
+        <SharedHeading
+          variant="small"
+          title="Profile information"
+          description="Update your name and email address"
+        />
 
         <Form
           v-slot="{ errors, processing, recentlySuccessful }"
-          v-bind="ProfileController.update.form()"
+          v-bind="ProfileController.update().form"
           class="space-y-6"
         >
-          <div class="grid gap-2">
-            <Label for="name">Name</Label>
-            <Input
+          <UFormField
+            name="name"
+            label="Name"
+            :error="errors.name"
+          >
+            <UInput
               id="name"
               class="mt-1 block w-full"
               name="name"
@@ -55,15 +57,14 @@ const user = page.props.auth.user
               autocomplete="name"
               placeholder="Full name"
             />
-            <!--            <InputError-->
-            <!--              class="mt-2"-->
-            <!--              :message="errors.name"-->
-            <!--            />-->
-          </div>
+          </UFormField>
 
-          <div class="grid gap-2">
-            <Label for="email">Email address</Label>
-            <Input
+          <UFormField
+            name="email"
+            label="Email address"
+            :error="errors.email"
+          >
+            <UInput
               id="email"
               type="email"
               class="mt-1 block w-full"
@@ -73,22 +74,18 @@ const user = page.props.auth.user
               autocomplete="username"
               placeholder="Email address"
             />
-            <!--            <InputError-->
-            <!--              class="mt-2"-->
-            <!--              :message="errors.email"-->
-            <!--            />-->
-          </div>
+          </UFormField>
 
           <div v-if="mustVerifyEmail && !user.email_verified_at">
             <p class="text-muted-foreground -mt-4 text-sm">
               Your email address is unverified.
-              <Link
+              <UButton
                 :href="send()"
-                as="button"
-                class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
+                variant="link"
+                class="p-0 underline"
               >
                 Click here to resend the verification email.
-              </Link>
+              </UButton>
             </p>
 
             <div
@@ -100,11 +97,12 @@ const user = page.props.auth.user
           </div>
 
           <div class="flex items-center gap-4">
-            <Button
-              :disabled="processing"
-              data-test="update-profile-button"
-              >Save</Button
+            <UButton
+              type="submit"
+              :loading="processing"
             >
+              Save
+            </UButton>
 
             <Transition
               enter-active-class="transition ease-in-out"
