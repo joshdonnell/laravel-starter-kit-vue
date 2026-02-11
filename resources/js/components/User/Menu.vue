@@ -3,7 +3,7 @@ import type { DropdownMenuItem } from '@nuxt/ui'
 import { logout } from '@/routes'
 import profile from '@/routes/user-profile'
 
-defineProps<{
+const props = defineProps<{
   collapsed?: boolean
 }>()
 
@@ -15,7 +15,7 @@ const items = computed<DropdownMenuItem[]>(() => [
     {
       type: 'label',
       label: user?.name,
-      avatar: null,
+      icon: 'i-lucide-user',
     },
   ],
   [
@@ -43,14 +43,14 @@ const items = computed<DropdownMenuItem[]>(() => [
   <UDropdownMenu
     :items="items"
     :content="{ align: 'center', collisionPadding: 12 }"
-    :ui="{ content: collapsed ? 'w-48' : 'w-(--reka-dropdown-menu-trigger-width)' }"
+    :ui="{ content: props.collapsed ? 'w-48' : 'w-(--reka-dropdown-menu-trigger-width)' }"
   >
     <UButton
       v-bind="{
-        user: user,
         label: collapsed ? undefined : user?.name,
         trailingIcon: collapsed ? undefined : 'i-lucide-chevrons-up-down',
       }"
+      icon="i-lucide-user"
       color="neutral"
       variant="ghost"
       block

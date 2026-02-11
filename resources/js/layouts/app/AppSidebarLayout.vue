@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
+import { useCookies } from '@vueuse/integrations/useCookies'
 import { dashboard } from '@/routes'
-import type { BreadcrumbItemType } from '@/types'
+import type { BreadcrumbItem } from '@/types/navigation'
 
 interface Props {
-  breadcrumbs?: BreadcrumbItemType[]
+  breadcrumbs?: BreadcrumbItem[]
 }
 
 withDefaults(defineProps<Props>(), {
   breadcrumbs: () => [],
 })
 
+const page = usePage()
+const sideBarState = useCookies(['sidebar_state'])
 const items: NavigationMenuItem[][] = [
   [
     {
@@ -45,6 +48,12 @@ const items: NavigationMenuItem[][] = [
     <UDashboardSidebar
       collapsible
       resizable
+      :collapsed="page.props.sidebarOpen === false"
+      @update:collapsed="
+        sideBarState.set('sidebar_state', sideBarState.get('sidebar_state') ? 'false' : 'true', {
+          path: '/',
+        })
+      "
     >
       <template #header="">
         <AppLogo />
