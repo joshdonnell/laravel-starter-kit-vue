@@ -1,9 +1,8 @@
 {
     "mcpServers": {
         "laravel-boost": {
-            "command": "/Users/josh/Library/Application",
+            "command": "/Users/josh/Library/Application Support/Herd/bin/php84",
             "args": [
-                "Support/Herd/bin/php84",
                 "/Users/josh/sites/laravel-starter-kit-vue/artisan",
                 "boost:mcp"
             ]
