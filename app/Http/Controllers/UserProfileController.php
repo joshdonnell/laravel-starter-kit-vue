@@ -17,7 +17,7 @@ final readonly class UserProfileController
 {
     public function edit(Request $request, #[CurrentUser] User $user): Response
     {
-        return Inertia::render('user-profile/Edit', [
+        return Inertia::render('settings/Profile', [
             'mustVerifyEmail' => $user->hasVerifiedEmail() === false,
             'status' => $request->session()->get('status'),
         ]);

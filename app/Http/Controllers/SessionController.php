@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateSessionRequest;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,14 +16,14 @@ final readonly class SessionController
 {
     public function create(Request $request): Response
     {
-        return Inertia::render('session/Create', [
+        return Inertia::render('auth/Login', [
             'canResetPassword' => Route::has('password.request'),
             'status' => $request->session()->get('status'),
             'canRegister' => true,
         ]);
     }
 
-    public function store(CreateSessionRequest $request): RedirectResponse
+    public function store(LoginRequest $request): RedirectResponse
     {
         $user = $request->validateCredentials();
 

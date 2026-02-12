@@ -2,10 +2,11 @@
     "$schema": "https://getcomposer.org/schema.json",
     "name": "joshdonnell/laravel-starter-kit-vue",
     "type": "project",
-    "description": "e2e typesafe stater kit based on the Nuno react starter kit ported to Vue with auto TS type generation",
+    "description": "e2e typesafe starter kit with auto TS type generation and Nuxt UI for fast front-end prototyping",
     "keywords": [
         "laravel",
-        "framework"
+        "framework",
+        "nuxt-ui"
     ],
     "license": "MIT",
     "require": {

@@ -14,7 +14,7 @@ it('renders reset password page', function (): void {
 
     $response->assertOk()
         ->assertInertia(fn ($page) => $page
-            ->component('user-password/Create')
+            ->component('auth/ResetPassword')
             ->has('email')
             ->has('token'));
 });
@@ -130,7 +130,7 @@ it('renders edit password page', function (): void {
         ->get(route('password.edit'));
 
     $response->assertOk()
-        ->assertInertia(fn ($page) => $page->component('user-password/Edit'));
+        ->assertInertia(fn ($page) => $page->component('settings/Password'));
 });
 
 it('may update password', function (): void {

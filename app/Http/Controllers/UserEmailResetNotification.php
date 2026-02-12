@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Actions\CreateUserEmailResetNotification;
-use App\Http\Requests\CreateUserEmailResetNotificationRequest;
+use App\Http\Requests\UserPasswordResetRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -15,13 +15,13 @@ final readonly class UserEmailResetNotification
 {
     public function create(Request $request): Response
     {
-        return Inertia::render('user-email-reset-notification/Create', [
+        return Inertia::render('auth/ForgotPassword', [
             'status' => $request->session()->get('status'),
         ]);
     }
 
     public function store(
-        CreateUserEmailResetNotificationRequest $request,
+        UserPasswordResetRequest $request,
         CreateUserEmailResetNotification $action
     ): RedirectResponse {
         $action->handle(['email' => $request->string('email')->value()]);

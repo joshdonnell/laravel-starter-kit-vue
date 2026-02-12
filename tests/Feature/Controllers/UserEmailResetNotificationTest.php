@@ -12,7 +12,7 @@ it('renders forgot password page', function (): void {
 
     $response->assertOk()
         ->assertInertia(fn ($page) => $page
-            ->component('user-email-reset-notification/Create')
+            ->component('auth/ForgotPassword')
             ->has('status'));
 });
 

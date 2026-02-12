@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ShowUserTwoFactorAuthenticationRequest;
+use App\Http\Requests\TwoFactorAuthenticationRequest;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -22,11 +22,11 @@ final readonly class UserTwoFactorAuthenticationController implements HasMiddlew
             : [];
     }
 
-    public function show(ShowUserTwoFactorAuthenticationRequest $request, #[CurrentUser] User $user): Response
+    public function show(TwoFactorAuthenticationRequest $request, #[CurrentUser] User $user): Response
     {
         $request->ensureStateIsValid();
 
-        return Inertia::render('user-two-factor-authentication/Show', [
+        return Inertia::render('settings/TwoFactor', [
             'twoFactorEnabled' => $user->hasEnabledTwoFactorAuthentication(),
         ]);
     }

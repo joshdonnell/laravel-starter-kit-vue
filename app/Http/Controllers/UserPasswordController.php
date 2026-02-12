@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\CreateUserPassword;
 use App\Actions\UpdateUserPassword;
-use App\Http\Requests\CreateUserPasswordRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
@@ -21,13 +21,13 @@ final readonly class UserPasswordController
 {
     public function create(Request $request): Response
     {
-        return Inertia::render('user-password/Create', [
+        return Inertia::render('auth/ResetPassword', [
             'email' => $request->email,
             'token' => $request->route('token'),
         ]);
     }
 
-    public function store(CreateUserPasswordRequest $request, CreateUserPassword $action): RedirectResponse
+    public function store(ResetPasswordRequest $request, CreateUserPassword $action): RedirectResponse
     {
         /** @var array<string, mixed> $credentials */
         $credentials = $request->only('email', 'password', 'password_confirmation', 'token');
@@ -46,7 +46,7 @@ final readonly class UserPasswordController
 
     public function edit(): Response
     {
-        return Inertia::render('user-password/Edit');
+        return Inertia::render('settings/Password');
     }
 
     public function update(UpdateUserPasswordRequest $request, #[CurrentUser] User $user, UpdateUserPassword $action): RedirectResponse
