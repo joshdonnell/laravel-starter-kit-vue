@@ -3,6 +3,8 @@
     <img alt="Logo for Laravel Starter Kit" src="art/header-light.png">
 </picture>
 
+<br/>
+
 <p>
     <a href="https://github.com/joshdonnell/laravel-starter-kit-vue/actions"><img src="https://github.com/joshdonnell/laravel-starter-kit-vue/actions/workflows/tests.yml/badge.svg" alt="Build Status"></a>
     <a href="https://packagist.org/packages/joshdonnell/laravel-starter-kit-vue"><img src="https://img.shields.io/packagist/v/joshdonnell/laravel-starter-kit-vue" alt="Latest Stable Version"></a>
@@ -15,7 +17,7 @@ An end-to-end type-safe Laravel 12 starter kit with auto-generated TypeScript ty
 
 **Backend:** PHP 8.4+, Laravel 12, Inertia.js, Spatie Laravel Data
 
-**Frontend:** Vue 3, Nuxt UI, TypeScript, Bun
+**Frontend:** Vue 3, Nuxt UI, TypeScript
 
 **Type Generation:** Laravel Wayfinder (auto-generated route & action types), Spatie Laravel Data (auto-generated DTO types)
 
