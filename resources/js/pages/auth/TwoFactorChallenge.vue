@@ -7,14 +7,16 @@ const authConfigContent = computed<TwoFactorConfigContent>(() => {
   if (showRecoveryInput.value) {
     return {
       title: 'Recovery Code',
-      description: 'Please confirm access to your account by entering one of your emergency recovery codes.',
+      description:
+        'Please confirm access to your account by entering one of your emergency recovery codes.',
       buttonText: 'login using an authentication code',
     }
   }
 
   return {
     title: 'Authentication Code',
-    description: 'Enter the authentication code provided by your authenticator application.',
+    description:
+      'Enter the authentication code provided by your authenticator application.',
     buttonText: 'login using a recovery code',
   }
 })
@@ -47,11 +49,7 @@ const codeAsNumber = computed(() => code.value.join(''))
           reset-on-error
           @error="code = []"
         >
-          <input
-            type="hidden"
-            name="code"
-            :value="codeAsNumber"
-          />
+          <input type="hidden" name="code" :value="codeAsNumber" />
           <UFormField :error="errors.code">
             <UPinInput
               v-model="code"
@@ -63,15 +61,11 @@ const codeAsNumber = computed(() => code.value.join(''))
               otp
             />
           </UFormField>
-          <UButton
-            type="submit"
-            class="w-full"
-            :loading="processing"
-          >
+          <UButton type="submit" class="w-full" :loading="processing">
             Continue
           </UButton>
 
-          <div class="text-muted-foreground text-center text-sm">
+          <div class="text-center text-sm text-muted-foreground">
             <span>or you can </span>
 
             <button
@@ -102,15 +96,11 @@ const codeAsNumber = computed(() => code.value.join(''))
             />
           </UFormField>
 
-          <UButton
-            type="submit"
-            class="w-full"
-            :loading="processing"
-          >
+          <UButton type="submit" class="w-full" :loading="processing">
             Continue
           </UButton>
 
-          <div class="text-muted-foreground text-center text-sm">
+          <div class="text-center text-sm text-muted-foreground">
             <span>or you can </span>
             <button
               type="button"

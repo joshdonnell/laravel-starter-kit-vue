@@ -13,7 +13,8 @@ const isOpen = defineModel<boolean>('isOpen')
 
 const colorMode = useColorMode()
 const { copy, copied } = useClipboard()
-const { qrCodeSvg, manualSetupKey, clearSetupData, fetchSetupData, errors } = useTwoFactorAuth()
+const { qrCodeSvg, manualSetupKey, clearSetupData, fetchSetupData, errors } =
+  useTwoFactorAuth()
 
 const showVerificationStep = ref(false)
 const code = ref<number[]>([])
@@ -23,7 +24,8 @@ const modalConfig = computed<TwoFactorConfigContent>(() => {
   if (props.twoFactorEnabled) {
     return {
       title: 'Two-Factor Authentication Enabled',
-      description: 'Two-factor authentication is now enabled. Scan the QR code or enter the setup key in your authenticator app.',
+      description:
+        'Two-factor authentication is now enabled. Scan the QR code or enter the setup key in your authenticator app.',
       buttonText: 'Close',
     }
   }
@@ -38,7 +40,8 @@ const modalConfig = computed<TwoFactorConfigContent>(() => {
 
   return {
     title: 'Enable Two-Factor Authentication',
-    description: 'To finish enabling two-factor authentication, scan the QR code or enter the setup key in your authenticator app',
+    description:
+      'To finish enabling two-factor authentication, scan the QR code or enter the setup key in your authenticator app',
     buttonText: 'Continue',
   }
 })
@@ -79,7 +82,11 @@ watch(isOpen, async (value) => {
     v-model:open="isOpen"
     :title="modalConfig.title"
     :description="modalConfig.description"
-    :ui="{ header: 'flex flex-col items-center text-center', title: 'text-lg', description: 'text-center' }"
+    :ui="{
+      header: 'flex flex-col items-center text-center',
+      title: 'text-lg',
+      description: 'text-center',
+    }"
   >
     <template #body>
       <div class="flex flex-col items-center space-y-6 p-4">
@@ -94,7 +101,9 @@ watch(isOpen, async (value) => {
           />
           <template v-else>
             <div class="flex w-full justify-center">
-              <div class="relative aspect-square w-64 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
+              <div
+                class="relative aspect-square w-64 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700"
+              >
                 <div
                   v-if="!qrCodeSvg"
                   class="absolute inset-0 flex items-center justify-center bg-white dark:bg-gray-900"
@@ -111,7 +120,10 @@ watch(isOpen, async (value) => {
                   <div
                     class="flex aspect-square size-full items-center justify-center"
                     :style="{
-                      filter: colorMode === 'dark' ? 'invert(1) brightness(1.5)' : undefined,
+                      filter:
+                        colorMode === 'dark'
+                          ? 'invert(1) brightness(1.5)'
+                          : undefined,
                     }"
                     v-html="qrCodeSvg"
                   />
@@ -119,11 +131,7 @@ watch(isOpen, async (value) => {
               </div>
             </div>
 
-            <UButton
-              type="button"
-              block
-              @click="handleModalNextStep"
-            >
+            <UButton type="button" block @click="handleModalNextStep">
               {{ modalConfig.buttonText }}
             </UButton>
 
@@ -174,11 +182,7 @@ watch(isOpen, async (value) => {
               @finish="code = []"
               @success="isOpen = false"
             >
-              <input
-                type="hidden"
-                name="code"
-                :value="codeAsNumber"
-              />
+              <input type="hidden" name="code" :value="codeAsNumber" />
 
               <div class="flex flex-col items-center">
                 <UFormField

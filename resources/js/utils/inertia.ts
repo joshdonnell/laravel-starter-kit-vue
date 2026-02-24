@@ -6,7 +6,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function urlIsActive(urlToCheck: NonNullable<InertiaLinkProps['href']>, currentUrl: string) {
+export function urlIsActive(
+  urlToCheck: NonNullable<InertiaLinkProps['href']>,
+  currentUrl: string,
+) {
   return toUrl(urlToCheck) === currentUrl
 }
 

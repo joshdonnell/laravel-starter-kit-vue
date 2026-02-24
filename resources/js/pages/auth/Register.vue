@@ -18,11 +18,7 @@ import { store } from '@/routes/register'
       class="flex flex-col gap-6"
     >
       <div class="grid gap-6">
-        <UFormField
-          label="Name"
-          name="name"
-          :error="errors.name"
-        >
+        <UFormField label="Name" name="name" :error="errors.name">
           <UInput
             id="name"
             type="text"
@@ -36,11 +32,7 @@ import { store } from '@/routes/register'
           />
         </UFormField>
 
-        <UFormField
-          label="Email"
-          name="email"
-          :error="errors.email"
-        >
+        <UFormField label="Email" name="email" :error="errors.email">
           <UInput
             id="email"
             type="email"
@@ -53,11 +45,7 @@ import { store } from '@/routes/register'
           />
         </UFormField>
 
-        <UFormField
-          label="Password"
-          name="password"
-          :error="errors.password"
-        >
+        <UFormField label="Password" name="password" :error="errors.password">
           <UInput
             id="password"
             type="password"
@@ -97,7 +85,7 @@ import { store } from '@/routes/register'
         </UButton>
       </div>
 
-      <div class="text-muted-foreground space-x-1 text-center text-sm">
+      <div class="space-x-1 text-center text-sm text-muted-foreground">
         <span>Already have an account?</span>
         <UButton
           :href="login().url"

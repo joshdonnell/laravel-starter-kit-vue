@@ -1,9 +1,11 @@
 {
     "$schema": "./node_modules/oxlint/configuration_schema.json",
     "plugins": [
+        "eslint",
         "vue",
         "typescript",
-        "unicorn"
+        "unicorn",
+        "oxc"
     ],
     "categories": {
         "correctness": "warn"

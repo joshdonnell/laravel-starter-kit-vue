@@ -34,7 +34,11 @@ const breadcrumbItems: BreadcrumbItem[] = [
             preserveScroll: true,
           }"
           reset-on-success
-          :reset-on-error="['password', 'password_confirmation', 'current_password']"
+          :reset-on-error="[
+            'password',
+            'password_confirmation',
+            'current_password',
+          ]"
           class="space-y-6"
         >
           <UFormField
@@ -83,10 +87,7 @@ const breadcrumbItems: BreadcrumbItem[] = [
           </UFormField>
 
           <div class="flex items-center gap-4">
-            <UButton
-              :loading="processing"
-              type="submit"
-            >
+            <UButton :loading="processing" type="submit">
               Save password
             </UButton>
 
@@ -96,10 +97,7 @@ const breadcrumbItems: BreadcrumbItem[] = [
               leave-active-class="transition ease-in-out"
               leave-to-class="opacity-0"
             >
-              <p
-                v-show="recentlySuccessful"
-                class="text-sm text-neutral-600"
-              >
+              <p v-show="recentlySuccessful" class="text-sm text-neutral-600">
                 Saved.
               </p>
             </Transition>

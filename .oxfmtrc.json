@@ -2,28 +2,13 @@
     "$schema": "./node_modules/oxfmt/configuration_schema.json",
     "semi": false,
     "singleQuote": true,
-    "singleAttributePerLine": false,
     "htmlWhitespaceSensitivity": "css",
-    "printWidth": 150,
+    "printWidth": 80,
     "sortTailwindcss": {
-        "functions": [
-            "clsx",
-            "cn"
-        ]
+        "stylesheet": "resources/css/app.css"
     },
     "tabWidth": 2,
     "sortPackageJson": false,
-    "overrides": [
-        {
-            "files": [
-                "**/*.vue"
-            ],
-            "options": {
-                "trailingComma": "all",
-                "singleAttributePerLine": true
-            }
-        }
-    ],
     "sortImports": {
         "newlinesBetween": false,
         "groups": [

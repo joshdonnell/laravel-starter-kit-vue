@@ -16,11 +16,7 @@ import { store } from '@/routes/password/confirm'
       reset-on-success
     >
       <div class="space-y-6">
-        <UFormField
-          name="password"
-          label="Password"
-          :error="errors.password"
-        >
+        <UFormField name="password" label="Password" :error="errors.password">
           <UInput
             id="password"
             type="password"

@@ -32,11 +32,7 @@ defineProps<{
       class="flex flex-col gap-6"
     >
       <div class="grid gap-6">
-        <UFormField
-          label="Email address"
-          name="email"
-          :error="errors.email"
-        >
+        <UFormField label="Email address" name="email" :error="errors.email">
           <UInput
             id="email"
             type="email"
@@ -50,16 +46,13 @@ defineProps<{
           />
         </UFormField>
 
-        <UFormField
-          name="password"
-          :error="errors.password"
-        >
+        <UFormField name="password" :error="errors.password">
           <slot name="label">
             <div class="mb-1 flex items-center justify-between">
               <label
                 for="password"
                 data-slot="label"
-                class="text-default block font-medium"
+                class="block font-medium text-default"
               >
                 Password</label
               >
@@ -108,7 +101,7 @@ defineProps<{
 
       <div
         v-if="canRegister"
-        class="text-muted-foreground flex justify-center gap-x-1 text-center text-sm"
+        class="flex justify-center gap-x-1 text-center text-sm text-muted-foreground"
       >
         Don't have an account?
         <UButton

@@ -24,11 +24,7 @@ const inputEmail = ref(props.email)
       :reset-on-success="['password', 'password_confirmation']"
     >
       <div class="grid gap-6">
-        <UFormField
-          name="email"
-          label="Email"
-          :error="errors.email"
-        >
+        <UFormField name="email" label="Email" :error="errors.email">
           <UInput
             id="email"
             v-model="inputEmail"
@@ -40,11 +36,7 @@ const inputEmail = ref(props.email)
           />
         </UFormField>
 
-        <UFormField
-          name="password"
-          label="Password"
-          :error="errors.password"
-        >
+        <UFormField name="password" label="Password" :error="errors.password">
           <UInput
             id="password"
             type="password"

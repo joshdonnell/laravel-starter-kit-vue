@@ -23,7 +23,7 @@ An end-to-end type-safe Laravel 12 starter kit with auto-generated TypeScript ty
 
 **DX Tooling:** unplugin-auto-import (Nuxt-style auto imports for Vue APIs and composables)
 
-**Code Quality:** PHPStan (level 9), Rector, Pint, ESLint, Prettier, Pest (100% coverage)
+**Code Quality:** PHPStan (level 9), Rector, Pint, oxlint, oxfmt, Pest (100% coverage)
 
 ## Local Development
 
@@ -71,7 +71,7 @@ You should see 100% test coverage and all quality checks passing.
 
 ### Code Quality
 
-- `composer lint` — Runs Rector (refactoring), Pint (PHP formatting), and Prettier (JS/TS formatting)
+- `composer lint` — Runs Rector (refactoring), Pint (PHP formatting), and oxfmt (JS/TS formatting)
 - `composer test:lint` — Dry-run mode for CI/CD pipelines
 
 ### Testing
@@ -90,7 +90,7 @@ You should see 100% test coverage and all quality checks passing.
 This project enforces a strict, automated code style across both PHP and JavaScript/TypeScript:
 
 - **PHP:** Laravel Pint for formatting, Rector for automated refactoring and modernisation
-- **JS/TS/Vue:** ESLint for linting, Prettier for formatting
+- **JS/TS/Vue:** oxlint for linting, oxfmt for formatting
 - **Types:** 100% type coverage enforced on both PHP (PHPStan level 9) and TypeScript (strict mode)
 
 Run `composer lint` to auto-fix formatting across the entire codebase.

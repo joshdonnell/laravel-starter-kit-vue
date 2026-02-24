@@ -43,7 +43,11 @@ const items = computed<DropdownMenuItem[]>(() => [
   <UDropdownMenu
     :items="items"
     :content="{ align: 'center', collisionPadding: 12 }"
-    :ui="{ content: props.collapsed ? 'w-48' : 'w-(--reka-dropdown-menu-trigger-width)' }"
+    :ui="{
+      content: props.collapsed
+        ? 'w-48'
+        : 'w-(--reka-dropdown-menu-trigger-width)',
+    }"
   >
     <UButton
       v-bind="{

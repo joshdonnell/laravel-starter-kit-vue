@@ -36,10 +36,7 @@ const settingsLayoutItems: NavigationMenuItem[][] = [
 
     <div class="flex flex-col lg:flex-row lg:space-x-12">
       <aside class="w-full max-w-xl lg:w-48">
-        <UNavigationMenu
-          :items="settingsLayoutItems"
-          orientation="vertical"
-        />
+        <UNavigationMenu :items="settingsLayoutItems" orientation="vertical" />
       </aside>
 
       <USeparator class="my-6 lg:hidden" />

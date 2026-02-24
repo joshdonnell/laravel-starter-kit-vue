@@ -18,12 +18,16 @@ const manualSetupKey = ref<string | null>(null)
 const qrCodeSvg = ref<string | null>(null)
 const recoveryCodesList = ref<string[]>([])
 
-const hasSetupData = computed<boolean>(() => qrCodeSvg.value !== null && manualSetupKey.value !== null)
+const hasSetupData = computed<boolean>(
+  () => qrCodeSvg.value !== null && manualSetupKey.value !== null,
+)
 
 export const useTwoFactorAuth = () => {
   const fetchQrCode = async (): Promise<void> => {
     try {
-      const { svg } = await fetchJson<{ svg: string; url: string }>(qrCode.url())
+      const { svg } = await fetchJson<{ svg: string; url: string }>(
+        qrCode.url(),
+      )
 
       qrCodeSvg.value = svg
     } catch {
@@ -34,7 +38,9 @@ export const useTwoFactorAuth = () => {
 
   const fetchSetupKey = async (): Promise<void> => {
     try {
-      const { secretKey: key } = await fetchJson<{ secretKey: string }>(secretKey.url())
+      const { secretKey: key } = await fetchJson<{ secretKey: string }>(
+        secretKey.url(),
+      )
 
       manualSetupKey.value = key
     } catch {

@@ -1,8 +1,5 @@
 <template>
-  <svg
-    class="stroke-inverted/10 absolute inset-0 h-full w-full"
-    fill="none"
-  >
+  <svg class="absolute inset-0 h-full w-full stroke-inverted/10" fill="none">
     <defs>
       <pattern
         id="pattern-5c1e4f0e-62d5-498b-8ff0-cf77bb448c8e"

@@ -23,15 +23,8 @@ defineProps<{
     </div>
 
     <div class="space-y-6">
-      <Form
-        v-slot="{ errors, processing }"
-        v-bind="email.form()"
-      >
-        <UFormField
-          label="Email address"
-          name="email"
-          :error="errors.email"
-        >
+      <Form v-slot="{ errors, processing }" v-bind="email.form()">
+        <UFormField label="Email address" name="email" :error="errors.email">
           <UInput
             id="email"
             type="email"
@@ -55,13 +48,9 @@ defineProps<{
         </div>
       </Form>
 
-      <div class="text-muted-foreground space-x-1 text-center text-sm">
+      <div class="space-x-1 text-center text-sm text-muted-foreground">
         <span>Or, return to</span>
-        <UButton
-          variant="link"
-          class="p-0 underline"
-          :href="login().url"
-        >
+        <UButton variant="link" class="p-0 underline" :href="login().url">
           log in
         </UButton>
       </div>

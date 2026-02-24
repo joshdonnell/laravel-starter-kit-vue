@@ -43,11 +43,7 @@ const user = page.props.auth.user
           v-bind="ProfileController.update().form"
           class="space-y-6"
         >
-          <UFormField
-            name="name"
-            label="Name"
-            :error="errors.name"
-          >
+          <UFormField name="name" label="Name" :error="errors.name">
             <UInput
               id="name"
               class="mt-1 block w-full"
@@ -59,11 +55,7 @@ const user = page.props.auth.user
             />
           </UFormField>
 
-          <UFormField
-            name="email"
-            label="Email address"
-            :error="errors.email"
-          >
+          <UFormField name="email" label="Email address" :error="errors.email">
             <UInput
               id="email"
               type="email"
@@ -77,13 +69,9 @@ const user = page.props.auth.user
           </UFormField>
 
           <div v-if="mustVerifyEmail && !user.email_verified_at">
-            <p class="text-muted-foreground -mt-4 text-sm">
+            <p class="-mt-4 text-sm text-muted-foreground">
               Your email address is unverified.
-              <UButton
-                :href="send()"
-                variant="link"
-                class="p-0 underline"
-              >
+              <UButton :href="send()" variant="link" class="p-0 underline">
                 Click here to resend the verification email.
               </UButton>
             </p>
@@ -97,12 +85,7 @@ const user = page.props.auth.user
           </div>
 
           <div class="flex items-center gap-4">
-            <UButton
-              type="submit"
-              :loading="processing"
-            >
-              Save
-            </UButton>
+            <UButton type="submit" :loading="processing"> Save </UButton>
 
             <Transition
               enter-active-class="transition ease-in-out"
@@ -110,10 +93,7 @@ const user = page.props.auth.user
               leave-active-class="transition ease-in-out"
               leave-to-class="opacity-0"
             >
-              <p
-                v-show="recentlySuccessful"
-                class="text-sm text-neutral-600"
-              >
+              <p v-show="recentlySuccessful" class="text-sm text-neutral-600">
                 Saved.
               </p>
             </Transition>
