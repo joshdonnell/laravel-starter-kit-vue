@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { home } from '@/routes';
+import { home } from '@/routes'
 
 defineProps<{
   title?: string
