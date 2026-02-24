@@ -1,0 +1,26 @@
+{
+    "$schema": "./node_modules/oxlint/configuration_schema.json",
+    "plugins": [
+        "vue",
+        "typescript",
+        "unicorn"
+    ],
+    "categories": {
+        "correctness": "warn"
+    },
+    "rules": {
+        "vue/multi-word-component-names": "off",
+        "vue/no-v-html": "off",
+        "@typescript-eslint/no-explicit-any": "off"
+    },
+    "ignorePatterns": [
+        "vendor",
+        "node_modules",
+        "public",
+        "bootstrap/ssr",
+        "tailwind.config.ts",
+        "resources/js/actions",
+        "resources/js/routes",
+        "resources/js/wayfinder"
+    ]
+}

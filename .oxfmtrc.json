@@ -1,0 +1,46 @@
+{
+    "$schema": "./node_modules/oxfmt/configuration_schema.json",
+    "semi": false,
+    "singleQuote": true,
+    "singleAttributePerLine": false,
+    "htmlWhitespaceSensitivity": "css",
+    "printWidth": 150,
+    "sortTailwindcss": {
+        "functions": [
+            "clsx",
+            "cn"
+        ]
+    },
+    "tabWidth": 2,
+    "sortPackageJson": false,
+    "overrides": [
+        {
+            "files": [
+                "**/*.vue"
+            ],
+            "options": {
+                "trailingComma": "all",
+                "singleAttributePerLine": true
+            }
+        }
+    ],
+    "sortImports": {
+        "newlinesBetween": false,
+        "groups": [
+            "builtin",
+            "external",
+            "internal",
+            "parent",
+            "sibling",
+            "index"
+        ]
+    },
+    "ignorePatterns": [
+        "resources/js/components/ui/*",
+        "resources/js/types/generated.d.ts",
+        "resources/views/mail/*",
+        "resources/js/actions/*",
+        "resources/js/routes/*",
+        "resources/js/wayfinder/*"
+    ]
+}
