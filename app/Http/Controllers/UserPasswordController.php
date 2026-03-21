@@ -46,7 +46,7 @@ final readonly class UserPasswordController
 
     public function edit(): Response
     {
-        return Inertia::render('settings/Password');
+        return Inertia::render('settings/Security');
     }
 
     public function update(UpdateUserPasswordRequest $request, #[CurrentUser] User $user, UpdateUserPassword $action): RedirectResponse

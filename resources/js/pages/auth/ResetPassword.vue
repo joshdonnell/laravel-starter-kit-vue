@@ -1,11 +1,16 @@
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Spinner } from '@/components/ui/spinner'
 import AuthLayout from '@/layouts/AuthLayout.vue'
-import { store } from '@/routes/password'
+import { update } from '@/routes/password'
 
 const props = defineProps<{
   token: string
   email: string
 }>()
+
 
 const inputEmail = ref(props.email)
 </script>
@@ -18,58 +23,60 @@ const inputEmail = ref(props.email)
     <Head title="Reset password" />
 
     <Form
-      v-slot="{ errors, processing }"
-      v-bind="store.form()"
+      v-bind="update.form()"
       :transform="(data) => ({ ...data, token, email })"
       :reset-on-success="['password', 'password_confirmation']"
+      v-slot="{ errors, processing }"
     >
       <div class="grid gap-6">
-        <UFormField name="email" label="Email" :error="errors.email">
-          <UInput
+        <div class="grid gap-2">
+          <Label for="email">Email</Label>
+          <Input
             id="email"
-            v-model="inputEmail"
             type="email"
             name="email"
+            autocomplete="email"
+            v-model="inputEmail"
             class="mt-1 block w-full"
             readonly
-            disabled
           />
-        </UFormField>
+          <InputError :message="errors.email" class="mt-2" />
+        </div>
 
-        <UFormField name="password" label="Password" :error="errors.password">
-          <UInput
+        <div class="grid gap-2">
+          <Label for="password">Password</Label>
+          <PasswordInput
             id="password"
-            type="password"
             name="password"
             autocomplete="new-password"
             class="mt-1 block w-full"
             autofocus
             placeholder="Password"
           />
-        </UFormField>
+          <InputError :message="errors.password" />
+        </div>
 
-        <UFormField
-          name="password_confirmation"
-          label="Confirm Password"
-          :error="errors.password_confirmation"
-        >
-          <UInput
+        <div class="grid gap-2">
+          <Label for="password_confirmation"> Confirm password </Label>
+          <PasswordInput
             id="password_confirmation"
-            type="password"
             name="password_confirmation"
             autocomplete="new-password"
             class="mt-1 block w-full"
             placeholder="Confirm password"
           />
-        </UFormField>
+          <InputError :message="errors.password_confirmation" />
+        </div>
 
-        <UButton
+        <Button
           type="submit"
-          class="mt-4 flex w-full justify-center"
-          :loading="processing"
+          class="mt-4 w-full"
+          :disabled="processing"
+          data-test="reset-password-button"
         >
+          <Spinner v-if="processing" />
           Reset password
-        </UButton>
+        </Button>
       </div>
     </Form>
   </AuthLayout>
