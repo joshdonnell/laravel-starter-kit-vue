@@ -11,23 +11,23 @@
     <a href="https://packagist.org/packages/joshdonnell/laravel-starter-kit-vue"><img src="https://img.shields.io/packagist/l/joshdonnell/laravel-starter-kit-vue" alt="License"></a>
 </p>
 
-An end-to-end type-safe Laravel 13 starter kit with auto-generated TypeScript types, Vue, and Nuxt UI for fast front-end prototyping. Built on top of [Nuno Maduro's Laravel Starter Kit (Maintained by me)](https://github.com/nunomaduro/laravel-starter-kit-inertia-vue), this kit extends it with Wayfinder, Laravel Data, and unplugin-auto-import to provide a Nuxt-like developer experience when writing Vue code within a Laravel Inertia application.
+An end-to-end type-safe Laravel 13 starter kit with auto-generated TypeScript types, Vue, and shadcn-vue for fast front-end prototyping. Built on top of [Nuno Maduro's Laravel Starter Kit (Maintained by me)](https://github.com/nunomaduro/laravel-starter-kit-inertia-vue), this kit extends it with Wayfinder, Laravel Data, and unplugin-auto-import to provide a Nuxt-like developer experience when writing Vue code within a Laravel Inertia application.
 
 ## Tech Stack
 
 **Backend:** PHP 8.4+, Laravel 13, Inertia.js v3, Spatie Laravel Data
 
-**Frontend:** Vue 3, Nuxt UI, TypeScript
+**Frontend:** Vue 3, shadcn-vue, TypeScript, Tailwind CSS v4
 
 **Type Generation:** Laravel Wayfinder (auto-generated route & action types), Spatie Laravel Data (auto-generated DTO types)
 
 **DX Tooling:** unplugin-auto-import (Nuxt-style auto imports for Vue APIs and composables)
 
-**Code Quality:** PHPStan (level 9), Rector, Pint, vite plus, oxlint, oxfmt, Pest (100% coverage)
+**Code Quality:** PHPStan (level 9), Rector, Pint, Vite Plus, oxlint, oxfmt, Pest v5 (100% coverage)
 
 ## Local Development
 
-> **Requires [PHP 8.4+](https://php.net/releases/), [Pnpm](https://pnpm.io/), and a code coverage driver like [Xdebug](https://xdebug.org/docs/install).**
+> **Requires [PHP 8.4+](https://php.net/releases/), [npm](https://nodejs.org/) or [pnpm](https://pnpm.io/), and a code coverage driver like [Xdebug](https://xdebug.org/docs/install).**
 
 ### Installation
 
@@ -51,8 +51,11 @@ composer dev
 If you plan to use Pest's browser testing capabilities:
 
 ```bash
-pnpm add playwright
-pnpx playwright install
+# npm
+npm install playwright && npx playwright install
+
+# pnpm
+pnpm add playwright && pnpx playwright install
 ```
 
 ### Verify Installation
