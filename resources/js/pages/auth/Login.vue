@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Spinner } from '@/components/ui/spinner'
 import AuthBase from '@/layouts/AuthLayout.vue'
 import { register } from '@/routes'
 import { store } from '@/routes/login'
@@ -26,14 +31,15 @@ defineProps<{
     </div>
 
     <Form
-      v-slot="{ errors, processing }"
       v-bind="store.form()"
       :reset-on-success="['password']"
+      v-slot="{ errors, processing }"
       class="flex flex-col gap-6"
     >
       <div class="grid gap-6">
-        <UFormField label="Email address" name="email" :error="errors.email">
-          <UInput
+        <div class="grid gap-2">
+          <Label for="email">Email address</Label>
+          <Input
             id="email"
             type="email"
             name="email"
@@ -42,76 +48,55 @@ defineProps<{
             :tabindex="1"
             autocomplete="email"
             placeholder="email@example.com"
-            class="w-full"
           />
-        </UFormField>
+          <InputError :message="errors.email" />
+        </div>
 
-        <UFormField name="password" :error="errors.password">
-          <slot name="label">
-            <div class="mb-1 flex items-center justify-between">
-              <label
-                for="password"
-                data-slot="label"
-                class="block font-medium text-default"
-              >
-                Password</label
-              >
-
-              <UButton
-                v-if="canResetPassword"
-                :href="request().url"
-                class="p-0 text-sm underline"
-                :tabindex="5"
-                variant="link"
-              >
-                Forgot password?
-              </UButton>
-            </div>
-          </slot>
-
-          <UInput
+        <div class="grid gap-2">
+          <div class="flex items-center justify-between">
+            <Label for="password">Password</Label>
+            <TextLink
+              v-if="canResetPassword"
+              :href="request()"
+              class="text-sm"
+              :tabindex="5"
+            >
+              Forgot password?
+            </TextLink>
+          </div>
+          <PasswordInput
             id="password"
-            type="password"
             name="password"
             required
             :tabindex="2"
             autocomplete="current-password"
             placeholder="Password"
-            class="w-full"
           />
-        </UFormField>
+          <InputError :message="errors.password" />
+        </div>
 
-        <UCheckbox
-          id="remember"
-          name="remember"
-          :tabindex="3"
-          label="Remember me"
-        />
+        <div class="flex items-center justify-between">
+          <Label for="remember" class="flex items-center space-x-3">
+            <Checkbox id="remember" name="remember" :tabindex="3" />
+            <span>Remember me</span>
+          </Label>
+        </div>
 
-        <UButton
+        <Button
           type="submit"
-          varient="solid"
-          class="mt-4 flex w-full justify-center"
+          class="mt-4 w-full"
           :tabindex="4"
-          :loading="processing"
+          :disabled="processing"
+          data-test="login-button"
         >
+          <Spinner v-if="processing" />
           Log in
-        </UButton>
+        </Button>
       </div>
 
-      <div
-        v-if="canRegister"
-        class="flex justify-center gap-x-1 text-center text-sm text-muted-foreground"
-      >
+      <div class="text-center text-sm text-muted-foreground" v-if="canRegister">
         Don't have an account?
-        <UButton
-          :href="register().url"
-          :tabindex="5"
-          variant="link"
-          class="p-0 underline"
-        >
-          Sign up
-        </UButton>
+        <TextLink :href="register()" :tabindex="5">Sign up</TextLink>
       </div>
     </Form>
   </AuthBase>

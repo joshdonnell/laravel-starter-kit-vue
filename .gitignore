@@ -29,3 +29,5 @@ yarn-error.log
 /tmp/
 /auto-imports.d.ts
 /components.d.ts
+resources/js/types/typescript-transformer-manifest.json
+resources/js/types/Users/josh/sites/personal/laravel-starter-kit-vue/resources/js/types/generated.d.ts

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Spinner } from '@/components/ui/spinner'
 import AuthLayout from '@/layouts/AuthLayout.vue'
 import { login } from '@/routes'
 import { email } from '@/routes/password'
@@ -23,36 +27,35 @@ defineProps<{
     </div>
 
     <div class="space-y-6">
-      <Form v-slot="{ errors, processing }" v-bind="email.form()">
-        <UFormField label="Email address" name="email" :error="errors.email">
-          <UInput
+      <Form v-bind="email.form()" v-slot="{ errors, processing }">
+        <div class="grid gap-2">
+          <Label for="email">Email address</Label>
+          <Input
             id="email"
             type="email"
             name="email"
             autocomplete="off"
             autofocus
-            required
             placeholder="email@example.com"
-            class="w-full"
           />
-        </UFormField>
+          <InputError :message="errors.email" />
+        </div>
 
         <div class="my-6 flex items-center justify-start">
-          <UButton
-            type="submit"
-            class="flex w-full justify-center"
-            :loading="processing"
+          <Button
+            class="w-full"
+            :disabled="processing"
+            data-test="email-password-reset-link-button"
           >
+            <Spinner v-if="processing" />
             Email password reset link
-          </UButton>
+          </Button>
         </div>
       </Form>
 
       <div class="space-x-1 text-center text-sm text-muted-foreground">
         <span>Or, return to</span>
-        <UButton variant="link" class="p-0 underline" :href="login().url">
-          log in
-        </UButton>
+        <TextLink :href="login()">log in</TextLink>
       </div>
     </div>
   </AuthLayout>

@@ -1,24 +1,73 @@
-import path from 'path'
-import { wayfinder } from '@laravel/vite-plugin-wayfinder'
-import ui from '@nuxt/ui/vite'
-import tailwindcss from '@tailwindcss/vite'
-import vue from '@vitejs/plugin-vue'
-import laravel from 'laravel-vite-plugin'
-import { defineConfig } from 'vite'
-import { watch } from 'vite-plugin-watch'
+import { wayfinder } from "@laravel/vite-plugin-wayfinder";
+import tailwindcss from "@tailwindcss/vite";
+import vue from "@vitejs/plugin-vue";
+import laravel from "laravel-vite-plugin";
+import RekaResolver from "reka-ui/resolver";
+import AutoImport from "unplugin-auto-import/vite";
+import Components from "unplugin-vue-components/vite";
+import { defineConfig } from "vite-plus";
+import { watch } from "vite-plugin-watch";
+import { fileURLToPath } from 'url';
 
-const inertiaComponents: string[] = ['Link', 'Form', 'Head', 'Page', 'Deferred']
+const inertiaComponents = ["Link", "Form", "Head", "Page", "Deferred"];
 
 export default defineConfig({
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'resources/js'),
+  fmt: {
+    semi: false,
+    singleQuote: true,
+    htmlWhitespaceSensitivity: "css",
+    printWidth: 80,
+    sortTailwindcss: {
+      stylesheet: "resources/css/app.css",
     },
+    tabWidth: 2,
+    sortPackageJson: false,
+    sortImports: {
+      newlinesBetween: false,
+      groups: ["builtin", "external", "internal", "parent", "sibling", "index"],
+    },
+    ignorePatterns: [
+      "resources/js/components/ui/*",
+      "resources/js/types/generated.d.ts",
+      "resources/views/mail/*",
+      "resources/js/actions/*",
+      "resources/js/routes/*",
+      "resources/js/wayfinder/*",
+    ],
+  },
+  lint: {
+    plugins: ["eslint", "vue", "typescript", "unicorn", "oxc"],
+    categories: {
+      correctness: "warn",
+    },
+    rules: {
+      "vue/multi-word-component-names": "off",
+      "vue/no-v-html": "off",
+    },
+    ignorePatterns: [
+      "vendor",
+      "node_modules",
+      "public",
+      "bootstrap/ssr",
+      "tailwind.config.ts",
+      "resources/js/actions",
+      "resources/js/routes",
+      "resources/js/wayfinder",
+    ],
+    options: {
+      typeAware: true,
+      typeCheck: true,
+    },
+  },
+  resolve: {
+  alias: {
+      "@": fileURLToPath(new URL('./resources/js', import.meta.url)),
+  },
   },
   plugins: [
     laravel({
-      input: ['resources/js/app.ts'],
-      ssr: 'resources/js/ssr.ts',
+      input: ["resources/js/app.ts"],
+      ssr: "resources/js/ssr.ts",
       refresh: true,
     }),
     tailwindcss(),
@@ -33,40 +82,45 @@ export default defineConfig({
         },
       },
     }),
-    ui({
-      router: 'inertia',
-      autoImport: {
-        imports: ['vue', { '@inertiajs/vue3': ['useForm', 'usePage', 'useRemember', 'usePrefetch', 'router'] }],
-        dirs: ['resources/js/composables'],
-      },
-      components: {
-        dts: true,
-        dirs: ['resources/js/components'],
-        directoryAsNamespace: true,
-        collapseSamePrefixes: true,
-        types: [
-          {
-            names: inertiaComponents,
-            from: '@inertiajs/vue3',
-          },
-        ],
-        resolvers: [
-          (component: string) => {
-            if (inertiaComponents.includes(component)) {
-              return {
-                name: component,
-                from: '@inertiajs/vue3',
-              }
-            }
+    AutoImport({
+      imports: [
+        "vue",
+        {
+          "@inertiajs/vue3": ["useForm", "usePage", "useRemember", "usePrefetch", "router"],
+        },
+      ],
+      dirs: ["resources/js/composables"],
+    }),
+    Components({
+      dts: true,
+      dirs: ["resources/js/components"],
+      directoryAsNamespace: true,
+      collapseSamePrefixes: true,
+      types: [
+        {
+          names: inertiaComponents,
+          from: "@inertiajs/vue3",
+        },
+      ],
+      resolvers: [
+        RekaResolver({
+          prefix: "Reka",
+        }),
+        (component: string) => {
+          if (inertiaComponents.includes(component)) {
+            return {
+              name: component,
+              from: "@inertiajs/vue3",
+            };
+          }
 
-            return undefined
-          },
-        ],
-      },
+          return undefined;
+        },
+      ],
     }),
     watch({
-      pattern: 'app/{Data,Enums}/**/*.php',
-      command: 'composer run transform-types',
+      pattern: "app/{Data,Enums}/**/*.php",
+      command: "composer run transform-types",
     }),
   ],
-})
+});

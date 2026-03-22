@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import { Spinner } from '@/components/ui/spinner'
 import AuthLayout from '@/layouts/AuthLayout.vue'
 import { store } from '@/routes/password/confirm'
 </script>
@@ -11,31 +14,34 @@ import { store } from '@/routes/password/confirm'
     <Head title="Confirm password" />
 
     <Form
-      v-slot="{ errors, processing }"
       v-bind="store.form()"
       reset-on-success
+      v-slot="{ errors, processing }"
     >
       <div class="space-y-6">
-        <UFormField name="password" label="Password" :error="errors.password">
-          <UInput
+        <div class="grid gap-2">
+          <Label htmlFor="password">Password</Label>
+          <PasswordInput
             id="password"
-            type="password"
             name="password"
             class="mt-1 block w-full"
             required
             autocomplete="current-password"
             autofocus
           />
-        </UFormField>
+
+          <InputError :message="errors.password" />
+        </div>
 
         <div class="flex items-center">
-          <UButton
-            type="submit"
-            class="flex w-full justify-center"
-            :loading="processing"
+          <Button
+            class="w-full"
+            :disabled="processing"
+            data-test="confirm-password-button"
           >
-            Confirm Password
-          </UButton>
+            <Spinner v-if="processing" />
+            Confirm password
+          </Button>
         </div>
       </div>
     </Form>

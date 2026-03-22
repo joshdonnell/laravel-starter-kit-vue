@@ -8,13 +8,6 @@ metadata:
 
 # Wayfinder Development
 
-## When to Apply
-
-Activate whenever referencing backend routes in frontend components:
-- Importing from `@/actions/` or `@/routes/`
-- Calling Laravel routes from TypeScript/JavaScript
-- Creating links or navigation to backend endpoints
-
 ## Documentation
 
 Use `search-docs` for detailed Wayfinder patterns and documentation.
@@ -68,10 +61,14 @@ show(1, { query: { page: 1 } }) // "/posts/1?page=1"
 
 ## Wayfinder + Inertia
 
-Use Wayfinder with the `<Form>` component:
-<!-- Wayfinder Form (Vue) -->
-```vue
-<Form v-bind="store.form()"><input name="title" /></Form>
+Use Wayfinder with `useForm`:
+
+<!-- Wayfinder useForm -->
+```typescript
+import { store } from "@/actions/App/Http/Controllers/ExampleController";
+
+const form = useForm({ name: "My Big Post" });
+form.submit(store());
 ```
 
 ## Verification

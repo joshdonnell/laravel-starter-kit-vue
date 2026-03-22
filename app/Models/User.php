@@ -31,7 +31,11 @@ final class User extends Authenticatable implements MustVerifyEmail
     /**
      * @use HasFactory<UserFactory>
      */
-    use HasFactory, HasUuids, Notifiable, TwoFactorAuthenticatable;
+    use HasFactory;
+
+    use HasUuids;
+    use Notifiable;
+    use TwoFactorAuthenticatable;
 
     /**
      * @var list<string>

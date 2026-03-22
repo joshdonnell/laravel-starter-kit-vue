@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Spinner } from '@/components/ui/spinner'
 import AuthBase from '@/layouts/AuthLayout.vue'
 import { login } from '@/routes'
 import { store } from '@/routes/register'
@@ -12,14 +16,15 @@ import { store } from '@/routes/register'
     <Head title="Register" />
 
     <Form
-      v-slot="{ errors, processing }"
       v-bind="store.form()"
       :reset-on-success="['password', 'password_confirmation']"
+      v-slot="{ errors, processing }"
       class="flex flex-col gap-6"
     >
       <div class="grid gap-6">
-        <UFormField label="Name" name="name" :error="errors.name">
-          <UInput
+        <div class="grid gap-2">
+          <Label for="name">Name</Label>
+          <Input
             id="name"
             type="text"
             required
@@ -28,12 +33,13 @@ import { store } from '@/routes/register'
             autocomplete="name"
             name="name"
             placeholder="Full name"
-            class="w-full"
           />
-        </UFormField>
+          <InputError :message="errors.name" />
+        </div>
 
-        <UFormField label="Email" name="email" :error="errors.email">
-          <UInput
+        <div class="grid gap-2">
+          <Label for="email">Email address</Label>
+          <Input
             id="email"
             type="email"
             required
@@ -41,60 +47,56 @@ import { store } from '@/routes/register'
             autocomplete="email"
             name="email"
             placeholder="email@example.com"
-            class="w-full"
           />
-        </UFormField>
+          <InputError :message="errors.email" />
+        </div>
 
-        <UFormField label="Password" name="password" :error="errors.password">
-          <UInput
+        <div class="grid gap-2">
+          <Label for="password">Password</Label>
+          <PasswordInput
             id="password"
-            type="password"
             required
             :tabindex="3"
             autocomplete="new-password"
             name="password"
             placeholder="Password"
-            class="w-full"
           />
-        </UFormField>
+          <InputError :message="errors.password" />
+        </div>
 
-        <UFormField
-          label="Confirm password"
-          name="password_confirmation"
-          :error="errors.password_confirmation"
-        >
-          <UInput
+        <div class="grid gap-2">
+          <Label for="password_confirmation">Confirm password</Label>
+          <PasswordInput
             id="password_confirmation"
-            type="password"
             required
             :tabindex="4"
             autocomplete="new-password"
             name="password_confirmation"
             placeholder="Confirm password"
-            class="w-full"
           />
-        </UFormField>
+          <InputError :message="errors.password_confirmation" />
+        </div>
 
-        <UButton
+        <Button
           type="submit"
-          class="mt-2 flex w-full justify-center"
+          class="mt-2 w-full"
           tabindex="5"
-          :loading="processing"
+          :disabled="processing"
+          data-test="register-user-button"
         >
+          <Spinner v-if="processing" />
           Create account
-        </UButton>
+        </Button>
       </div>
 
-      <div class="space-x-1 text-center text-sm text-muted-foreground">
-        <span>Already have an account?</span>
-        <UButton
-          :href="login().url"
-          class="p-0 underline"
+      <div class="text-center text-sm text-muted-foreground">
+        Already have an account?
+        <TextLink
+          :href="login()"
+          class="underline underline-offset-4"
           :tabindex="6"
-          variant="link"
+          >Log in</TextLink
         >
-          Log in
-        </UButton>
       </div>
     </Form>
   </AuthBase>
