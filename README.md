@@ -11,11 +11,11 @@
     <a href="https://packagist.org/packages/joshdonnell/laravel-starter-kit-vue"><img src="https://img.shields.io/packagist/l/joshdonnell/laravel-starter-kit-vue" alt="License"></a>
 </p>
 
-An end-to-end type-safe Laravel 12 starter kit with auto-generated TypeScript types, Vue, and Nuxt UI for fast front-end prototyping. Built on top of [Nuno Maduro's Laravel Starter Kit (Maintained by me :)](https://github.com/nunomaduro/laravel-starter-kit-inertia-vue), this kit extends it with Wayfinder, Laravel Data, and unplugin-auto-import to provide a Nuxt-like developer experience when writing Vue code within a Laravel Inertia application.
+An end-to-end type-safe Laravel 13 starter kit with auto-generated TypeScript types, Vue, and Nuxt UI for fast front-end prototyping. Built on top of [Nuno Maduro's Laravel Starter Kit (Maintained by me)](https://github.com/nunomaduro/laravel-starter-kit-inertia-vue), this kit extends it with Wayfinder, Laravel Data, and unplugin-auto-import to provide a Nuxt-like developer experience when writing Vue code within a Laravel Inertia application.
 
 ## Tech Stack
 
-**Backend:** PHP 8.4+, Laravel 12, Inertia.js, Spatie Laravel Data
+**Backend:** PHP 8.4+, Laravel 13, Inertia.js v3, Spatie Laravel Data
 
 **Frontend:** Vue 3, Nuxt UI, TypeScript
 
@@ -23,7 +23,7 @@ An end-to-end type-safe Laravel 12 starter kit with auto-generated TypeScript ty
 
 **DX Tooling:** unplugin-auto-import (Nuxt-style auto imports for Vue APIs and composables)
 
-**Code Quality:** PHPStan (level 9), Rector, Pint, oxlint, oxfmt, Pest (100% coverage)
+**Code Quality:** PHPStan (level 9), Rector, Pint, vite plus, oxlint, oxfmt, Pest (100% coverage)
 
 ## Local Development
 
@@ -42,7 +42,7 @@ cd example-app
 # Install dependencies and configure the project
 composer setup
 
-# Start the development server (Laravel, queue, logs, and Vite)
+# Start the development server (Laravel, queue, logs, and vite plus)
 composer dev
 ```
 
