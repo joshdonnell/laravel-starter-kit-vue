@@ -105,7 +105,7 @@
             "@test:types"
         ],
         "transform-types": [
-            "@php artisan typescript:transform --output js/types/generated.d.ts"
+            "@php artisan typescript:transform"
         ]
     },
     "extra": {
