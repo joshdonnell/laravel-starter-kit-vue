@@ -125,12 +125,16 @@ it('requires matching password confirmation', function (): void {
 it('renders edit password page', function (): void {
     $user = User::factory()->create();
 
-    $response = $this->actingAs($user)
-        ->fromRoute('dashboard')
+    $this->actingAs($user)->session(['auth.password_confirmed_at' => time()]);
+
+    $response = $this->fromRoute('dashboard')
         ->get(route('password.edit'));
 
     $response->assertOk()
-        ->assertInertia(fn ($page) => $page->component('settings/Password'));
+        ->assertInertia(fn ($page) => $page
+            ->component('settings/Security')
+            ->has('canManageTwoFactor')
+            ->has('twoFactorEnabled'));
 });
 
 it('may update password', function (): void {
@@ -205,4 +209,50 @@ it('redirects authenticated users away from reset password', function (): void {
         ->get(route('password.reset', ['token' => 'fake-token']));
 
     $response->assertRedirectToRoute('dashboard');
+});
+
+it('renders two factor authentication page', function (): void {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)->session(['auth.password_confirmed_at' => time()]);
+
+    $response = $this->fromRoute('dashboard')
+        ->get(route('two-factor.show'));
+
+    $response->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('settings/Security')
+            ->has('twoFactorEnabled'));
+});
+
+it('shows two factor disabled when not enabled', function (): void {
+    $user = User::factory()->withoutTwoFactor()->create();
+
+    $this->actingAs($user)->session(['auth.password_confirmed_at' => time()]);
+
+    $response = $this->fromRoute('dashboard')
+        ->get(route('two-factor.show'));
+
+    $response->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('settings/Security')
+            ->where('twoFactorEnabled', false));
+});
+
+it('shows two factor enabled when enabled', function (): void {
+    $user = User::factory()->create([
+        'two_factor_secret' => encrypt('secret'),
+        'two_factor_recovery_codes' => encrypt(json_encode(['code1', 'code2'])),
+        'two_factor_confirmed_at' => now(),
+    ]);
+
+    $this->actingAs($user)->session(['auth.password_confirmed_at' => time()]);
+
+    $response = $this->fromRoute('dashboard')
+        ->get(route('two-factor.show'));
+
+    $response->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('settings/Security')
+            ->where('twoFactorEnabled', true));
 });

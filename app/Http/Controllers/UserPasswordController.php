@@ -7,18 +7,29 @@ namespace App\Http\Controllers;
 use App\Actions\CreateUserPassword;
 use App\Actions\UpdateUserPassword;
 use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Requests\TwoFactorAuthenticationRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use Laravel\Fortify\Features;
 
-final readonly class UserPasswordController
+final readonly class UserPasswordController implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword')
+            ? [new Middleware('password.confirm', only: ['edit'])]
+            : [];
+    }
+
     public function create(Request $request): Response
     {
         return Inertia::render('auth/ResetPassword', [
@@ -44,9 +55,14 @@ final readonly class UserPasswordController
         return to_route('login')->with('status', __('passwords.reset'));
     }
 
-    public function edit(): Response
+    public function edit(TwoFactorAuthenticationRequest $request, #[CurrentUser] User $user): Response
     {
-        return Inertia::render('settings/Security');
+        $request->ensureStateIsValid();
+
+        return Inertia::render('settings/Security', [
+            'canManageTwoFactor' => Features::enabled(Features::twoFactorAuthentication()),
+            'twoFactorEnabled' => $user->hasEnabledTwoFactorAuthentication(),
+        ]);
     }
 
     public function update(UpdateUserPasswordRequest $request, #[CurrentUser] User $user, UpdateUserPassword $action): RedirectResponse

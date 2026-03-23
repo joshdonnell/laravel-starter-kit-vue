@@ -9,7 +9,6 @@ use App\Http\Controllers\UserEmailVerification;
 use App\Http\Controllers\UserEmailVerificationNotificationController;
 use App\Http\Controllers\UserPasswordController;
 use App\Http\Controllers\UserProfileController;
-use App\Http\Controllers\UserTwoFactorAuthenticationController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -38,7 +37,7 @@ Route::middleware('auth')->group(function (): void {
     Route::get('settings/appearance', fn () => Inertia::render('settings/Appearance'))->name('appearance.edit');
 
     // User Two-Factor Authentication...
-    Route::get('settings/two-factor', [UserTwoFactorAuthenticationController::class, 'show'])
+    Route::get('settings/two-factor', [UserPasswordController::class, 'edit'])
         ->name('two-factor.show');
 });
 
