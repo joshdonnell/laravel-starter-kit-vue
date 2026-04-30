@@ -2,11 +2,12 @@
     "$schema": "https://getcomposer.org/schema.json",
     "name": "joshdonnell/laravel-starter-kit-vue",
     "type": "project",
-    "description": "e2e typesafe starter kit with auto TS type generation and Nuxt UI for fast front-end prototyping",
+    "description": "An end-to-end type-safe Laravel 13 starter kit with auto-generated TypeScript types, Vue 3, and shadcn-vue components for fast front-end prototyping",
     "keywords": [
         "laravel",
         "framework",
-        "nuxt-ui"
+        "vue",
+        "shadcn"
     ],
     "license": "MIT",
     "require": {
