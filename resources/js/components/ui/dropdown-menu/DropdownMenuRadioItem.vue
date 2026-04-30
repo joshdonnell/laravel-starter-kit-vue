@@ -3,11 +3,6 @@ import type { DropdownMenuRadioItemEmits, DropdownMenuRadioItemProps } from "rek
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"
 import { Circle } from "lucide-vue-next"
-import {
-  DropdownMenuItemIndicator,
-  DropdownMenuRadioItem,
-  useForwardPropsEmits,
-} from "reka-ui"
 import { cn } from "@/lib/utils"
 
 const props = defineProps<DropdownMenuRadioItemProps & { class?: HTMLAttributes["class"] }>()
@@ -20,7 +15,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
 
 <template>
-  <DropdownMenuRadioItem
+  <RekaDropdownMenuRadioItem
     data-slot="dropdown-menu-radio-item"
     v-bind="forwarded"
     :class="cn(
@@ -29,12 +24,12 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
     )"
   >
     <span class="pointer-events-none absolute left-2 flex size-3.5 items-center justify-center">
-      <DropdownMenuItemIndicator>
+      <RekaDropdownMenuItemIndicator>
         <slot name="indicator-icon">
           <Circle class="size-2 fill-current" />
         </slot>
-      </DropdownMenuItemIndicator>
+      </RekaDropdownMenuItemIndicator>
     </span>
     <slot />
-  </DropdownMenuRadioItem>
+  </RekaDropdownMenuRadioItem>
 </template>

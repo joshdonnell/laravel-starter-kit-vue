@@ -1,11 +1,5 @@
 <script setup lang="ts">
-import ProfileController from '@/actions/App/Http/Controllers/UserProfileController'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import AppLayout from '@/layouts/AppLayout.vue'
-import SettingsLayout from '@/layouts/settings/Layout.vue'
-import { edit } from '@/routes/user-profile'
+import { edit, update } from '@/routes/user-profile'
 import { send } from '@/routes/verification'
 import type { BreadcrumbItem } from '@/types'
 
@@ -14,9 +8,7 @@ type Props = {
   status?: string
 }
 
-
 defineProps<Props>()
-
 
 const breadcrumbItems: BreadcrumbItem[] = [
   {
@@ -24,7 +16,6 @@ const breadcrumbItems: BreadcrumbItem[] = [
     href: edit(),
   },
 ]
-
 
 const page = usePage()
 const user = computed(() => page.props.auth.user)
@@ -45,13 +36,13 @@ const user = computed(() => page.props.auth.user)
         />
 
         <Form
-          v-bind="ProfileController.update.form()"
+          v-bind="update.form()"
           class="space-y-6"
-          v-slot="{ errors, processing, recentlySuccessful }"
+          v-slot="{ errors, processing }"
         >
           <div class="grid gap-2">
-            <Label for="name">Name</Label>
-            <Input
+            <UiLabel for="name">Name</UiLabel>
+            <UiInput
               id="name"
               class="mt-1 block w-full"
               name="name"
@@ -64,8 +55,8 @@ const user = computed(() => page.props.auth.user)
           </div>
 
           <div class="grid gap-2">
-            <Label for="email">Email address</Label>
-            <Input
+            <UiLabel for="email">Email address</UiLabel>
+            <UiInput
               id="email"
               type="email"
               class="mt-1 block w-full"
@@ -99,20 +90,9 @@ const user = computed(() => page.props.auth.user)
           </div>
 
           <div class="flex items-center gap-4">
-            <Button :disabled="processing" data-test="update-profile-button"
-              >Save</Button
+            <UiButton :disabled="processing" data-test="update-profile-button"
+              >Save</UiButton
             >
-
-            <Transition
-              enter-active-class="transition ease-in-out"
-              enter-from-class="opacity-0"
-              leave-active-class="transition ease-in-out"
-              leave-to-class="opacity-0"
-            >
-              <p v-show="recentlySuccessful" class="text-sm text-neutral-600">
-                Saved.
-              </p>
-            </Transition>
           </div>
         </Form>
       </div>

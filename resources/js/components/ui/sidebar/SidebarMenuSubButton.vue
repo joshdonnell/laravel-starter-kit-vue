@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { PrimitiveProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
-import { Primitive } from "reka-ui"
 import { cn } from "@/lib/utils"
 
 const props = withDefaults(defineProps<PrimitiveProps & {
@@ -15,7 +14,7 @@ const props = withDefaults(defineProps<PrimitiveProps & {
 </script>
 
 <template>
-  <Primitive
+  <RekaPrimitive
     data-slot="sidebar-menu-sub-button"
     data-sidebar="menu-sub-button"
     :as="as"
@@ -32,5 +31,5 @@ const props = withDefaults(defineProps<PrimitiveProps & {
     )"
   >
     <slot />
-  </Primitive>
+  </RekaPrimitive>
 </template>

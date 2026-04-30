@@ -1,16 +1,10 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Spinner } from '@/components/ui/spinner'
-import AuthLayout from '@/layouts/AuthLayout.vue'
 import { update } from '@/routes/password'
 
 const props = defineProps<{
   token: string
   email: string
 }>()
-
 
 const inputEmail = ref(props.email)
 </script>
@@ -30,8 +24,8 @@ const inputEmail = ref(props.email)
     >
       <div class="grid gap-6">
         <div class="grid gap-2">
-          <Label for="email">Email</Label>
-          <Input
+          <UiLabel for="email">Email</UiLabel>
+          <UiInput
             id="email"
             type="email"
             name="email"
@@ -44,7 +38,7 @@ const inputEmail = ref(props.email)
         </div>
 
         <div class="grid gap-2">
-          <Label for="password">Password</Label>
+          <UiLabel for="password">Password</UiLabel>
           <PasswordInput
             id="password"
             name="password"
@@ -57,7 +51,7 @@ const inputEmail = ref(props.email)
         </div>
 
         <div class="grid gap-2">
-          <Label for="password_confirmation"> Confirm password </Label>
+          <UiLabel for="password_confirmation"> Confirm password </UiLabel>
           <PasswordInput
             id="password_confirmation"
             name="password_confirmation"
@@ -68,15 +62,15 @@ const inputEmail = ref(props.email)
           <InputError :message="errors.password_confirmation" />
         </div>
 
-        <Button
+        <UiButton
           type="submit"
           class="mt-4 w-full"
           :disabled="processing"
           data-test="reset-password-button"
         >
-          <Spinner v-if="processing" />
+          <UiSpinner v-if="processing" />
           Reset password
-        </Button>
+        </UiButton>
       </div>
     </Form>
   </AuthLayout>

@@ -1,16 +1,16 @@
 ---
 name: pest-testing
-description: "Use this skill for Pest PHP testing in Laravel projects only. Trigger whenever any test is being written, edited, fixed, or refactored — including fixing tests that broke after a code change, adding assertions, converting PHPUnit to Pest, adding datasets, and TDD workflows. Always activate when the user asks how to write something in Pest, mentions test files or directories (tests/Feature, tests/Unit, tests/Browser), or needs browser testing, smoke testing multiple pages for JS errors, or architecture tests. Covers: it()/expect() syntax, datasets, mocking, browser testing (visit/click/fill), smoke testing, arch(), Livewire component tests, RefreshDatabase, and all Pest 4 features. Do not use for factories, seeders, migrations, controllers, models, or non-test PHP code."
+description: "Use this skill for Pest PHP testing in Laravel projects only. Trigger whenever any test is being written, edited, fixed, or refactored — including fixing tests that broke after a code change, adding assertions, converting PHPUnit to Pest, adding datasets, and TDD workflows. Always activate when the user asks how to write something in Pest, mentions test files or directories (tests/Feature, tests/Unit, tests/Browser), or needs browser testing, smoke testing multiple pages for JS errors, or architecture tests. Covers: it()/expect() syntax, datasets, mocking, browser testing (visit/click/fill), smoke testing, arch(), Livewire component tests, RefreshDatabase, and all Pest 5 features. Do not use for factories, seeders, migrations, controllers, models, or non-test PHP code."
 license: MIT
 metadata:
   author: laravel
 ---
 
-# Pest Testing 4
+# Pest Testing 5
 
 ## Documentation
 
-Use `search-docs` for detailed Pest 4 patterns and documentation.
+Use `search-docs` for detailed Pest 5 patterns and documentation.
 
 ## Basic Usage
 
@@ -74,7 +74,7 @@ it('has emails', function (string $email) {
 ]);
 ```
 
-## Pest 4 Features
+## Pest 5 Features
 
 | Feature | Purpose |
 |---------|---------|
@@ -138,7 +138,7 @@ Split tests across parallel processes for faster CI runs.
 
 ### Architecture Testing
 
-Pest 4 includes architecture testing (from Pest 3):
+Pest 5 includes architecture testing:
 
 <!-- Architecture Test Example -->
 ```php

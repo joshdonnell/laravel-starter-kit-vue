@@ -5,7 +5,6 @@ type Props = {
   breadcrumbs?: BreadcrumbItem[]
 }
 
-
 withDefaults(defineProps<Props>(), {
   breadcrumbs: () => [],
 })
@@ -18,5 +17,6 @@ withDefaults(defineProps<Props>(), {
       <AppSidebarHeader :breadcrumbs="breadcrumbs" />
       <slot />
     </AppContent>
+    <UiSonner />
   </AppShell>
 </template>

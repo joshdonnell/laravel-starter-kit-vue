@@ -1,9 +1,4 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Spinner } from '@/components/ui/spinner'
-import AuthLayout from '@/layouts/AuthLayout.vue'
 import { login } from '@/routes'
 import { email } from '@/routes/password'
 
@@ -29,8 +24,8 @@ defineProps<{
     <div class="space-y-6">
       <Form v-bind="email.form()" v-slot="{ errors, processing }">
         <div class="grid gap-2">
-          <Label for="email">Email address</Label>
-          <Input
+          <UiLabel for="email">Email address</UiLabel>
+          <UiInput
             id="email"
             type="email"
             name="email"
@@ -42,14 +37,14 @@ defineProps<{
         </div>
 
         <div class="my-6 flex items-center justify-start">
-          <Button
+          <UiButton
             class="w-full"
             :disabled="processing"
             data-test="email-password-reset-link-button"
           >
-            <Spinner v-if="processing" />
+            <UiSpinner v-if="processing" />
             Email password reset link
-          </Button>
+          </UiButton>
         </div>
       </Form>
 

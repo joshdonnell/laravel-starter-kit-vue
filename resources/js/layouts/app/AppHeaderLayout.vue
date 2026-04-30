@@ -5,7 +5,6 @@ type Props = {
   breadcrumbs?: BreadcrumbItem[]
 }
 
-
 withDefaults(defineProps<Props>(), {
   breadcrumbs: () => [],
 })
@@ -17,5 +16,6 @@ withDefaults(defineProps<Props>(), {
     <AppContent variant="header">
       <slot />
     </AppContent>
+    <UiSonner />
   </AppShell>
 </template>

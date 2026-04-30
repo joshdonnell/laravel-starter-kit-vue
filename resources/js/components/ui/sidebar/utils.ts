@@ -1,4 +1,3 @@
-import { createContext } from "reka-ui"
 import type { ComputedRef, Ref } from 'vue';
 
 export type SidebarContext = {

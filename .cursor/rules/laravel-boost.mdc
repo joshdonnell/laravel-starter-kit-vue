@@ -6,36 +6,87 @@ alwaysApply: true
 
 # App/Actions guidelines
 
-- This application uses the Action pattern and prefers for much logic to live in reusable and composable Action classes.
-- Actions live in `app/Actions`, they are named based on what they do, with no suffix.
-- Actions will be called from many different places: jobs, commands, HTTP requests, API requests, MCP requests, and more.
-- Create dedicated Action classes for business logic with a single `handle()` method.
-- Inject dependencies via constructor using private properties.
+- This application uses the Action pattern. Business logic lives in reusable, composable Action classes.
+- Actions live in `app/Actions`, named based on what they do, with no suffix (e.g., `CreateUser`, not `CreateUserAction`).
+- Actions are called from many different places: controllers, jobs, commands, other actions, and more.
+- Actions are `final readonly` classes with a single public `handle()` method.
+- Inject dependencies via constructor using private property promotion. If there are no dependencies, omit the constructor entirely.
+- Wrap complex operations involving multiple models in `DB::transaction()`.
+- Actions should be single-responsibility. A top-level action may compose multiple sub-actions, but each sub-action should do one thing.
+- When a top-level action orchestrates multiple sub-actions, wrap the entire orchestration in `DB::transaction()`.
+- Use `#[SensitiveParameter]` on password or secret string parameters.
 - Create new actions with `php artisan make:action "{name}" --no-interaction`
-- Wrap complex operations in `DB::transaction()` within actions when multiple models are involved.
-- Some actions won't require dependencies via `__construct` and they can use just the `handle()` method.
 
-<code-snippet name="Example action class" lang="php">
-
+<code-snippet name="Simple action with no dependencies" lang="php">
 <?php
 
 declare(strict_types=1);
 
 namespace App\Actions;
 
-final readonly class CreateFavorite
-{
-    public function __construct(private FavoriteService $favorites)
-    {
-        //
-    }
+use App\Models\User;
 
-    public function handle(User $user, string $favorite): bool
+final readonly class DeleteUser
+{
+    public function handle(User $user): void
     {
-        return $this->favorites->add($user, $favorite);
+        $user->delete();
     }
 }
+</code-snippet>
 
+<code-snippet name="Action with dependencies" lang="php">
+<?php
+
+declare(strict_types=1);
+
+namespace App\Actions;
+
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use SensitiveParameter;
+
+final readonly class UpdateUserPassword
+{
+    public function handle(User $user, #[SensitiveParameter] string $password): void
+    {
+        $user->update([
+            'password' => Hash::make($password),
+        ]);
+    }
+}
+</code-snippet>
+
+<code-snippet name="Orchestrating action wrapping sub-actions in a transaction" lang="php">
+<?php
+
+declare(strict_types=1);
+
+namespace App\Actions;
+
+use App\Models\Order;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
+
+final readonly class ProcessOrder
+{
+    public function __construct(
+        private CreatePayment $createPayment,
+        private SendOrderConfirmation $sendConfirmation,
+    ) {}
+
+    public function handle(User $user, array $items): Order
+    {
+        return DB::transaction(function () use ($user, $items): Order {
+            $order = Order::query()->create([...]);
+
+            $this->createPayment->handle($order);
+            $this->sendConfirmation->handle($order);
+
+            return $order;
+        });
+    }
+}
 </code-snippet>
 
 
@@ -55,29 +106,36 @@ The Laravel Boost guidelines are specifically curated by Laravel maintainers for
 ## Foundational Context
 This application is a Laravel application and its main Laravel ecosystems package & versions are below. You are an expert with them all. Ensure you abide by these specific packages & versions.
 
-- php - 8.4.15
-- inertiajs/inertia-laravel (INERTIA) - v2
+- php - 8.4
+- inertiajs/inertia-laravel (INERTIA_LARAVEL) - v3
 - laravel/fortify (FORTIFY) - v1
-- laravel/framework (LARAVEL) - v12
+- laravel/framework (LARAVEL) - v13
 - laravel/prompts (PROMPTS) - v0
 - laravel/wayfinder (WAYFINDER) - v0
 - larastan/larastan (LARASTAN) - v3
+- laravel/boost (BOOST) - v2
 - laravel/mcp (MCP) - v0
+- laravel/pail (PAIL) - v1
 - laravel/pint (PINT) - v1
-- pestphp/pest (PEST) - v4
+- pestphp/pest (PEST) - v5
 - phpunit/phpunit (PHPUNIT) - v12
 - rector/rector (RECTOR) - v2
-- @inertiajs/vue3 (INERTIA) - v2
+- @inertiajs/vue3 (INERTIA) - v3
 - tailwindcss (TAILWINDCSS) - v4
 - vue (VUE) - v3
 - @laravel/vite-plugin-wayfinder (WAYFINDER) - v0
-- eslint (ESLINT) - v9
-- prettier (PRETTIER) - v3
+
+## Skills Activation
+This project has domain-specific skills available. You MUST activate the relevant skill whenever you work in that domain.
+
+- `wayfinder-development` — Activates whenever referencing backend routes in frontend components. Use when importing from @/actions or @/routes, calling Laravel routes from TypeScript, or working with Wayfinder route functions.
+- `pest-testing` — Use this skill for Pest PHP testing in Laravel projects only. Trigger whenever any test is being written, edited, fixed, or refactored. Covers: it()/expect() syntax, datasets, mocking, browser testing, smoke testing, arch(), and all Pest 5 features. Do not use for factories, seeders, migrations, controllers, models, or non-test PHP code.
+- `fortify-development` — Laravel Fortify headless authentication backend development. Activate when implementing authentication features including login, registration, password reset, email verification, two-factor authentication (2FA/TOTP), profile updates, headless auth, authentication scaffolding, or auth guards in Laravel applications.
 
 ## Conventions
 - You must follow all existing code conventions used in this application. When creating or editing a file, check sibling files for the correct structure, approach, naming.
 - Use descriptive names for variables and methods. For example, `isRegisteredForDiscounts`, not `discount()`.
-- Check for existing components to reuse before writing a new one.
+- Check for existing components, actions, requests, and types to reuse before writing new ones.
 
 ## Verification Scripts
 - Do not create verification scripts or tinker when tests cover that functionality and prove it works. Unit and feature tests are more important.
@@ -87,7 +145,7 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - Do not change the application's dependencies without approval.
 
 ## Frontend Bundling
-- If the user doesn't see a frontend change reflected in the UI, it could mean they need to run `pnpm run build`, `pnpm run dev`, or `composer run dev`. Ask them.
+- If the user doesn't see a frontend change reflected in the UI, it could mean they need to run `npm run build`, `npm run dev`, or `composer run dev`. Ask them.
 
 ## Replies
 - Be concise in your explanations - focus on what's important rather than explaining obvious details.
@@ -102,7 +160,8 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - Laravel Boost is an MCP server that comes with powerful tools designed specifically for this application. Use them.
 
 ## Artisan
-- Use the `list-artisan-commands` tool when you need to call an Artisan command to double check the available parameters.
+- Run Artisan commands directly via the command line (e.g., `php artisan route:list`, `php artisan tinker --execute "..."`).
+- Use `php artisan list` to discover available commands and `php artisan [command] --help` to check parameters.
 
 ## URLs
 - Whenever you share a project URL with the user you should use the `get-absolute-url` tool to ensure you're using the correct scheme, domain / IP, and port.
@@ -137,16 +196,20 @@ This application is a Laravel application and its main Laravel ecosystems packag
 
 ## PHP
 
-- Always use curly braces for control structures, even if it has one line.
+- Every PHP file must start with `<?php` followed by `declare(strict_types=1);` on the next line.
+- Always use curly braces for control structures, even for single-line bodies.
+- Prefer `final` and `readonly` classes to prevent unintended inheritance and mutation.
 
 ### Constructors
 - Use PHP 8 constructor property promotion in `__construct()`.
-    - <code-snippet>public function __construct(public GitHub $github) { }</code-snippet>
-- Do not allow empty `__construct()` methods with zero parameters.
+    - <code-snippet>public function __construct(private GitHub $github) { }</code-snippet>
+- Do not allow empty `__construct()` methods with zero parameters unless the constructor is private.
+- If a class has no dependencies, omit the constructor entirely.
 
 ### Type Declarations
 - Always use explicit return type declarations for methods and functions.
 - Use appropriate PHP type hints for method parameters.
+- Use `assert()` for runtime type assertions when the type system cannot guarantee a type (e.g., after `$this->user()` on a FormRequest).
 
 <code-snippet name="Explicit Return Types and Method Params" lang="php">
 protected function isAccessible(User $user, ?string $path = null): bool
@@ -160,9 +223,93 @@ protected function isAccessible(User $user, ?string $path = null): bool
 
 ## PHPDoc Blocks
 - Add useful array shape type definitions for arrays when appropriate.
+- Use `@property-read` annotations on models to document attributes for static analysis.
 
 ## Enums
 - Typically, keys in an Enum should be TitleCase. For example: `FavoritePerson`, `BestLake`, `Monthly`.
+
+
+=== models rules ===
+
+# Models
+
+- Models are `final class` and use `declare(strict_types=1);`.
+- Use `casts()` method instead of `$casts` property for attribute casting.
+- Add PHPDoc `@property-read` annotations for every attribute to help Larastan understand the model shape.
+- Use `HasUuids` when the model uses UUID primary keys.
+- Use proper Eloquent relationship methods with return type hints.
+- Prefer relationship methods over raw queries or manual joins.
+- Avoid `DB::`; prefer `Model::query()`. Generate code that leverages Laravel's ORM capabilities rather than bypassing them.
+- Generate code that prevents N+1 query problems by using eager loading.
+- Use Laravel's query builder for very complex database operations.
+
+## Factories
+- When creating new models, create useful factories and seeders for them too.
+- Cache expensive generated values in factory definitions (e.g., `self::$password ??= Hash::make('password')`).
+- Add named factory states for common variations (e.g., `unverified()`, `withoutTwoFactor()`).
+
+
+=== controllers rules ===
+
+# Controllers
+
+- Controllers are `final readonly` classes with `declare(strict_types=1);`.
+- Controllers do not contain business logic. They delegate to Actions and Form Requests.
+- Controllers implement `HasMiddleware` only when they need custom middleware.
+- Use `#[CurrentUser]` attribute to inject the authenticated user instead of calling `auth()->user()`.
+- Return `Inertia\Response` or `Illuminate\Http\RedirectResponse` with explicit return types.
+- Use named routes and the `route()` helper or `to_route()` helper.
+- Use `redirect()->intended()` after login or registration.
+- Use `Inertia::flash()` for toast notifications.
+
+<code-snippet name="Controller Example" lang="php">
+final readonly class ProfileController
+{
+    public function update(UpdateUserRequest $request, #[CurrentUser] User $user, UpdateUser $action): RedirectResponse
+    {
+        $action->handle($user, $request->validated());
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Profile updated.)]);
+
+        return to_route('user-profile.edit');
+    }
+}
+</code-snippet>
+
+
+=== form-requests rules ===
+
+# Form Requests
+
+- Always create dedicated Form Request classes for validation. Never validate inline in controllers.
+- Form requests are `final class` (not `readonly`, since they extend `FormRequest`).
+- Include validation rules AND custom error messages when appropriate.
+- Type the `rules()` return as `array<string, array<mixed>|string>` or `array<string, ValidationRule|array<mixed>|string>`.
+- Use `assert()` after `$this->user()` to satisfy static analysis when the user type is known.
+- Add custom methods to Form Requests for complex logic (e.g., `validateCredentials()`, `throttleKey()`).
+- Use `$request->safe()->except()`, `$request->validated()`, `$request->string()->value()`, and `$request->boolean()` to extract typed data.
+
+<code-snippet name="Form Request Example" lang="php">
+final class UpdateUserRequest extends FormRequest
+{
+    /**
+     * @return array<string, ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        $user = $this->user();
+        assert($user instanceof User);
+
+        return [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => [
+                'required', 'string', 'email', 'max:255',
+                Rule::unique(User::class)->ignore($user->id),
+            ],
+        ];
+    }
+}
+</code-snippet>
 
 
 === tests rules ===
@@ -170,66 +317,60 @@ protected function isAccessible(User $user, ?string $path = null): bool
 ## Test Enforcement
 
 - Every change must be programmatically tested. Write a new test or update an existing test, then run the affected tests to make sure they pass.
-- Run the minimum number of tests needed to ensure code quality and speed. Use `php artisan test` with a specific filename or filter.
+- Run the minimum number of tests needed to ensure code quality and speed. Use `php artisan test --compact` with a specific filename or filter.
+- Use `declare(strict_types=1);` in every test file.
+- Prefer Pest's `it()` function over `test()`.
+- Use `actingAs()` for authentication in feature tests.
+- Use `fromRoute()` to set the previous URL for redirect assertions.
+- Use `assertInertia()` to assert Inertia page components and props.
+- Use `assertInertiaFlash()` to assert flash data sent via `Inertia::flash()`.
+- Unit test Actions by resolving them with `resolve(Action::class)` and calling `->handle()` directly.
+- Fake events with `Event::fake()` when testing event dispatching.
+- Use factories for model creation. Check for custom states before manually setting up models.
+- Faker: Use methods such as `$this->faker->word()` or `fake()->randomDigit()`. Follow existing conventions whether to use `$this->faker` or `fake()`.
+
+<code-snippet name="Unit Test Action Example" lang="php">
+it('may update a user', function (): void {
+    $user = User::factory()->create(['name' => 'Old Name']);
+
+    $action = resolve(UpdateUser::class);
+    $action->handle($user, ['name' => 'New Name']);
+
+    expect($user->refresh()->name)->toBe('New Name');
+});
+</code-snippet>
 
 
 === inertia-laravel/core rules ===
 
 ## Inertia Core
 
-- Inertia.js components should be placed in the `resources/js/Pages` directory unless specified differently in the JS bundler (vite.config.js).
+- Inertia.js components should be placed in the `resources/js/pages` directory unless specified differently in the JS bundler (vite.config.js).
 - Use `Inertia::render()` for server-side routing instead of traditional Blade views.
 - Use `search-docs` for accurate guidance on all things Inertia.
 
-<code-snippet lang="php" name="Inertia::render Example">
-// routes/web.php example
-Route::get('/users', function () {
-    return Inertia::render('Users/Index', [
-        'users' => User::all()
-    ]);
-});
-</code-snippet>
+## Inertia v3
 
-
-=== inertia-laravel/v2 rules ===
-
-## Inertia v2
-
-- Make use of all Inertia features from v1 & v2. Check the documentation before making any changes to ensure we are taking the correct approach.
-
-### Inertia v2 New Features
-- Polling
-- Prefetching
-- Deferred props
-- Infinite scrolling using merging props and `WhenVisible`
-- Lazy loading data on scroll
-
-### Deferred Props & Empty States
-- When using deferred props on the frontend, you should add a nice empty state with pulsing / animated skeleton.
-
-### Inertia Form General Guidance
-- The recommended way to build forms when using Inertia is with the `<Form>` component - a useful example is below. Use `search-docs` with a query of `form component` for guidance.
-- Forms can also be built using the `useForm` helper for more programmatic control, or to follow existing conventions. Use `search-docs` with a query of `useForm helper` for guidance.
-- `resetOnError`, `resetOnSuccess`, and `setDefaultsOnSuccess` are available on the `<Form>` component. Use `search-docs` with a query of 'form component resetting' for guidance.
+- Use all Inertia features from v1, v2, and v3. Check the documentation before making changes to ensure we are taking the correct approach.
+- Features: deferred props, infinite scroll, merging props, polling, prefetching, once props, flash data.
+- When using deferred props, add an empty state with a pulsing or animated skeleton.
+- Use `Inertia::flash()` to send flash data to the frontend (e.g., toast notifications).
 
 
 === laravel/core rules ===
 
 ## Do Things the Laravel Way
 
-- Use `php artisan make:` commands to create new files (i.e. migrations, controllers, models, etc.). You can list available Artisan commands using the `list-artisan-commands` tool.
+- Use `php artisan make:` commands to create new files (i.e. migrations, controllers, models, etc.). You can list available Artisan commands using `php artisan list` and check their parameters with `php artisan [command] --help`.
 - If you're creating a generic PHP class, use `php artisan make:class`.
 - Pass `--no-interaction` to all Artisan commands to ensure they work without user input. You should also pass the correct `--options` to ensure correct behavior.
 
 ### Database
 - Always use proper Eloquent relationship methods with return type hints. Prefer relationship methods over raw queries or manual joins.
-- Use Eloquent models and relationships before suggesting raw database queries
+- Use Eloquent models and relationships before suggesting raw database queries.
 - Avoid `DB::`; prefer `Model::query()`. Generate code that leverages Laravel's ORM capabilities rather than bypassing them.
 - Generate code that prevents N+1 query problems by using eager loading.
 - Use Laravel's query builder for very complex database operations.
-
-### Model Creation
-- When creating new models, create useful factories and seeders for them too. Ask the user if they need any other things, using `list-artisan-commands` to check the available options to `php artisan make:model`.
 
 ### APIs & Eloquent Resources
 - For APIs, default to using Eloquent API Resources and API versioning unless existing API routes do not, then you should follow existing application convention.
@@ -256,18 +397,18 @@ Route::get('/users', function () {
 - When creating tests, make use of `php artisan make:test [options] {name}` to create a feature test, and pass `--unit` to create a unit test. Most tests should be feature tests.
 
 ### Vite Error
-- If you receive an "Illuminate\Foundation\ViteException: Unable to locate file in Vite manifest" error, you can run `pnpm run build` or ask the user to run `pnpm run dev` or `composer run dev`.
+- If you receive an "Illuminate\Foundation\ViteException: Unable to locate file in Vite manifest" error, you can run `npm run build` or ask the user to run `npm run dev` or `composer run dev`.
 
 
-=== laravel/v12 rules ===
+=== laravel/v13 rules ===
 
-## Laravel 12
+## Laravel 13
 
 - Use the `search-docs` tool to get version specific documentation.
 - Since Laravel 11, Laravel has a new streamlined file structure which this project uses.
 
-### Laravel 12 Structure
-- No middleware files in `app/Http/Middleware/`.
+### Laravel 13 Structure
+- No middleware files in `app/Http/Kernel.php`.
 - `bootstrap/app.php` is the file to register middleware, exceptions, and routing files.
 - `bootstrap/providers.php` contains application specific service providers.
 - **No app\Console\Kernel.php** - use `bootstrap/app.php` or `routes/console.php` for console configuration.
@@ -275,7 +416,7 @@ Route::get('/users', function () {
 
 ### Database
 - When modifying a column, the migration must include all of the attributes that were previously defined on the column. Otherwise, they will be dropped and lost.
-- Laravel 11 allows limiting eagerly loaded records natively, without external packages: `$query->latest()->limit(10);`.
+- Laravel 13 allows limiting eagerly loaded records natively, without external packages: `$query->latest()->limit(10);`.
 
 ### Models
 - Casts can and likely should be set in a `casts()` method on a model rather than the `$casts` property. Follow existing conventions from other models.
@@ -363,9 +504,9 @@ it('is true', function () {
 
 ### Running Tests
 - Run the minimal number of tests using an appropriate filter before finalizing code edits.
-- To run all tests: `php artisan test`.
-- To run all tests in a file: `php artisan test tests/Feature/ExampleTest.php`.
-- To filter on a particular test name: `php artisan test --filter=testName` (recommended after making a change to a related file).
+- To run all tests: `php artisan test --compact`.
+- To run all tests in a file: `php artisan test --compact tests/Feature/ExampleTest.php`.
+- To filter on a particular test name: `php artisan test --compact --filter=testName` (recommended after making a change to a related file).
 - When the tests relating to your changes are passing, ask the user if they would like to run the entire test suite to ensure everything is still passing.
 
 ### Pest Assertions
@@ -396,17 +537,17 @@ it('has emails', function (string $email) {
 </code-snippet>
 
 
-=== pest/v4 rules ===
+=== pest/v5 rules ===
 
-## Pest 4
+## Pest 5
 
-- Pest v4 is a huge upgrade to Pest and offers: browser testing, smoke testing, visual regression testing, test sharding, and faster type coverage.
+- Pest v5 is the current version used in this project.
 - Browser testing is incredibly powerful and useful for this project.
 - Browser tests should live in `tests/Browser/`.
 - Use the `search-docs` tool for detailed guidance on utilizing these features.
 
 ### Browser Testing
-- You can use Laravel features like `Event::fake()`, `assertAuthenticated()`, and model factories within Pest v4 browser tests, as well as `RefreshDatabase` (when needed) to ensure a clean state for each test.
+- You can use Laravel features like `Event::fake()`, `assertAuthenticated()`, and model factories within Pest browser tests, as well as `RefreshDatabase` (when needed) to ensure a clean state for each test.
 - Interact with the page (click, type, scroll, select, submit, drag-and-drop, touch gestures, etc.) when appropriate to complete the test.
 - If requested, test on multiple browsers (Chrome, Firefox, Safari).
 - If requested, test on different devices and viewports (like iPhone 14 Pro, tablets, or custom breakpoints).
@@ -447,54 +588,43 @@ $pages->assertNoJavascriptErrors()->assertNoConsoleLogs();
 
 - Vue components must have a single root element.
 - Use `router.visit()` or `<Link>` for navigation instead of traditional links.
+- All Vue components use `<script setup lang="ts">`.
+- Vue APIs (`ref`, `computed`, `onMounted`, etc.), Inertia APIs (`usePage`, `useForm`, `router`), and composables are auto-imported by `unplugin-auto-import`. Do not manually import them.
+- Custom composables live in `resources/js/composables/` and are auto-imported.
+- UI components live in `resources/js/components/ui/` and are auto-imported by `unplugin-vue-components`.
+- shadcn-vue / reka-ui components are prefixed with `Ui` (e.g., `UiButton`, `UiLabel`).
+- Reka UI primitives are prefixed with `Reka` (e.g., `RekaPrimitive`).
+- Inertia components (`Link`, `Form`, `Head`) are auto-imported from `@inertiajs/vue3`.
 
-<code-snippet name="Inertia Client Navigation" lang="vue">
+## Wayfinder Routes
+- Import named routes from `@/routes/` (e.g., `import { dashboard } from '@/routes'`).
+- Import controller-specific routes from `@/routes/controller-name` (e.g., `import { edit, update } from '@/routes/user-profile'`).
+- Use `.form()` on route imports for Inertia `<Form>` bindings: `v-bind="update.form()"`.
+- Use `to_route()` helper in controllers, not hardcoded URLs.
 
-    import { Link } from '@inertiajs/vue3'
-    <Link href="/">Home</Link>
+## Forms
+- Use Inertia's `<Form>` component with `v-bind="route.form()"`.
+- Access form state via `v-slot="{ errors, processing }"`.
+- Use `<InputError :message="errors.fieldName" />` to display validation errors.
+- Use `reset-on-success` and `reset-on-error` props on `<Form>` to clear fields after submission.
 
-</code-snippet>
+## Layouts & Pages
+- Pages live in `resources/js/pages/`.
+- Layouts live in `resources/js/layouts/`.
+- Wrap pages in `AppLayout` and pass `breadcrumbs` prop when applicable.
+- Use `<Head title="Page Title" />` for page titles.
+- Access shared Inertia data via `usePage()` and wrap derived values in `computed()`.
 
+## Types
+- TypeScript types live in `resources/js/types/`.
+- Export shared types from `resources/js/types/index.ts`.
+- Extend `@inertiajs/core` `InertiaConfig` interface in `global.d.ts` to type shared page props.
 
-=== inertia-vue/v2/forms rules ===
-
-## Inertia + Vue Forms
-
-<code-snippet name="`<Form>` Component Example" lang="vue">
-
-<Form
-    action="/users"
-    method="post"
-    #default="{
-        errors,
-        hasErrors,
-        processing,
-        progress,
-        wasSuccessful,
-        recentlySuccessful,
-        setError,
-        clearErrors,
-        resetAndClearErrors,
-        defaults,
-        isDirty,
-        reset,
-        submit,
-  }"
->
-    <input type="text" name="name" />
-
-    <div v-if="errors.name">
-        {{ errors.name }}
-    </div>
-
-    <button type="submit" :disabled="processing">
-        {{ processing ? 'Creating...' : 'Create User' }}
-    </button>
-
-    <div v-if="wasSuccessful">User created successfully!</div>
-</Form>
-
-</code-snippet>
+## Styling
+- Use Tailwind CSS v4 utility classes.
+- Use the `cn()` utility from `@/lib/utils` for conditional class merging (combines `clsx` and `tailwind-merge`).
+- Use CSS variables for theming (defined in `resources/css/app.css`).
+- Support dark mode via the `.dark` class and `dark:` variant.
 
 
 === tailwindcss/core rules ===
@@ -562,4 +692,19 @@ $pages->assertNoJavascriptErrors()->assertNoConsoleLogs();
 | overflow-ellipsis | text-ellipsis |
 | decoration-slice | box-decoration-slice |
 | decoration-clone | box-decoration-clone |
+
+=== phpstan/rules ===
+
+# PHPStan
+
+- PHPStan runs at level `max` (the highest strictness level) via Larastan.
+- Every PHP file must satisfy level max. This means:
+  - All method parameters must be typed.
+  - All method return types must be explicit.
+  - All properties must be typed.
+  - No mixed types should leak through without explicit handling.
+- Use `assert()` for runtime type narrowing when static analysis cannot infer a type.
+- Add PHPDoc `@property-read` annotations on Eloquent models.
+- Use precise array shape types in PHPDoc when returning arrays.
+
 </laravel-boost-guidelines>

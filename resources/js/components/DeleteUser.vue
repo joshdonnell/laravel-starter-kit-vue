@@ -1,17 +1,5 @@
 <script setup lang="ts">
-import ProfileController from '@/actions/App/Http/Controllers/UserProfileController'
-import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-import { Label } from '@/components/ui/label'
+import { destroy } from '@/routes/user'
 
 const passwordInput = useTemplateRef('passwordInput')
 </script>
@@ -32,15 +20,15 @@ const passwordInput = useTemplateRef('passwordInput')
           Please proceed with caution, this cannot be undone.
         </p>
       </div>
-      <Dialog>
-        <DialogTrigger as-child>
-          <Button variant="destructive" data-test="delete-user-button"
-            >Delete account</Button
+      <UiDialog>
+        <UiDialogTrigger as-child>
+          <UiButton variant="destructive" data-test="delete-user-button"
+            >Delete account</UiButton
           >
-        </DialogTrigger>
-        <DialogContent>
+        </UiDialogTrigger>
+        <UiDialogContent>
           <Form
-            v-bind="ProfileController.destroy.form()"
+            v-bind="destroy.form()"
             reset-on-success
             @error="() => passwordInput?.focus()"
             :options="{
@@ -49,19 +37,19 @@ const passwordInput = useTemplateRef('passwordInput')
             class="space-y-6"
             v-slot="{ errors, processing, reset, clearErrors }"
           >
-            <DialogHeader class="space-y-3">
-              <DialogTitle
-                >Are you sure you want to delete your account?</DialogTitle
+            <UiDialogHeader class="space-y-3">
+              <UiDialogTitle
+                >Are you sure you want to delete your account?</UiDialogTitle
               >
-              <DialogDescription>
+              <UiDialogDescription>
                 Once your account is deleted, all of its resources and data will
                 also be permanently deleted. Please enter your password to
                 confirm you would like to permanently delete your account.
-              </DialogDescription>
-            </DialogHeader>
+              </UiDialogDescription>
+            </UiDialogHeader>
 
             <div class="grid gap-2">
-              <Label for="password" class="sr-only">Password</Label>
+              <UiLabel for="password" class="sr-only">Password</UiLabel>
               <PasswordInput
                 id="password"
                 name="password"
@@ -71,9 +59,9 @@ const passwordInput = useTemplateRef('passwordInput')
               <InputError :message="errors.password" />
             </div>
 
-            <DialogFooter class="gap-2">
-              <DialogClose as-child>
-                <Button
+            <UiDialogFooter class="gap-2">
+              <UiDialogClose as-child>
+                <UiButton
                   variant="secondary"
                   @click="
                     () => {
@@ -83,21 +71,21 @@ const passwordInput = useTemplateRef('passwordInput')
                   "
                 >
                   Cancel
-                </Button>
-              </DialogClose>
+                </UiButton>
+              </UiDialogClose>
 
-              <Button
+              <UiButton
                 type="submit"
                 variant="destructive"
                 :disabled="processing"
                 data-test="confirm-delete-user-button"
               >
                 Delete account
-              </Button>
-            </DialogFooter>
+              </UiButton>
+            </UiDialogFooter>
           </Form>
-        </DialogContent>
-      </Dialog>
+        </UiDialogContent>
+      </UiDialog>
     </div>
   </div>
 </template>

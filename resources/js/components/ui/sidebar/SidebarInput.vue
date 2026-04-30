@@ -1,15 +1,13 @@
 <script setup lang="ts">
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
-import { Input } from '@/components/ui/input'
-
 const props = defineProps<{
   class?: HTMLAttributes["class"]
 }>()
 </script>
 
 <template>
-  <Input
+  <UiInput
     data-slot="sidebar-input"
     data-sidebar="input"
     :class="cn(
@@ -18,5 +16,5 @@ const props = defineProps<{
     )"
   >
     <slot />
-  </Input>
+  </UiInput>
 </template>

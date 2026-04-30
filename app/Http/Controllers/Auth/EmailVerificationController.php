@@ -2,15 +2,25 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
-final readonly class UserEmailVerification
+final readonly class EmailVerificationController
 {
+    public function index(Request $request, #[CurrentUser] User $user): Response|RedirectResponse
+    {
+        return $user->hasVerifiedEmail()
+            ? redirect()->intended(route('dashboard', absolute: false))
+            : Inertia::render('auth/VerifyEmail', ['status' => $request->session()->get('status')]);
+    }
+
     public function update(EmailVerificationRequest $request, #[CurrentUser] User $user): RedirectResponse
     {
         if ($user->hasVerifiedEmail()) {

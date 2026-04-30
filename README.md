@@ -11,23 +11,37 @@
     <a href="https://packagist.org/packages/joshdonnell/laravel-starter-kit-vue"><img src="https://img.shields.io/packagist/l/joshdonnell/laravel-starter-kit-vue" alt="License"></a>
 </p>
 
-An end-to-end type-safe Laravel 13 starter kit with auto-generated TypeScript types, Vue, and shadcn-vue for fast front-end prototyping. Built on top of [Nuno Maduro's Laravel Starter Kit (Maintained by me)](https://github.com/nunomaduro/laravel-starter-kit-inertia-vue), this kit extends it with Wayfinder, Laravel Data, and unplugin-auto-import to provide a Nuxt-like developer experience when writing Vue code within a Laravel Inertia application.
+An end-to-end type-safe Laravel 13 starter kit with auto-generated TypeScript types, Vue 3, and shadcn-vue components for fast front-end prototyping. Built on top of [Nuno Maduro's Laravel Starter Kit](https://github.com/nunomaduro/laravel-starter-kit-inertia-vue), this kit extends it with Wayfinder, Laravel Data, and unplugin-auto-import to provide a Nuxt-like developer experience when writing Vue code within a Laravel Inertia application.
 
 ## Tech Stack
 
-**Backend:** PHP 8.4+, Laravel 13, Inertia.js v3, Spatie Laravel Data
+**Backend:** PHP 8.4+, Laravel 13, Inertia.js v3, Laravel Fortify, Spatie Laravel Data, Nuno Maduro's Essentials
 
-**Frontend:** Vue 3, shadcn-vue, TypeScript, Tailwind CSS v4
+**Frontend:** Vue 3, reka-ui, shadcn-vue, TypeScript, Tailwind CSS v4
 
-**Type Generation:** Laravel Wayfinder (auto-generated route & action types), Spatie Laravel Data (auto-generated DTO types)
+**Type Generation:** Laravel Wayfinder (auto-generated route & action types), Spatie Laravel Data + TypeScript Transformer (auto-generated DTO types)
 
-**DX Tooling:** unplugin-auto-import (Nuxt-style auto imports for Vue APIs and composables)
+**DX Tooling:** Vite Plus, unplugin-auto-import, unplugin-vue-components, vite-plugin-watch
 
-**Code Quality:** PHPStan (level 9), Rector, Pint, Vite Plus, oxlint, oxfmt, Pest v5 (100% coverage)
+**Code Quality:** PHPStan (level max via Larastan), Rector, Pint, oxlint, oxfmt, Pest v5 (100% coverage)
+
+## Features
+
+- **Fully type-safe end-to-end** — Auto-generated TypeScript types for routes, actions, and Data Transfer Objects
+- **Zero-config auto imports** — Vue APIs, composables, and components are auto-imported just like Nuxt
+- **Auto-regenerating types** — Editing `app/Data` or `app/Enums` automatically triggers TypeScript type generation
+- **Dark mode & appearance switching** — Built-in theme support with cookie-based persistence
+- **Persistent sidebar state** — Collapsible sidebar remembers its state across requests
+- **Complete authentication** — Login, registration, password reset, email verification, and two-factor authentication via Laravel Fortify
+- **Action-oriented architecture** — Business logic lives in dedicated, immutable Action classes
+- **Resource-based routing** — Controllers follow CRUD conventions (Cruddy by Design)
+- **Preloaded assets** — Critical CSS and JS are automatically preloaded via Link headers
 
 ## Local Development
 
-> **Requires [PHP 8.4+](https://php.net/releases/), [npm](https://nodejs.org/) or [pnpm](https://pnpm.io/), and a code coverage driver like [Xdebug](https://xdebug.org/docs/install).**
+> **Requires [PHP 8.4+](https://php.net/releases/), [Node 22+](https://nodejs.org/), [pnpm](https://pnpm.io/) (used in CI), and a code coverage driver like [Xdebug](https://xdebug.org/docs/install).**
+>
+> SQLite is used by default for database, session, cache, and queue storage.
 
 ### Installation
 
@@ -39,10 +53,10 @@ cd example-app
 ### Setup
 
 ```bash
-# Install dependencies and configure the project
+# Install dependencies, create .env, generate key, run migrations, and build assets
 composer setup
 
-# Start the development server (Laravel, queue, logs, and vite plus)
+# Start the development server (Laravel, queue, logs, and Vite)
 composer dev
 ```
 
@@ -51,11 +65,7 @@ composer dev
 If you plan to use Pest's browser testing capabilities:
 
 ```bash
-# npm
-npm install playwright && npx playwright install
-
-# pnpm
-pnpm add playwright && pnpx playwright install
+pnpm add playwright && pnpm exec playwright install
 ```
 
 ### Verify Installation
@@ -70,17 +80,18 @@ You should see 100% test coverage and all quality checks passing.
 
 ### Development
 
-- `composer dev` — Starts Laravel server, queue worker, log monitoring, and Vite dev server concurrently
+- `composer dev` — Starts Laravel server, queue worker, log monitoring (Pail), and Vite dev server concurrently
+- `composer transform-types` — Manually regenerates TypeScript types from PHP Data and Enums
 
 ### Code Quality
 
-- `composer lint` — Runs Rector (refactoring), Pint (PHP formatting), and oxfmt (JS/TS formatting)
+- `composer lint` — Runs Rector (refactoring), Pint (PHP formatting), and Vite Plus (JS/TS/Vue linting and formatting)
 - `composer test:lint` — Dry-run mode for CI/CD pipelines
 
 ### Testing
 
 - `composer test:type-coverage` — Ensures 100% type coverage with Pest
-- `composer test:types` — Runs PHPStan at level 9 (maximum strictness)
+- `composer test:types` — Runs PHPStan (level max) and TypeScript (`tsc --noEmit`) type checking
 - `composer test:unit` — Runs Pest tests with 100% code coverage requirement
 - `composer test` — Runs the complete suite (type coverage, unit tests, linting, static analysis)
 
@@ -93,8 +104,8 @@ You should see 100% test coverage and all quality checks passing.
 This project enforces a strict, automated code style across both PHP and JavaScript/TypeScript:
 
 - **PHP:** Laravel Pint for formatting, Rector for automated refactoring and modernisation
-- **JS/TS/Vue:** oxlint for linting, oxfmt for formatting
-- **Types:** 100% type coverage enforced on both PHP (PHPStan level 9) and TypeScript (strict mode)
+- **JS/TS/Vue:** Vite Plus handles linting (oxlint) and formatting (oxfmt) via the `vp` CLI
+- **Types:** 100% type coverage enforced on both PHP (PHPStan level max) and TypeScript (strict mode)
 
 Run `composer lint` to auto-fix formatting across the entire codebase.
 
@@ -109,11 +120,12 @@ Run `composer lint` to auto-fix formatting across the entire codebase.
 
 ## Testing
 
-The project uses [Pest](https://pestphp.com) with a full testing suite of 150+ tests. The following standards are enforced:
+The project uses [Pest](https://pestphp.com) with a comprehensive testing suite. The following standards are enforced:
 
 - **100% code coverage** — the test suite will fail if coverage drops below 100%
 - **100% type coverage** — every method, property, and parameter must be explicitly typed
-- **Static analysis** — PHPStan at level 9 (maximum strictness)
+- **Static analysis** — PHPStan at level max (maximum strictness)
+- **Browser testing** — Pest browser tests powered by Playwright
 
 Run the full suite with:
 
@@ -125,7 +137,7 @@ Or run individual checks:
 
 ```bash
 composer test:unit            # Unit & feature tests
-composer test:types           # PHPStan static analysis
+composer test:types           # PHPStan + TypeScript type checking
 composer test:type-coverage   # Type coverage check
 composer test:lint            # Linting dry-run
 ```

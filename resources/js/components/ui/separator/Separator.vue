@@ -2,7 +2,6 @@
 import type { SeparatorProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"
-import { Separator } from "reka-ui"
 import { cn } from "@/lib/utils"
 
 const props = withDefaults(defineProps<
@@ -16,7 +15,7 @@ const delegatedProps = reactiveOmit(props, "class")
 </script>
 
 <template>
-  <Separator
+  <RekaSeparator
     data-slot="separator"
     v-bind="delegatedProps"
     :class="

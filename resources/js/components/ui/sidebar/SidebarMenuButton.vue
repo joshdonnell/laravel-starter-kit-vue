@@ -2,8 +2,6 @@
 import type { Component } from "vue"
 import type { SidebarMenuButtonProps } from "./SidebarMenuButtonChild.vue"
 import { reactiveOmit } from "@vueuse/core"
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import SidebarMenuButtonChild from "./SidebarMenuButtonChild.vue"
 import { useSidebar } from "./utils"
 
 defineOptions({
@@ -24,17 +22,17 @@ const delegatedProps = reactiveOmit(props, "tooltip")
 </script>
 
 <template>
-  <SidebarMenuButtonChild v-if="!tooltip" v-bind="{ ...delegatedProps, ...$attrs }">
+  <UiSidebarMenuButtonChild v-if="!tooltip" v-bind="{ ...delegatedProps, ...$attrs }">
     <slot />
-  </SidebarMenuButtonChild>
+  </UiSidebarMenuButtonChild>
 
-  <Tooltip v-else>
-    <TooltipTrigger as-child>
-      <SidebarMenuButtonChild v-bind="{ ...delegatedProps, ...$attrs }">
+  <UiTooltip v-else>
+    <UiTooltipTrigger as-child>
+      <UiSidebarMenuButtonChild v-bind="{ ...delegatedProps, ...$attrs }">
         <slot />
-      </SidebarMenuButtonChild>
-    </TooltipTrigger>
-    <TooltipContent
+      </UiSidebarMenuButtonChild>
+    </UiTooltipTrigger>
+    <UiTooltipContent
       side="right"
       align="center"
       :hidden="state !== 'collapsed' || isMobile"
@@ -43,6 +41,6 @@ const delegatedProps = reactiveOmit(props, "tooltip")
         {{ tooltip }}
       </template>
       <component :is="tooltip" v-else />
-    </TooltipContent>
-  </Tooltip>
+    </UiTooltipContent>
+  </UiTooltip>
 </template>

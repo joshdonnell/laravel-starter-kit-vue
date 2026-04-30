@@ -1,31 +1,27 @@
 <script setup lang="ts">
 import { AlertCircle } from 'lucide-vue-next'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-
 type Props = {
   errors: string[]
   title?: string
 }
 
-
 const props = withDefaults(defineProps<Props>(), {
   title: 'Something went wrong.',
 })
-
 
 const uniqueErrors = computed(() => Array.from(new Set(props.errors)))
 </script>
 
 <template>
-  <Alert variant="destructive">
+  <UiAlert variant="destructive">
     <AlertCircle class="size-4" />
-    <AlertTitle>{{ title }}</AlertTitle>
-    <AlertDescription>
+    <UiAlertTitle>{{ title }}</UiAlertTitle>
+    <UiAlertDescription>
       <ul class="list-inside list-disc text-sm">
         <li v-for="(error, index) in uniqueErrors" :key="index">
           {{ error }}
         </li>
       </ul>
-    </AlertDescription>
-  </Alert>
+    </UiAlertDescription>
+  </UiAlert>
 </template>

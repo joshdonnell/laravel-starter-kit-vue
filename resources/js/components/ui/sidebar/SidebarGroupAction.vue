@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { PrimitiveProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
-import { Primitive } from "reka-ui"
 import { cn } from "@/lib/utils"
 
 const props = defineProps<PrimitiveProps & {
@@ -10,7 +9,7 @@ const props = defineProps<PrimitiveProps & {
 </script>
 
 <template>
-  <Primitive
+  <RekaPrimitive
     data-slot="sidebar-group-action"
     data-sidebar="group-action"
     :as="as"
@@ -23,5 +22,5 @@ const props = defineProps<PrimitiveProps & {
     )"
   >
     <slot />
-  </Primitive>
+  </RekaPrimitive>
 </template>

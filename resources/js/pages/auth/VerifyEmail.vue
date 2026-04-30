@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-import { Spinner } from '@/components/ui/spinner'
-import AuthLayout from '@/layouts/AuthLayout.vue'
 import { logout } from '@/routes'
 import { send } from '@/routes/verification'
 
@@ -30,10 +27,10 @@ defineProps<{
       class="space-y-6 text-center"
       v-slot="{ processing }"
     >
-      <Button :disabled="processing" variant="secondary">
-        <Spinner v-if="processing" />
+      <UiButton :disabled="processing" variant="secondary">
+        <UiSpinner v-if="processing" />
         Resend verification email
-      </Button>
+      </UiButton>
 
       <TextLink :href="logout()" as="button" class="mx-auto block text-sm">
         Log out

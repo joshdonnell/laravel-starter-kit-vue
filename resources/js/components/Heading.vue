@@ -5,7 +5,6 @@ type Props = {
   variant?: 'default' | 'small'
 }
 
-
 withDefaults(defineProps<Props>(), {
   variant: 'default',
 })

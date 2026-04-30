@@ -3,12 +3,6 @@ import type { SelectItemProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"
 import { Check } from "lucide-vue-next"
-import {
-  SelectItem,
-  SelectItemIndicator,
-  SelectItemText,
-  useForwardProps,
-} from "reka-ui"
 import { cn } from "@/lib/utils"
 
 const props = defineProps<SelectItemProps & { class?: HTMLAttributes["class"] }>()
@@ -19,7 +13,7 @@ const forwardedProps = useForwardProps(delegatedProps)
 </script>
 
 <template>
-  <SelectItem
+  <RekaSelectItem
     data-slot="select-item"
     v-bind="forwardedProps"
     :class="
@@ -30,15 +24,15 @@ const forwardedProps = useForwardProps(delegatedProps)
     "
   >
     <span class="absolute right-2 flex size-3.5 items-center justify-center">
-      <SelectItemIndicator>
+      <RekaSelectItemIndicator>
         <slot name="indicator-icon">
           <Check class="size-4" />
         </slot>
-      </SelectItemIndicator>
+      </RekaSelectItemIndicator>
     </span>
 
-    <SelectItemText>
+    <RekaSelectItemText>
       <slot />
-    </SelectItemText>
-  </SelectItem>
+    </RekaSelectItemText>
+  </RekaSelectItem>
 </template>

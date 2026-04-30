@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { Spinner } from '@/components/ui/spinner'
-import AuthLayout from '@/layouts/AuthLayout.vue'
 import { store } from '@/routes/password/confirm'
 </script>
 
@@ -20,7 +16,7 @@ import { store } from '@/routes/password/confirm'
     >
       <div class="space-y-6">
         <div class="grid gap-2">
-          <Label htmlFor="password">Password</Label>
+          <UiLabel htmlFor="password">Password</UiLabel>
           <PasswordInput
             id="password"
             name="password"
@@ -34,14 +30,14 @@ import { store } from '@/routes/password/confirm'
         </div>
 
         <div class="flex items-center">
-          <Button
+          <UiButton
             class="w-full"
             :disabled="processing"
             data-test="confirm-password-button"
           >
-            <Spinner v-if="processing" />
+            <UiSpinner v-if="processing" />
             Confirm password
-          </Button>
+          </UiButton>
         </div>
       </div>
     </Form>

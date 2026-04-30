@@ -1,20 +1,6 @@
 <script setup lang="ts">
 import { useClipboard } from '@vueuse/core'
 import { Check, Copy, ScanLine } from 'lucide-vue-next'
-import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from '@/components/ui/input-otp'
-import { Spinner } from '@/components/ui/spinner'
 import { confirm } from '@/routes/two-factor'
 import type { TwoFactorConfigContent } from '@/types'
 
@@ -23,25 +9,19 @@ type Props = {
   twoFactorEnabled: boolean
 }
 
-
 const { resolvedAppearance } = useAppearance()
-
 
 const props = defineProps<Props>()
 const isOpen = defineModel<boolean>('isOpen')
-
 
 const { copy, copied } = useClipboard()
 const { qrCodeSvg, manualSetupKey, clearSetupData, fetchSetupData, errors } =
   useTwoFactorAuth()
 
-
 const showVerificationStep = ref(false)
 const code = ref<string>('')
 
-
 const pinInputContainerRef = useTemplateRef('pinInputContainerRef')
-
 
 const modalConfig = computed<TwoFactorConfigContent>(() => {
   if (props.twoFactorEnabled) {
@@ -69,36 +49,29 @@ const modalConfig = computed<TwoFactorConfigContent>(() => {
   }
 })
 
-
 const handleModalNextStep = () => {
   if (props.requiresConfirmation) {
     showVerificationStep.value = true
-
 
     nextTick(() => {
       pinInputContainerRef.value?.querySelector('input')?.focus()
     })
 
-
     return
   }
-
 
   clearSetupData()
   isOpen.value = false
 }
-
 
 const resetModalState = () => {
   if (props.twoFactorEnabled) {
     clearSetupData()
   }
 
-
   showVerificationStep.value = false
   code.value = ''
 }
-
 
 watch(
   () => isOpen.value,
@@ -108,7 +81,6 @@ watch(
       return
     }
 
-
     if (!qrCodeSvg.value) {
       await fetchSetupData()
     }
@@ -117,9 +89,9 @@ watch(
 </script>
 
 <template>
-  <Dialog :open="isOpen" @update:open="isOpen = $event">
-    <DialogContent class="sm:max-w-md">
-      <DialogHeader class="flex items-center justify-center">
+  <UiDialog :open="isOpen" @update:open="isOpen = $event">
+    <UiDialogContent class="sm:max-w-md">
+      <UiDialogHeader class="flex items-center justify-center">
         <div
           class="mb-3 w-auto rounded-full border border-border bg-card p-0.5 shadow-sm"
         >
@@ -143,11 +115,11 @@ watch(
             <ScanLine class="relative z-20 size-6 text-foreground" />
           </div>
         </div>
-        <DialogTitle>{{ modalConfig.title }}</DialogTitle>
-        <DialogDescription class="text-center">
+        <UiDialogTitle>{{ modalConfig.title }}</UiDialogTitle>
+        <UiDialogDescription class="text-center">
           {{ modalConfig.description }}
-        </DialogDescription>
-      </DialogHeader>
+        </UiDialogDescription>
+      </UiDialogHeader>
 
       <div
         class="relative flex w-auto flex-col items-center justify-center space-y-5"
@@ -165,7 +137,7 @@ watch(
                   v-if="!qrCodeSvg"
                   class="absolute inset-0 z-10 flex aspect-square h-auto w-full animate-pulse items-center justify-center bg-background"
                 >
-                  <Spinner class="size-6" />
+                  <UiSpinner class="size-6" />
                 </div>
                 <div v-else class="relative z-10 overflow-hidden border p-5">
                   <div
@@ -183,9 +155,9 @@ watch(
             </div>
 
             <div class="flex w-full items-center space-x-5">
-              <Button class="w-full" @click="handleModalNextStep">
+              <UiButton class="w-full" @click="handleModalNextStep">
                 {{ modalConfig.buttonText }}
-              </Button>
+              </UiButton>
             </div>
 
             <div class="relative flex w-full items-center justify-center">
@@ -203,7 +175,7 @@ watch(
                   v-if="!manualSetupKey"
                   class="flex h-full w-full items-center justify-center bg-muted p-3"
                 >
-                  <Spinner />
+                  <UiSpinner />
                 </div>
                 <template v-else>
                   <input
@@ -239,25 +211,26 @@ watch(
               <div
                 class="flex w-full flex-col items-center justify-center space-y-3 py-2"
               >
-                <InputOTP
+                <UiInputOtpInputOTP
                   id="otp"
                   v-model="code"
                   :maxlength="6"
                   :disabled="processing"
+                  autofocus
                 >
-                  <InputOTPGroup>
-                    <InputOTPSlot
+                  <UiInputOtpInputOTPGroup>
+                    <UiInputOtpInputOTPSlot
                       v-for="index in 6"
                       :key="index"
                       :index="index - 1"
                     />
-                  </InputOTPGroup>
-                </InputOTP>
+                  </UiInputOtpInputOTPGroup>
+                </UiInputOtpInputOTP>
                 <InputError :message="errors?.code" />
               </div>
 
               <div class="flex w-full items-center space-x-5">
-                <Button
+                <UiButton
                   type="button"
                   variant="outline"
                   class="w-auto flex-1"
@@ -265,19 +238,19 @@ watch(
                   :disabled="processing"
                 >
                   Back
-                </Button>
-                <Button
+                </UiButton>
+                <UiButton
                   type="submit"
                   class="w-auto flex-1"
                   :disabled="processing || code.length < 6"
                 >
                   Confirm
-                </Button>
+                </UiButton>
               </div>
             </div>
           </Form>
         </template>
       </div>
-    </DialogContent>
-  </Dialog>
+    </UiDialogContent>
+  </UiDialog>
 </template>

@@ -1,35 +1,23 @@
 <script setup lang="ts">
 import { Eye, EyeOff, LockKeyhole, RefreshCw } from 'lucide-vue-next'
-import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import { regenerateRecoveryCodes } from '@/routes/two-factor'
 
 const { recoveryCodesList, fetchRecoveryCodes, errors } = useTwoFactorAuth()
 const isRecoveryCodesVisible = ref<boolean>(false)
 const recoveryCodeSectionRef = useTemplateRef('recoveryCodeSectionRef')
 
-
 const toggleRecoveryCodesVisibility = async () => {
   if (!isRecoveryCodesVisible.value && !recoveryCodesList.value.length) {
     await fetchRecoveryCodes()
   }
 
-
   isRecoveryCodesVisible.value = !isRecoveryCodesVisible.value
-
 
   if (isRecoveryCodesVisible.value) {
     await nextTick()
     recoveryCodeSectionRef.value?.scrollIntoView({ behavior: 'smooth' })
   }
 }
-
 
 onMounted(async () => {
   if (!recoveryCodesList.value.length) {
@@ -39,27 +27,27 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Card class="w-full">
-    <CardHeader>
-      <CardTitle class="flex gap-3">
+  <UiCard class="w-full">
+    <UiCardHeader>
+      <UiCardTitle class="flex gap-3">
         <LockKeyhole class="size-4" />2FA recovery codes
-      </CardTitle>
-      <CardDescription>
+      </UiCardTitle>
+      <UiCardDescription>
         Recovery codes let you regain access if you lose your 2FA device. Store
         them in a secure password manager.
-      </CardDescription>
-    </CardHeader>
-    <CardContent>
+      </UiCardDescription>
+    </UiCardHeader>
+    <UiCardContent>
       <div
         class="flex flex-col gap-3 select-none sm:flex-row sm:items-center sm:justify-between"
       >
-        <Button @click="toggleRecoveryCodesVisibility" class="w-fit">
+        <UiButton @click="toggleRecoveryCodesVisibility" class="w-fit">
           <component
             :is="isRecoveryCodesVisible ? EyeOff : Eye"
             class="size-4"
           />
           {{ isRecoveryCodesVisible ? 'Hide' : 'View' }} recovery codes
-        </Button>
+        </UiButton>
 
         <Form
           v-if="isRecoveryCodesVisible && recoveryCodesList.length"
@@ -69,9 +57,9 @@ onMounted(async () => {
           @success="fetchRecoveryCodes"
           #default="{ processing }"
         >
-          <Button variant="secondary" type="submit" :disabled="processing">
+          <UiButton variant="secondary" type="submit" :disabled="processing">
             <RefreshCw /> Regenerate codes
-          </Button>
+          </UiButton>
         </Form>
       </div>
       <div
@@ -106,6 +94,6 @@ onMounted(async () => {
           </p>
         </div>
       </div>
-    </CardContent>
-  </Card>
+    </UiCardContent>
+  </UiCard>
 </template>

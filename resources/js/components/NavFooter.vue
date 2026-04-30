@@ -1,11 +1,4 @@
 <script setup lang="ts">
-import {
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from '@/components/ui/sidebar'
 import { toUrl } from '@/lib/utils'
 import type { NavItem } from '@/types'
 
@@ -14,18 +7,17 @@ type Props = {
   class?: string
 }
 
-
 defineProps<Props>()
 </script>
 
 <template>
-  <SidebarGroup
+  <UiSidebarGroup
     :class="`group-data-[collapsible=icon]:p-0 ${$props.class || ''}`"
   >
-    <SidebarGroupContent>
-      <SidebarMenu>
-        <SidebarMenuItem v-for="item in items" :key="item.title">
-          <SidebarMenuButton
+    <UiSidebarGroupContent>
+      <UiSidebarMenu>
+        <UiSidebarMenuItem v-for="item in items" :key="item.title">
+          <UiSidebarMenuButton
             class="text-neutral-600 hover:text-neutral-800 dark:text-neutral-300 dark:hover:text-neutral-100"
             as-child
           >
@@ -37,9 +29,9 @@ defineProps<Props>()
               <component :is="item.icon" />
               <span>{{ item.title }}</span>
             </a>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
-      </SidebarMenu>
-    </SidebarGroupContent>
-  </SidebarGroup>
+          </UiSidebarMenuButton>
+        </UiSidebarMenuItem>
+      </UiSidebarMenu>
+    </UiSidebarGroupContent>
+  </UiSidebarGroup>
 </template>

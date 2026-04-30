@@ -3,7 +3,6 @@ import { Monitor, Moon, Sun } from 'lucide-vue-next'
 
 const { appearance, updateAppearance } = useAppearance()
 
-
 const tabs = [
   { value: 'light', Icon: Sun, label: 'Light' },
   { value: 'dark', Icon: Moon, label: 'Dark' },

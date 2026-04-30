@@ -27,6 +27,7 @@
         "larastan/larastan": "^3.9.6",
         "laravel/boost": "^2.4.6",
         "laravel/pail": "^v1.2.6",
+        "laravel/pao": "^1.0.6",
         "laravel/pint": "^1.29.1",
         "mockery/mockery": "^1.6.12",
         "nunomaduro/collision": "^8.9.4",

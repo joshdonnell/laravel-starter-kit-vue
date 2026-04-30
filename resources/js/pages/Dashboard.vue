@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import AppLayout from '@/layouts/AppLayout.vue'
 import { dashboard } from '@/routes'
 import type { BreadcrumbItem } from '@/types'
 

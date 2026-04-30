@@ -2,6 +2,7 @@ import { wayfinder } from "@laravel/vite-plugin-wayfinder";
 import tailwindcss from "@tailwindcss/vite";
 import vue from "@vitejs/plugin-vue";
 import laravel from "laravel-vite-plugin";
+import { bunny } from "laravel-vite-plugin/fonts";
 import RekaResolver from "reka-ui/resolver";
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
@@ -40,10 +41,6 @@ export default defineConfig({
     categories: {
       correctness: "warn",
     },
-    rules: {
-      "vue/multi-word-component-names": "off",
-      "vue/no-v-html": "off",
-    },
     ignorePatterns: [
       "vendor",
       "node_modules",
@@ -69,6 +66,11 @@ export default defineConfig({
       input: ["resources/js/app.ts"],
       ssr: "resources/js/ssr.ts",
       refresh: true,
+      fonts: [
+        bunny("Instrument Sans", {
+          weights: [400, 500, 600],
+        }),
+      ],
     }),
     tailwindcss(),
     wayfinder({
@@ -87,13 +89,15 @@ export default defineConfig({
         "vue",
         {
           "@inertiajs/vue3": ["useForm", "usePage", "useRemember", "usePrefetch", "router"],
+          "reka-ui": ["createContext", "useForwardProps", "useForwardPropsEmits"],
+          vue: ["createSSRApp"],
         },
       ],
       dirs: ["resources/js/composables"],
     }),
     Components({
       dts: true,
-      dirs: ["resources/js/components"],
+      dirs: ["resources/js/components", "resources/js/layouts"],
       directoryAsNamespace: true,
       collapseSamePrefixes: true,
       types: [

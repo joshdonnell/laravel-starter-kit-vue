@@ -1,12 +1,4 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from '@/components/ui/input-otp'
-import AuthLayout from '@/layouts/AuthLayout.vue'
 import { store } from '@/routes/two-factor/login'
 import type { TwoFactorConfigContent } from '@/types'
 
@@ -28,16 +20,13 @@ const authConfigContent = computed<TwoFactorConfigContent>(() => {
   }
 })
 
-
 const showRecoveryInput = ref<boolean>(false)
-
 
 const toggleRecoveryMode = (clearErrors: () => void): void => {
   showRecoveryInput.value = !showRecoveryInput.value
   clearErrors()
   code.value = ''
 }
-
 
 const code = ref<string>('')
 </script>
@@ -63,26 +52,26 @@ const code = ref<string>('')
             class="flex flex-col items-center justify-center space-y-3 text-center"
           >
             <div class="flex w-full items-center justify-center">
-              <InputOTP
+              <UiInputOtpInputOTP
                 id="otp"
                 v-model="code"
                 :maxlength="6"
                 :disabled="processing"
                 autofocus
               >
-                <InputOTPGroup>
-                  <InputOTPSlot
+                <UiInputOtpInputOTPGroup>
+                  <UiInputOtpInputOTPSlot
                     v-for="index in 6"
                     :key="index"
                     :index="index - 1"
                   />
-                </InputOTPGroup>
-              </InputOTP>
+                </UiInputOtpInputOTPGroup>
+              </UiInputOtpInputOTP>
             </div>
             <InputError :message="errors.code" />
           </div>
-          <Button type="submit" class="w-full" :disabled="processing"
-            >Continue</Button
+          <UiButton type="submit" class="w-full" :disabled="processing"
+            >Continue</UiButton
           >
           <div class="text-center text-sm text-muted-foreground">
             <span>or you can </span>
@@ -104,7 +93,7 @@ const code = ref<string>('')
           reset-on-error
           #default="{ errors, processing, clearErrors }"
         >
-          <Input
+          <UiInput
             name="recovery_code"
             type="text"
             placeholder="Enter recovery code"
@@ -112,8 +101,8 @@ const code = ref<string>('')
             required
           />
           <InputError :message="errors.recovery_code" />
-          <Button type="submit" class="w-full" :disabled="processing"
-            >Continue</Button
+          <UiButton type="submit" class="w-full" :disabled="processing"
+            >Continue</UiButton
           >
 
           <div class="text-center text-sm text-muted-foreground">

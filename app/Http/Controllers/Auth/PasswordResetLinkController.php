@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use App\Actions\CreateUserEmailResetNotification;
 use App\Http\Requests\UserPasswordResetRequest;
@@ -11,9 +11,9 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
-final readonly class UserEmailResetNotification
+final readonly class PasswordResetLinkController
 {
-    public function create(Request $request): Response
+    public function index(Request $request): Response
     {
         return Inertia::render('auth/ForgotPassword', [
             'status' => $request->session()->get('status'),

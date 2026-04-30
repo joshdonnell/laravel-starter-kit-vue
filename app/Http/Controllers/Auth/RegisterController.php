@@ -2,22 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use App\Actions\CreateUser;
-use App\Actions\DeleteUser;
 use App\Http\Requests\CreateUserRequest;
-use App\Http\Requests\DeleteUserRequest;
-use App\Models\User;
-use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
-final readonly class UserController
+final readonly class RegisterController
 {
-    public function create(): Response
+    public function index(): Response
     {
         return Inertia::render('auth/Register');
     }
@@ -37,17 +33,5 @@ final readonly class UserController
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard', absolute: false));
-    }
-
-    public function destroy(DeleteUserRequest $request, #[CurrentUser] User $user, DeleteUser $action): RedirectResponse
-    {
-        Auth::logout();
-
-        $action->handle($user);
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return to_route('home');
     }
 }

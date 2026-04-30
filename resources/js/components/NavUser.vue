@@ -1,37 +1,26 @@
 <script setup lang="ts">
 import { ChevronsUpDown } from 'lucide-vue-next'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from '@/components/ui/sidebar'
-
+import { useSidebar } from '@/components/ui/sidebar'
 const page = usePage()
 const user = computed(() => page.props.auth.user)
 const { isMobile, state } = useSidebar()
 </script>
 
 <template>
-  <SidebarMenu>
-    <SidebarMenuItem>
-      <DropdownMenu>
-        <DropdownMenuTrigger as-child>
-          <SidebarMenuButton
+  <UiSidebarMenu>
+    <UiSidebarMenuItem>
+      <UiDropdownMenu>
+        <UiDropdownMenuTrigger as-child>
+          <UiSidebarMenuButton
             size="lg"
             class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             data-test="sidebar-menu-button"
           >
             <UserInfo :user="user" />
             <ChevronsUpDown class="ml-auto size-4" />
-          </SidebarMenuButton>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent
+          </UiSidebarMenuButton>
+        </UiDropdownMenuTrigger>
+        <UiDropdownMenuContent
           class="w-(--reka-dropdown-menu-trigger-width) min-w-56 rounded-lg"
           :side="
             isMobile ? 'bottom' : state === 'collapsed' ? 'left' : 'bottom'
@@ -40,8 +29,8 @@ const { isMobile, state } = useSidebar()
           :side-offset="4"
         >
           <UserMenuContent :user="user" />
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </SidebarMenuItem>
-  </SidebarMenu>
+        </UiDropdownMenuContent>
+      </UiDropdownMenu>
+    </UiSidebarMenuItem>
+  </UiSidebarMenu>
 </template>

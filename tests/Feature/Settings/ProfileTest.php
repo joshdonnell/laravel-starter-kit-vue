@@ -30,7 +30,8 @@ it('may update profile information', function (): void {
             'email' => 'new@example.com',
         ]);
 
-    $response->assertRedirectToRoute('user-profile.edit');
+    $response->assertRedirectToRoute('user-profile.edit')
+        ->assertInertiaFlash('toast', ['type' => 'success', 'message' => 'Profile updated.']);
 
     expect($user->refresh()->name)->toBe('New Name')
         ->and($user->email)->toBe('new@example.com');
@@ -115,7 +116,7 @@ it('requires valid email', function (): void {
 });
 
 it('requires unique email except own', function (): void {
-    $existingUser = User::factory()->create(['email' => 'existing@example.com']);
+    User::factory()->create(['email' => 'existing@example.com']);
     $user = User::factory()->create(['email' => 'test@example.com']);
 
     $response = $this->actingAs($user)

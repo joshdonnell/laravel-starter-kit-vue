@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\SessionController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\UserEmailResetNotification;
-use App\Http\Controllers\UserEmailVerification;
-use App\Http\Controllers\UserEmailVerificationNotificationController;
-use App\Http\Controllers\UserPasswordController;
-use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\Auth\EmailVerificationController;
+use App\Http\Controllers\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Settings\ProfileController;
+use App\Http\Controllers\Settings\SecurityController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -19,68 +21,52 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
 });
 
 Route::middleware('auth')->group(function (): void {
-    // User...
-    Route::delete('user', [UserController::class, 'destroy'])->name('user.destroy');
+    Route::delete('user', [ProfileController::class, 'destroy'])->name('user.destroy');
 
-    // User Profile...
     Route::redirect('settings', '/settings/profile');
-    Route::get('settings/profile', [UserProfileController::class, 'edit'])->name('user-profile.edit');
-    Route::patch('settings/profile', [UserProfileController::class, 'update'])->name('user-profile.update');
+    Route::get('settings/profile', [ProfileController::class, 'edit'])->name('user-profile.edit');
+    Route::patch('settings/profile', [ProfileController::class, 'update'])->name('user-profile.update');
 
-    // User Password...
-    Route::get('settings/password', [UserPasswordController::class, 'edit'])->name('password.edit');
-    Route::put('settings/password', [UserPasswordController::class, 'update'])
+    Route::get('settings/password', [SecurityController::class, 'edit'])->name('password.edit');
+    Route::put('settings/password', [SecurityController::class, 'update'])
         ->middleware('throttle:6,1')
         ->name('password.update');
 
-    // Appearance...
     Route::get('settings/appearance', fn () => Inertia::render('settings/Appearance'))->name('appearance.edit');
 
-    // User Two-Factor Authentication...
-    Route::get('settings/two-factor', [UserPasswordController::class, 'edit'])
+    Route::get('settings/two-factor', [SecurityController::class, 'edit'])
         ->name('two-factor.show');
 });
 
 Route::middleware('guest')->group(function (): void {
-    // User...
-    Route::get('register', [UserController::class, 'create'])
-        ->name('register');
-    Route::post('register', [UserController::class, 'store'])
-        ->name('register.store');
+    Route::resource('register', RegisterController::class)
+        ->only(['index', 'store'])
+        ->names(['index' => 'register', 'store' => 'register.store']);
 
-    // User Password...
-    Route::get('reset-password/{token}', [UserPasswordController::class, 'create'])
+    Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
         ->name('password.reset');
-    Route::post('reset-password', [UserPasswordController::class, 'store'])
+    Route::post('reset-password', [NewPasswordController::class, 'store'])
         ->name('password.store');
 
-    // User Email Reset Notification...
-    Route::get('forgot-password', [UserEmailResetNotification::class, 'create'])
-        ->name('password.request');
-    Route::post('forgot-password', [UserEmailResetNotification::class, 'store'])
-        ->name('password.email');
+    Route::resource('forgot-password', PasswordResetLinkController::class)
+        ->only(['index', 'store'])
+        ->names(['index' => 'password.request', 'store' => 'password.email']);
 
-    // Session...
-    Route::get('login', [SessionController::class, 'create'])
-        ->name('login');
-    Route::post('login', [SessionController::class, 'store'])
-        ->name('login.store');
+    Route::resource('login', LoginController::class)
+        ->only(['index', 'store'])
+        ->names(['index' => 'login', 'store' => 'login.store']);
 });
 
 Route::middleware('auth')->group(function (): void {
-    // User Email Verification...
-    Route::get('verify-email', [UserEmailVerificationNotificationController::class, 'create'])
+    Route::get('verify-email', [EmailVerificationController::class, 'index'])
         ->name('verification.notice');
-    Route::post('email/verification-notification', [UserEmailVerificationNotificationController::class, 'store'])
+    Route::post('email/verification-notification', EmailVerificationNotificationController::class)
         ->middleware('throttle:6,1')
         ->name('verification.send');
 
-    // User Email Verification...
-    Route::get('verify-email/{id}/{hash}', [UserEmailVerification::class, 'update'])
+    Route::get('verify-email/{id}/{hash}', [EmailVerificationController::class, 'update'])
         ->middleware(['signed', 'throttle:6,1'])
         ->name('verification.verify');
 
-    // Session...
-    Route::post('logout', [SessionController::class, 'destroy'])
-        ->name('logout');
+    Route::post('logout', LogoutController::class)->name('logout');
 });

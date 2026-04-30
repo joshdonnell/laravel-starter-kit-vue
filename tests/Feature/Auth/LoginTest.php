@@ -54,7 +54,7 @@ it('may create a session with remember me', function (): void {
 });
 
 it('redirects to two-factor challenge when enabled', function (): void {
-    $user = User::factory()->create([
+    User::factory()->create([
         'email' => 'test@example.com',
         'password' => Hash::make('password'),
         'two_factor_secret' => encrypt('secret'),
@@ -111,18 +111,6 @@ it('requires password', function (): void {
         ->assertSessionHasErrors('password');
 });
 
-it('may destroy a session', function (): void {
-    $user = User::factory()->create();
-
-    $response = $this->actingAs($user)
-        ->fromRoute('dashboard')
-        ->post(route('logout'));
-
-    $response->assertRedirect('/');
-
-    $this->assertGuest();
-});
-
 it('redirects authenticated users away from login', function (): void {
     $user = User::factory()->create();
 
@@ -134,13 +122,12 @@ it('redirects authenticated users away from login', function (): void {
 });
 
 it('throttles login attempts after too many failures', function (): void {
-    $user = User::factory()->create([
+    User::factory()->create([
         'email' => 'test@example.com',
         'password' => Hash::make('password'),
     ]);
 
-    // Make 5 failed login attempts to trigger rate limiting
-    for ($i = 0; $i < 5; $i++) {
+    for ($attempt = 0; $attempt < 5; $attempt++) {
         $this->fromRoute('login')
             ->post(route('login.store'), [
                 'email' => 'test@example.com',
@@ -148,7 +135,6 @@ it('throttles login attempts after too many failures', function (): void {
             ]);
     }
 
-    // The 6th attempt should be throttled
     $response = $this->fromRoute('login')
         ->post(route('login.store'), [
             'email' => 'test@example.com',
@@ -168,8 +154,7 @@ it('clears rate limit after successful login', function (): void {
         'password' => Hash::make('password'),
     ]);
 
-    // Make a few failed attempts
-    for ($i = 0; $i < 3; $i++) {
+    for ($attempt = 0; $attempt < 3; $attempt++) {
         $this->fromRoute('login')
             ->post(route('login.store'), [
                 'email' => 'test@example.com',
@@ -177,7 +162,6 @@ it('clears rate limit after successful login', function (): void {
             ]);
     }
 
-    // Successful login should clear the rate limit
     $response = $this->fromRoute('login')
         ->post(route('login.store'), [
             'email' => 'test@example.com',
@@ -191,14 +175,12 @@ it('clears rate limit after successful login', function (): void {
 it('dispatches lockout event when rate limit is reached', function (): void {
     Event::fake([Lockout::class]);
 
-    $user = User::factory()->create([
+    User::factory()->create([
         'email' => 'test@example.com',
         'password' => Hash::make('password'),
     ]);
 
-    // Make 6 failed login attempts to trigger rate limiting and Lockout event
-    // The Lockout event fires on the 6th attempt when tooManyAttempts returns true
-    for ($i = 0; $i < 6; $i++) {
+    for ($attempt = 0; $attempt < 6; $attempt++) {
         $this->fromRoute('login')
             ->post(route('login.store'), [
                 'email' => 'test@example.com',

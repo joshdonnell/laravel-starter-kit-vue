@@ -5,11 +5,9 @@ defineOptions({
   inheritAttrs: false,
 })
 
-
 type Props = {
   className?: HTMLAttributes['class']
 }
-
 
 defineProps<Props>()
 </script>

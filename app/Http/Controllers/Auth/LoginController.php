@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Requests\LoginRequest;
 use Illuminate\Http\RedirectResponse;
@@ -12,9 +12,9 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
 
-final readonly class SessionController
+final readonly class LoginController
 {
-    public function create(Request $request): Response
+    public function index(Request $request): Response
     {
         return Inertia::render('auth/Login', [
             'canResetPassword' => Route::has('password.request'),
@@ -41,15 +41,5 @@ final readonly class SessionController
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard', absolute: false));
-    }
-
-    public function destroy(Request $request): RedirectResponse
-    {
-        Auth::guard('web')->logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect('/');
     }
 }
