@@ -20,7 +20,7 @@
         "unplugin-auto-import": "^21.0.0",
         "unplugin-vue-components": "^32.0.0",
         "vite-plugin-watch": "^0.3.1",
-        "vite-plus": "latest",
+        "vite-plus": "^0.1.20",
         "vue-tsc": "^3.2.7"
     },
     "dependencies": {
