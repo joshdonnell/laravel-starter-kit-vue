@@ -63,7 +63,7 @@ jobs:
         run: php artisan key:generate
 
       - name: Install pnpm Dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       - name: Build Assets
         run: pnpm run build
