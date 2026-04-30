@@ -15,7 +15,7 @@ An end-to-end type-safe Laravel 13 starter kit with auto-generated TypeScript ty
 
 ## Tech Stack
 
-**Backend:** PHP 8.4+, Laravel 13, Inertia.js v3, Laravel Fortify, Spatie Laravel Data, Nuno Maduro's Essentials
+**Backend:** PHP 8.5+, Laravel 13, Inertia.js v3, Laravel Fortify, Spatie Laravel Data, Nuno Maduro's Essentials
 
 **Frontend:** Vue 3, reka-ui, shadcn-vue, TypeScript, Tailwind CSS v4
 
@@ -39,7 +39,7 @@ An end-to-end type-safe Laravel 13 starter kit with auto-generated TypeScript ty
 
 ## Local Development
 
-> **Requires [PHP 8.4+](https://php.net/releases/), [Node 22+](https://nodejs.org/), [pnpm](https://pnpm.io/) (used in CI), and a code coverage driver like [Xdebug](https://xdebug.org/docs/install).**
+> **Requires [PHP 8.5+](https://php.net/releases/), [Node 22+](https://nodejs.org/), [pnpm](https://pnpm.io/) (used in CI), and a code coverage driver like [Xdebug](https://xdebug.org/docs/install).**
 >
 > SQLite is used by default for database, session, cache, and queue storage.
 
