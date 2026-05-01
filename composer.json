@@ -57,12 +57,12 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
             "@php artisan key:generate",
             "@php artisan migrate --force",
-            "npm install",
-            "npm run build"
+            "pnpm install",
+            "pnpm run build"
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
-            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite --kill-others"
+            "pnpx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"pnpm run dev\" --names=server,queue,logs,vite --kill-others"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
@@ -83,23 +83,23 @@
         ],
         "update:requirements": [
             "composer bump",
-            "npx npm-check-updates -u"
+            "pnpx npm-check-updates -u"
         ],
         "lint": [
             "rector",
             "pint --parallel",
-            "npm run lint"
+            "pnpm run lint"
         ],
         "test:type-coverage": "pest --type-coverage --min=100",
         "test:lint": [
             "pint --parallel --test",
             "rector --dry-run",
-            "npm run test:lint"
+            "pnpm run test:lint"
         ],
         "test:unit": "pest --parallel --coverage --exactly=100.0",
         "test:types": [
             "phpstan",
-            "npm run test:types"
+            "pnpm run test:types"
         ],
         "test": [
             "@test:type-coverage",
