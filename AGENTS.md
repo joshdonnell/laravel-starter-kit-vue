@@ -15,6 +15,7 @@
 - Create new actions with `php artisan make:action "{name}" --no-interaction`
 
 <!-- Simple action with no dependencies -->
+
 ```php
 <?php
 
@@ -34,6 +35,7 @@ final readonly class DeleteUser
 ```
 
 <!-- Action with dependencies -->
+
 ```php
 <?php
 
@@ -57,6 +59,7 @@ final readonly class UpdateUserPassword
 ```
 
 <!-- Orchestrating action wrapping sub-actions in a transaction -->
+
 ```php
 <?php
 
@@ -210,7 +213,7 @@ This project has domain-specific skills available. You MUST activate the relevan
 ## Constructors
 
 - Use PHP 8 constructor property promotion in `__construct()`.
-    - `public function __construct(private GitHub $github) { }`
+  - `public function __construct(private GitHub $github) { }`
 - Do not allow empty `__construct()` methods with zero parameters unless the constructor is private.
 - If a class has no dependencies, omit the constructor entirely.
 
@@ -221,6 +224,7 @@ This project has domain-specific skills available. You MUST activate the relevan
 - Use `assert()` for runtime type assertions when the type system cannot guarantee a type (e.g., after `$this->user()` on a FormRequest).
 
 <!-- Explicit Return Types and Method Params -->
+
 ```php
 protected function isAccessible(User $user, ?string $path = null): bool
 {

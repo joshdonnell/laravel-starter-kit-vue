@@ -91,7 +91,7 @@ If a user attempts to log in and two-factor authentication is enabled, the login
 
 ```json
 {
-    "two_factor": true
+  "two_factor": true
 }
 ```
 
@@ -112,7 +112,7 @@ Configure via `fortify.limiters.login` in config. Default configuration throttle
 ## Key Endpoints
 
 | Feature                | Method   | Endpoint                                    |
-|------------------------|----------|---------------------------------------------|
+| ---------------------- | -------- | ------------------------------------------- |
 | Login                  | POST     | `/login`                                    |
 | Logout                 | POST     | `/logout`                                   |
 | Register               | POST     | `/register`                                 |

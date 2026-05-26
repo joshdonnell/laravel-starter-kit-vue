@@ -1,55 +1,57 @@
-import { wayfinder } from "@laravel/vite-plugin-wayfinder";
-import tailwindcss from "@tailwindcss/vite";
-import vue from "@vitejs/plugin-vue";
-import laravel from "laravel-vite-plugin";
-import { bunny } from "laravel-vite-plugin/fonts";
-import RekaResolver from "reka-ui/resolver";
-import AutoImport from "unplugin-auto-import/vite";
-import Components from "unplugin-vue-components/vite";
-import { defineConfig } from "vite-plus";
-import { watch } from "vite-plugin-watch";
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'url'
+import { wayfinder } from '@laravel/vite-plugin-wayfinder'
+import tailwindcss from '@tailwindcss/vite'
+import vue from '@vitejs/plugin-vue'
+import laravel from 'laravel-vite-plugin'
+import { bunny } from 'laravel-vite-plugin/fonts'
+import RekaResolver from 'reka-ui/resolver'
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import { watch } from 'vite-plugin-watch'
+import { defineConfig } from 'vite-plus'
 
-const inertiaComponents = ["Link", "Form", "Head", "Page", "Deferred"];
+const inertiaComponents = ['Link', 'Form', 'Head', 'Page', 'Deferred']
 
 export default defineConfig({
   fmt: {
     semi: false,
     singleQuote: true,
-    htmlWhitespaceSensitivity: "css",
+    htmlWhitespaceSensitivity: 'css',
     printWidth: 80,
     sortTailwindcss: {
-      stylesheet: "resources/css/app.css",
+      stylesheet: 'resources/css/app.css',
     },
     tabWidth: 2,
     sortPackageJson: false,
     sortImports: {
       newlinesBetween: false,
-      groups: ["builtin", "external", "internal", "parent", "sibling", "index"],
+      groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
     },
     ignorePatterns: [
-      "resources/js/components/ui/*",
-      "resources/js/types/generated.d.ts",
-      "resources/views/mail/*",
-      "resources/js/actions/*",
-      "resources/js/routes/*",
-      "resources/js/wayfinder/*",
+      'resources/js/components/ui/*',
+      'resources/js/types/generated.d.ts',
+      'resources/views/mail/*',
+      'resources/js/actions/*',
+      'resources/js/routes/*',
+      'resources/js/wayfinder/*',
+      'resources/js/types/home/runner/*',
+      'resources/js/types/home/runner',
     ],
   },
   lint: {
-    plugins: ["eslint", "vue", "typescript", "unicorn", "oxc"],
+    plugins: ['eslint', 'vue', 'typescript', 'unicorn', 'oxc'],
     categories: {
-      correctness: "warn",
+      correctness: 'warn',
     },
     ignorePatterns: [
-      "vendor",
-      "node_modules",
-      "public",
-      "bootstrap/ssr",
-      "tailwind.config.ts",
-      "resources/js/actions",
-      "resources/js/routes",
-      "resources/js/wayfinder",
+      'vendor',
+      'node_modules',
+      'public',
+      'bootstrap/ssr',
+      'tailwind.config.ts',
+      'resources/js/actions',
+      'resources/js/routes',
+      'resources/js/wayfinder',
     ],
     options: {
       typeAware: true,
@@ -57,17 +59,17 @@ export default defineConfig({
     },
   },
   resolve: {
-  alias: {
-      "@": fileURLToPath(new URL('./resources/js', import.meta.url)),
-  },
+    alias: {
+      '@': fileURLToPath(new URL('./resources/js', import.meta.url)),
+    },
   },
   plugins: [
     laravel({
-      input: ["resources/css/app.css", "resources/js/app.ts"],
-      ssr: "resources/js/ssr.ts",
+      input: ['resources/css/app.css', 'resources/js/app.ts'],
+      ssr: 'resources/js/ssr.ts',
       refresh: true,
       fonts: [
-        bunny("Instrument Sans", {
+        bunny('Instrument Sans', {
           weights: [400, 500, 600],
         }),
       ],
@@ -86,45 +88,55 @@ export default defineConfig({
     }),
     AutoImport({
       imports: [
-        "vue",
+        'vue',
         {
-          "@inertiajs/vue3": ["useForm", "usePage", "useRemember", "usePrefetch", "router"],
-          "reka-ui": ["createContext", "useForwardProps", "useForwardPropsEmits"],
-          vue: ["createSSRApp"],
+          '@inertiajs/vue3': [
+            'useForm',
+            'usePage',
+            'useRemember',
+            'usePrefetch',
+            'router',
+          ],
+          'reka-ui': [
+            'createContext',
+            'useForwardProps',
+            'useForwardPropsEmits',
+          ],
+          vue: ['createSSRApp'],
         },
       ],
-      dirs: ["resources/js/composables"],
+      dirs: ['resources/js/composables'],
     }),
     Components({
       dts: true,
-      dirs: ["resources/js/components", "resources/js/layouts"],
+      dirs: ['resources/js/components', 'resources/js/layouts'],
       directoryAsNamespace: true,
       collapseSamePrefixes: true,
       types: [
         {
           names: inertiaComponents,
-          from: "@inertiajs/vue3",
+          from: '@inertiajs/vue3',
         },
       ],
       resolvers: [
         RekaResolver({
-          prefix: "Reka",
+          prefix: 'Reka',
         }),
         (component: string) => {
           if (inertiaComponents.includes(component)) {
             return {
               name: component,
-              from: "@inertiajs/vue3",
-            };
+              from: '@inertiajs/vue3',
+            }
           }
 
-          return undefined;
+          return undefined
         },
       ],
     }),
     watch({
-      pattern: "app/{Data,Enums}/**/*.php",
-      command: "composer run transform-types",
+      pattern: 'app/{Data,Enums}/**/*.php',
+      command: 'composer run transform-types',
     }),
   ],
-});
+})
