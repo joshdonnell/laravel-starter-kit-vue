@@ -35,7 +35,7 @@ export default defineConfig({
       'resources/js/routes/*',
       'resources/js/wayfinder/*',
       'resources/js/types/home/runner/*',
-      'resources/js/types/home/runner',
+      'resources/js/types/typescript-transformer-manifest.json',
     ],
   },
   lint: {
