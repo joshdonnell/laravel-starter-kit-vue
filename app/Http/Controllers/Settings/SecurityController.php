@@ -15,6 +15,7 @@ use Illuminate\Routing\Controllers\Middleware;
 use Inertia\Inertia;
 use Inertia\Response;
 use Laravel\Fortify\Features;
+use Laravel\Passkeys\Passkey;
 
 final readonly class SecurityController implements HasMiddleware
 {
@@ -38,7 +39,7 @@ final readonly class SecurityController implements HasMiddleware
                     ->select(['id', 'name', 'credential', 'created_at', 'last_used_at'])
                     ->latest()
                     ->get()
-                    ->map(fn ($passkey): array => [
+                    ->map(fn (Passkey $passkey): array => [
                         'id' => $passkey->id,
                         'name' => $passkey->name,
                         'authenticator' => $passkey->authenticator,
