@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 use App\Models\User;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Fortify\Features;
 
 it('renders edit password page', function (): void {
     $user = User::factory()->create();
@@ -19,6 +21,28 @@ it('renders edit password page', function (): void {
             ->has('canManageTwoFactor')
             ->has('twoFactorEnabled')
             ->where('canManagePasskeys', true)
+            ->where('passkeys', []));
+});
+
+it('hides passkey props when the feature is disabled', function (): void {
+    Config::set('fortify.features', [
+        Features::twoFactorAuthentication([
+            'confirm' => true,
+            'confirmPassword' => true,
+        ]),
+    ]);
+
+    $user = User::factory()->create();
+
+    $this->actingAs($user)->session(['auth.password_confirmed_at' => time()]);
+
+    $response = $this->fromRoute('dashboard')
+        ->get(route('password.edit'));
+
+    $response->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('settings/Security')
+            ->where('canManagePasskeys', false)
             ->where('passkeys', []));
 });
 
