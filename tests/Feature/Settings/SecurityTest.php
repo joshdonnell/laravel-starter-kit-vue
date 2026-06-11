@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Models\User;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Fortify\Features;
 
 it('renders edit password page', function (): void {
     $user = User::factory()->create();
@@ -25,7 +26,7 @@ it('renders edit password page', function (): void {
 
 it('hides passkey props when the feature is disabled', function (): void {
     Config::set('fortify.features', [
-        Laravel\Fortify\Features::twoFactorAuthentication([
+        Features::twoFactorAuthentication([
             'confirm' => true,
             'confirmPassword' => true,
         ]),

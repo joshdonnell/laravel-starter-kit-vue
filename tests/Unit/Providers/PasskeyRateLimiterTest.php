@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 
@@ -22,7 +23,7 @@ it('throttles passkey requests by credential id when present', function (): void
 it('falls back to the session id when no credential id is present', function (): void {
     $request = Request::create('/passkeys/login/options', 'GET');
     $request->server->set('REMOTE_ADDR', '203.0.113.99');
-    $request->setLaravelSession(app('session.store'));
+    $request->setLaravelSession(resolve(Session::class));
 
     $limit = RateLimiter::limiter('passkeys')($request);
 
