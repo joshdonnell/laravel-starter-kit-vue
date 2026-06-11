@@ -17,7 +17,33 @@ it('renders edit password page', function (): void {
         ->assertInertia(fn ($page) => $page
             ->component('settings/Security')
             ->has('canManageTwoFactor')
-            ->has('twoFactorEnabled'));
+            ->has('twoFactorEnabled')
+            ->where('canManagePasskeys', true)
+            ->where('passkeys', []));
+});
+
+it('exposes the users passkeys on the security page', function (): void {
+    $user = User::factory()->create();
+
+    $passkey = $user->passkeys()->create([
+        'name' => 'My Mac',
+        'credential_id' => 'cred-1',
+        'credential' => ['publicKey' => 'foo'],
+    ]);
+
+    $this->actingAs($user)->session(['auth.password_confirmed_at' => time()]);
+
+    $response = $this->fromRoute('dashboard')
+        ->get(route('password.edit'));
+
+    $response->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('settings/Security')
+            ->where('canManagePasskeys', true)
+            ->has('passkeys', 1, fn ($p) => $p
+                ->where('id', $passkey->id)
+                ->where('name', 'My Mac')
+                ->etc()));
 });
 
 it('may update password', function (): void {

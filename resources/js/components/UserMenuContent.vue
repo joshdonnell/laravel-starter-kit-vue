@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { LogOut, Settings } from 'lucide-vue-next'
+import { LogOut, Settings } from '@lucide/vue'
 import { logout } from '@/routes'
 import { edit } from '@/routes/user-profile'
 import type { User } from '@/types'

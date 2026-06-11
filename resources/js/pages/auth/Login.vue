@@ -24,6 +24,8 @@ defineProps<{
       {{ status }}
     </div>
 
+    <PasskeyVerify />
+
     <Form
       v-bind="store.form()"
       :reset-on-success="['password']"
@@ -55,7 +57,7 @@ defineProps<{
               class="text-sm"
               :tabindex="5"
             >
-              Forgot password?
+              Forgot your password?
             </TextLink>
           </div>
           <PasswordInput

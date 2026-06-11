@@ -2,7 +2,7 @@
 import type { DialogContentEmits, DialogContentProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"
-import { X } from "lucide-vue-next"
+import { X } from "@lucide/vue"
 import { cn } from "@/lib/utils"
 
 interface SheetContentProps extends DialogContentProps {

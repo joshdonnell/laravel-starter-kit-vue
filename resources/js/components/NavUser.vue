@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChevronsUpDown } from 'lucide-vue-next'
+import { ChevronsUpDown } from '@lucide/vue'
 import { useSidebar } from '@/components/ui/sidebar'
 const page = usePage()
 const user = computed(() => page.props.auth.user)

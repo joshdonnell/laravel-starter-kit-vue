@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { Check, Copy, ScanLine } from '@lucide/vue'
 import { useClipboard } from '@vueuse/core'
-import { Check, Copy, ScanLine } from 'lucide-vue-next'
 import { confirm } from '@/routes/two-factor'
 import type { TwoFactorConfigContent } from '@/types'
 

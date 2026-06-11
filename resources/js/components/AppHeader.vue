@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-vue-next'
+import { BookOpen, Folder, LayoutGrid, Menu, Search } from '@lucide/vue'
 import { toUrl } from '@/lib/utils'
 import { dashboard } from '@/routes'
 import type { BreadcrumbItem, NavItem } from '@/types'

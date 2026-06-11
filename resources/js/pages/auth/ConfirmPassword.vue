@@ -1,13 +1,27 @@
 <script setup lang="ts">
+import {
+  index as confirmOptions,
+  store as confirmStore,
+} from '@/actions/Laravel/Passkeys/Http/Controllers/PasskeyConfirmationController'
 import { store } from '@/routes/password/confirm'
 </script>
 
 <template>
   <AuthLayout
-    title="Confirm your password"
+    title="Confirm password"
     description="This is a secure area of the application. Please confirm your password before continuing."
   >
     <Head title="Confirm password" />
+
+    <PasskeyVerify
+      :routes="{
+        options: confirmOptions(),
+        submit: confirmStore(),
+      }"
+      label="Confirm with passkey"
+      loading-label="Confirming..."
+      separator="Or confirm with password"
+    />
 
     <Form
       v-bind="store.form()"

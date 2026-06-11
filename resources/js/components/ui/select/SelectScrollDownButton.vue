@@ -2,7 +2,7 @@
 import type { SelectScrollDownButtonProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"
-import { ChevronDown } from "lucide-vue-next"
+import { ChevronDown } from "@lucide/vue"
 import { cn } from "@/lib/utils"
 
 const props = defineProps<SelectScrollDownButtonProps & { class?: HTMLAttributes["class"] }>()

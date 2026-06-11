@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Eye, EyeOff } from 'lucide-vue-next'
+import { Eye, EyeOff } from '@lucide/vue'
 import type { HTMLAttributes } from 'vue'
 import { cn } from '@/lib/utils'
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BookOpen, FolderGit2, LayoutGrid } from 'lucide-vue-next'
+import { BookOpen, FolderGit2, LayoutGrid } from '@lucide/vue'
 import { dashboard } from '@/routes'
 import type { NavItem } from '@/types'
 

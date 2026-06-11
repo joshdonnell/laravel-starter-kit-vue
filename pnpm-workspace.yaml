@@ -1,0 +1,10 @@
+onlyBuiltDependencies:
+  - vue-demi
+overrides:
+  vite: npm:@voidzero-dev/vite-plus-core@latest
+  vitest: npm:@voidzero-dev/vite-plus-test@latest
+minimumReleaseAgeExclude:
+  - '@types/node@25.9.3'
+  - reka-ui@2.9.10
+allowBuilds:
+  vue-demi: true

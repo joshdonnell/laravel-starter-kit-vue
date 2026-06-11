@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Eye, EyeOff, LockKeyhole, RefreshCw } from 'lucide-vue-next'
+import { Eye, EyeOff, LockKeyhole, RefreshCw } from '@lucide/vue'
 import { regenerateRecoveryCodes } from '@/routes/two-factor'
 
 const { recoveryCodesList, fetchRecoveryCodes, errors } = useTwoFactorAuth()
