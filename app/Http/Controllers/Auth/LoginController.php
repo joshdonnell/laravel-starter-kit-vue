@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Auth;
 
+use App\Actions\LoginUser;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -23,7 +23,7 @@ final readonly class LoginController
         ]);
     }
 
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request, LoginUser $loginUser): RedirectResponse
     {
         $user = $request->validateCredentials();
 
@@ -36,9 +36,7 @@ final readonly class LoginController
             return to_route('two-factor.login');
         }
 
-        Auth::login($user, $request->boolean('remember'));
-
-        $request->session()->regenerate();
+        $loginUser->handle($user, $request->boolean('remember'));
 
         return redirect()->intended(route('dashboard', absolute: false));
     }

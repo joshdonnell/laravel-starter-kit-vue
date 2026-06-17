@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Auth;
 
 use App\Actions\CreateUser;
+use App\Actions\LoginUser;
 use App\Http\Requests\CreateUserRequest;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -15,10 +15,11 @@ final readonly class RegisterController
 {
     public function index(): Response
     {
-        return Inertia::render('auth/Register');
+        return Inertia::render('auth/Register', [
+        ]);
     }
 
-    public function store(CreateUserRequest $request, CreateUser $action): RedirectResponse
+    public function store(CreateUserRequest $request, CreateUser $action, LoginUser $loginUser): RedirectResponse
     {
         /** @var array<string, mixed> $attributes */
         $attributes = $request->safe()->except('password');
@@ -28,7 +29,7 @@ final readonly class RegisterController
             $request->string('password')->value(),
         );
 
-        Auth::login($user);
+        $loginUser->handle($user);
 
         $request->session()->regenerate();
 

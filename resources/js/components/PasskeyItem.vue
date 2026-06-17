@@ -7,7 +7,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  remove: [id: number, onError: () => void]
+  remove: [id: string, onError: () => void]
 }>()
 
 const isDeleting = ref<boolean>(false)

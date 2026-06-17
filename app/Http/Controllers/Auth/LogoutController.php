@@ -4,18 +4,15 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Auth;
 
+use App\Actions\LogoutUser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 final readonly class LogoutController
 {
-    public function __invoke(Request $request): RedirectResponse
+    public function __invoke(Request $request, LogoutUser $logoutUser): RedirectResponse
     {
-        Auth::guard('web')->logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        $logoutUser->handle($request);
 
         return redirect('/');
     }

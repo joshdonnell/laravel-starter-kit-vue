@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Middleware;
 
 use App\Data\UserData;
+use App\Models\User;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -38,11 +39,13 @@ final class HandleInertiaRequests extends Middleware
 
         [$message, $author] = str($quote)->explode('-');
 
+        $user = $request->user();
+
         return [
             ...parent::share($request),
             'name' => config('app.name', 'Laravel'),
             'auth' => [
-                'user' => $request->user() ? UserData::from($request->user()) : null,
+                'user' => $user instanceof User ? UserData::from($user) : null,
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];

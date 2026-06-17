@@ -13,7 +13,7 @@ withDefaults(defineProps<Props>(), {
   passkeys: () => [],
 })
 
-const handleDelete = (id: number, onError: () => void): void => {
+const handleDelete = (id: string, onError: () => void): void => {
   router.delete(destroy.url(id), {
     preserveScroll: true,
     onError,

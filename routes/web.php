@@ -16,6 +16,11 @@ use Inertia\Inertia;
 
 Route::get('/', fn () => Inertia::render('Welcome'))->name('home');
 
+Route::get('.well-known/passkey-endpoints', fn () => response()->json([
+    'enroll' => route('two-factor.show'),
+    'manage' => route('two-factor.show'),
+]))->name('well-known.passkeys');
+
 Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::get('dashboard', fn () => Inertia::render('Dashboard'))->name('dashboard');
 });
