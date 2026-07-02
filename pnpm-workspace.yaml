@@ -12,5 +12,17 @@ minimumReleaseAgeExclude:
   - playwright@1.61.0
   - '@vue/language-core@3.3.6'
   - vue-tsc@3.3.6
+  - '@inertiajs/core@3.6.0'
+  - '@inertiajs/vue3@3.6.0'
+  - '@voidzero-dev/vite-plus-core@0.2.2'
+  - '@voidzero-dev/vite-plus-darwin-arm64@0.2.2'
+  - '@voidzero-dev/vite-plus-darwin-x64@0.2.2'
+  - '@voidzero-dev/vite-plus-linux-arm64-gnu@0.2.2'
+  - '@voidzero-dev/vite-plus-linux-arm64-musl@0.2.2'
+  - '@voidzero-dev/vite-plus-linux-x64-gnu@0.2.2'
+  - '@voidzero-dev/vite-plus-linux-x64-musl@0.2.2'
+  - '@voidzero-dev/vite-plus-win32-arm64-msvc@0.2.2'
+  - '@voidzero-dev/vite-plus-win32-x64-msvc@0.2.2'
+  - vite-plus@0.2.2
 allowBuilds:
   vue-demi: true

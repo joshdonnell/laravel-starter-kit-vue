@@ -49,6 +49,7 @@ export default defineConfig({
       'public',
       'bootstrap/ssr',
       'tailwind.config.ts',
+      'vite.config.ts',
       'resources/js/actions',
       'resources/js/routes',
       'resources/js/wayfinder',
