@@ -24,5 +24,8 @@ minimumReleaseAgeExclude:
   - '@voidzero-dev/vite-plus-win32-arm64-msvc@0.2.2'
   - '@voidzero-dev/vite-plus-win32-x64-msvc@0.2.2'
   - vite-plus@0.2.2
+  - concurrently@10.0.4
+  - playwright-core@1.62.0
+  - playwright@1.62.0
 allowBuilds:
   vue-demi: true
