@@ -3,3 +3,5 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - playwright-core@1.62.0
   - playwright@1.62.0
+overrides:
+  typescript: 6.0.3
