@@ -1,6 +1,7 @@
 {
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@10.34.5",
   "scripts": {
     "build": "vp build",
     "build:ssr": "vp build && vp build --ssr",
