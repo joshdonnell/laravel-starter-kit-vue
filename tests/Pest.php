@@ -9,6 +9,9 @@ use Illuminate\Support\Sleep;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
+pest()->tia()
+    ->locally();
+
 pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
     ->beforeEach(function (): void {
@@ -21,10 +24,3 @@ pest()->extend(TestCase::class)
         $this->freezeTime();
     })
     ->in('Browser', 'Feature', 'Unit');
-
-expect()->extend('toBeOne', fn () => $this->toBe(1));
-
-function something(): void
-{
-    // ..
-}
