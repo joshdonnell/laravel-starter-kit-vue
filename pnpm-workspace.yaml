@@ -1,11 +1,4 @@
 allowBuilds:
   vue-demi: true
-minimumReleaseAgeExclude:
-  - playwright-core@1.62.0
-  - playwright@1.62.0
-  - '@vueuse/core@14.4.0'
-  - '@vueuse/integrations@14.4.0'
-  - '@vueuse/metadata@14.4.0'
-  - '@vueuse/shared@14.4.0'
 overrides:
   typescript: 6.0.3
