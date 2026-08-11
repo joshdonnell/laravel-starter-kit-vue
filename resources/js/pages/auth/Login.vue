@@ -29,7 +29,7 @@ defineProps<{
     <Form
       v-bind="store.form()"
       :reset-on-success="['password']"
-      v-slot="{ errors, processing }"
+      v-slot="{ errors, processing, validate }"
       class="flex flex-col gap-6"
     >
       <div class="grid gap-6">
@@ -44,6 +44,7 @@ defineProps<{
             :tabindex="1"
             autocomplete="email"
             placeholder="email@example.com"
+            @change="validate('email')"
           />
           <InputError :message="errors.email" />
         </div>
@@ -67,6 +68,7 @@ defineProps<{
             :tabindex="2"
             autocomplete="current-password"
             placeholder="Password"
+            @change="validate('password')"
           />
           <InputError :message="errors.password" />
         </div>

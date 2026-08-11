@@ -13,7 +13,7 @@ import { store } from '@/routes/register'
     <Form
       v-bind="store.form()"
       :reset-on-success="['password', 'password_confirmation']"
-      v-slot="{ errors, processing }"
+      v-slot="{ errors, processing, validate }"
       class="flex flex-col gap-6"
     >
       <div class="grid gap-6">
@@ -28,6 +28,7 @@ import { store } from '@/routes/register'
             autocomplete="name"
             name="name"
             placeholder="Full name"
+            @change="validate('name')"
           />
           <InputError :message="errors.name" />
         </div>
@@ -42,6 +43,7 @@ import { store } from '@/routes/register'
             autocomplete="email"
             name="email"
             placeholder="email@example.com"
+            @change="validate('email')"
           />
           <InputError :message="errors.email" />
         </div>
@@ -55,6 +57,7 @@ import { store } from '@/routes/register'
             autocomplete="new-password"
             name="password"
             placeholder="Password"
+            @change="validate('password')"
           />
           <InputError :message="errors.password" />
         </div>
@@ -68,6 +71,7 @@ import { store } from '@/routes/register'
             autocomplete="new-password"
             name="password_confirmation"
             placeholder="Confirm password"
+            @change="validate('password_confirmation')"
           />
           <InputError :message="errors.password_confirmation" />
         </div>

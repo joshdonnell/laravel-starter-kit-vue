@@ -34,6 +34,20 @@ it('may send password reset notification', function (): void {
     Notification::assertSentTo($user, ResetPassword::class);
 });
 
+it('validates a password reset request without sending a notification', function (): void {
+    Notification::fake();
+
+    $user = User::factory()->create();
+
+    $response = $this->withPrecognition()
+        ->post(route('password.email'), [
+            'email' => $user->email,
+        ]);
+
+    $response->assertSuccessfulPrecognition();
+    Notification::assertNothingSent();
+});
+
 it('returns generic message for non-existent email', function (): void {
     Notification::fake();
 

@@ -35,6 +35,19 @@ it('may create a session', function (): void {
     $this->assertAuthenticatedAs($user);
 });
 
+it('validates login fields without authenticating the user', function (): void {
+    $user = User::factory()->create();
+
+    $response = $this->withPrecognition()
+        ->post(route('login.store'), [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+    $response->assertSuccessfulPrecognition();
+    $this->assertGuest();
+});
+
 it('may create a session with remember me', function (): void {
     $user = User::factory()->withoutTwoFactor()->create([
         'email' => 'test@example.com',

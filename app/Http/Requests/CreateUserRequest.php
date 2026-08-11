@@ -30,9 +30,9 @@ final class CreateUserRequest extends FormRequest
             ],
             'password' => [
                 'required',
-                'confirmed',
                 Password::defaults(),
             ],
+            'password_confirmation' => ['required', 'same:password'],
         ];
     }
 }

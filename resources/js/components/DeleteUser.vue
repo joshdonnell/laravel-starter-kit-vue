@@ -35,7 +35,7 @@ const passwordInput = useTemplateRef('passwordInput')
               preserveScroll: true,
             }"
             class="space-y-6"
-            v-slot="{ errors, processing, reset, clearErrors }"
+            v-slot="{ errors, processing, reset, clearErrors, validate }"
           >
             <UiDialogHeader class="space-y-3">
               <UiDialogTitle
@@ -55,6 +55,7 @@ const passwordInput = useTemplateRef('passwordInput')
                 name="password"
                 ref="passwordInput"
                 placeholder="Password"
+                @change="validate('password')"
               />
               <InputError :message="errors.password" />
             </div>

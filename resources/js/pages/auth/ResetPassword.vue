@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { update } from '@/routes/password'
+import { store } from '@/routes/password'
 
 const props = defineProps<{
   token: string
@@ -17,10 +17,10 @@ const inputEmail = ref(props.email)
     <Head title="Reset password" />
 
     <Form
-      v-bind="update.form()"
+      v-bind="store.form()"
       :transform="(data) => ({ ...data, token, email })"
       :reset-on-success="['password', 'password_confirmation']"
-      v-slot="{ errors, processing }"
+      v-slot="{ errors, processing, validate }"
     >
       <div class="grid gap-6">
         <div class="grid gap-2">
@@ -46,6 +46,7 @@ const inputEmail = ref(props.email)
             class="mt-1 block w-full"
             autofocus
             placeholder="Password"
+            @change="validate('password')"
           />
           <InputError :message="errors.password" />
         </div>
@@ -58,6 +59,7 @@ const inputEmail = ref(props.email)
             autocomplete="new-password"
             class="mt-1 block w-full"
             placeholder="Confirm password"
+            @change="validate('password_confirmation')"
           />
           <InputError :message="errors.password_confirmation" />
         </div>

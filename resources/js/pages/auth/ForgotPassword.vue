@@ -22,7 +22,7 @@ defineProps<{
     </div>
 
     <div class="space-y-6">
-      <Form v-bind="email.form()" v-slot="{ errors, processing }">
+      <Form v-bind="email.form()" v-slot="{ errors, processing, validate }">
         <div class="grid gap-2">
           <UiLabel for="email">Email address</UiLabel>
           <UiInput
@@ -32,6 +32,7 @@ defineProps<{
             autocomplete="off"
             autofocus
             placeholder="email@example.com"
+            @change="validate('email')"
           />
           <InputError :message="errors.email" />
         </div>

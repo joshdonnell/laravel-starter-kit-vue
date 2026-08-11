@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\SecurityController;
+use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -26,11 +27,15 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
 });
 
 Route::middleware('auth')->group(function (): void {
-    Route::delete('user', [ProfileController::class, 'destroy'])->name('user.destroy');
+    Route::delete('user', [ProfileController::class, 'destroy'])
+        ->middleware(HandlePrecognitiveRequests::class)
+        ->name('user.destroy');
 
     Route::redirect('settings', '/settings/profile');
     Route::get('settings/profile', [ProfileController::class, 'edit'])->name('user-profile.edit');
-    Route::patch('settings/profile', [ProfileController::class, 'update'])->name('user-profile.update');
+    Route::patch('settings/profile', [ProfileController::class, 'update'])
+        ->middleware(HandlePrecognitiveRequests::class)
+        ->name('user-profile.update');
 
     Route::get('settings/password', [SecurityController::class, 'edit'])->name('password.edit');
     Route::put('settings/password', [SecurityController::class, 'update'])
@@ -46,19 +51,23 @@ Route::middleware('auth')->group(function (): void {
 Route::middleware('guest')->group(function (): void {
     Route::resource('register', RegisterController::class)
         ->only(['index', 'store'])
+        ->middlewareFor('store', HandlePrecognitiveRequests::class)
         ->names(['index' => 'register', 'store' => 'register.store']);
 
     Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
         ->name('password.reset');
     Route::post('reset-password', [NewPasswordController::class, 'store'])
+        ->middleware(HandlePrecognitiveRequests::class)
         ->name('password.store');
 
     Route::resource('forgot-password', PasswordResetLinkController::class)
         ->only(['index', 'store'])
+        ->middlewareFor('store', HandlePrecognitiveRequests::class)
         ->names(['index' => 'password.request', 'store' => 'password.email']);
 
     Route::resource('login', LoginController::class)
         ->only(['index', 'store'])
+        ->middlewareFor('store', HandlePrecognitiveRequests::class)
         ->names(['index' => 'login', 'store' => 'login.store']);
 });
 

@@ -22,7 +22,7 @@ final readonly class RegisterController
     public function store(CreateUserRequest $request, CreateUser $action, LoginUser $loginUser): RedirectResponse
     {
         /** @var array<string, mixed> $attributes */
-        $attributes = $request->safe()->except('password');
+        $attributes = $request->safe()->except(['password', 'password_confirmation']);
 
         $user = $action->handle(
             $attributes,
