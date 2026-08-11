@@ -37,6 +37,25 @@ it('may update profile information', function (): void {
         ->and($user->email)->toBe('new@example.com');
 });
 
+it('validates profile updates without changing the user', function (): void {
+    $user = User::factory()->create([
+        'name' => 'Old Name',
+        'email' => 'old@example.com',
+    ]);
+
+    $response = $this->actingAs($user)
+        ->withPrecognition()
+        ->patch(route('user-profile.update'), [
+            'name' => 'New Name',
+            'email' => 'new@example.com',
+        ]);
+
+    $response->assertSuccessfulPrecognition();
+
+    expect($user->refresh()->name)->toBe('Old Name')
+        ->and($user->email)->toBe('old@example.com');
+});
+
 it('resets email verification when email changes', function (): void {
     $user = User::factory()->create([
         'email' => 'old@example.com',

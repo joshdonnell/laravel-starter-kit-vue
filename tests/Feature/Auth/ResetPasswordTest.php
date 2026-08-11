@@ -44,6 +44,32 @@ it('may reset password', function (): void {
     Event::assertDispatched(PasswordReset::class);
 });
 
+it('validates a new password without resetting it', function (): void {
+    $user = User::factory()->create();
+
+    $response = $this->withPrecognition()
+        ->post(route('password.store'), [
+            'token' => 'reset-token',
+            'email' => $user->email,
+            'password' => 'new-password',
+            'password_confirmation' => 'new-password',
+        ]);
+
+    $response->assertSuccessfulPrecognition();
+
+    expect(Hash::check('password', $user->refresh()->password))->toBeTrue();
+});
+
+it('validates the new password before confirmation is entered', function (): void {
+    $response = $this->withPrecognition()
+        ->withHeader('Precognition-Validate-Only', 'password')
+        ->post(route('password.store'), [
+            'password' => 'new-password',
+        ]);
+
+    $response->assertSuccessfulPrecognition();
+});
+
 it('fails with invalid token', function (): void {
     User::factory()->create([
         'email' => 'test@example.com',
@@ -106,7 +132,7 @@ it('requires password confirmation', function (): void {
         ]);
 
     $response->assertRedirect(route('password.reset', ['token' => 'fake-token']))
-        ->assertSessionHasErrors('password');
+        ->assertSessionHasErrors('password_confirmation');
 });
 
 it('requires matching password confirmation', function (): void {
@@ -119,7 +145,7 @@ it('requires matching password confirmation', function (): void {
         ]);
 
     $response->assertRedirect(route('password.reset', ['token' => 'fake-token']))
-        ->assertSessionHasErrors('password');
+        ->assertSessionHasErrors('password_confirmation');
 });
 
 it('redirects authenticated users away from reset password', function (): void {

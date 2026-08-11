@@ -40,6 +40,33 @@ it('may register a new user', function (): void {
     Event::assertDispatched(Registered::class);
 });
 
+it('validates registration without creating a user', function (): void {
+    Event::fake([Registered::class]);
+
+    $response = $this->withPrecognition()
+        ->post(route('register.store'), [
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => 'password1234',
+            'password_confirmation' => 'password1234',
+        ]);
+
+    $response->assertSuccessfulPrecognition();
+
+    expect(User::query()->count())->toBe(0);
+    Event::assertNotDispatched(Registered::class);
+});
+
+it('validates the password before confirmation is entered', function (): void {
+    $response = $this->withPrecognition()
+        ->withHeader('Precognition-Validate-Only', 'password')
+        ->post(route('register.store'), [
+            'password' => 'password1234',
+        ]);
+
+    $response->assertSuccessfulPrecognition();
+});
+
 it('requires name', function (): void {
     $response = $this->fromRoute('register')
         ->post(route('register.store'), [
@@ -112,7 +139,7 @@ it('requires password confirmation', function (): void {
         ]);
 
     $response->assertRedirectToRoute('register')
-        ->assertSessionHasErrors('password');
+        ->assertSessionHasErrors('password_confirmation');
 });
 
 it('requires matching password confirmation', function (): void {
@@ -125,7 +152,7 @@ it('requires matching password confirmation', function (): void {
         ]);
 
     $response->assertRedirectToRoute('register')
-        ->assertSessionHasErrors('password');
+        ->assertSessionHasErrors('password_confirmation');
 });
 
 it('redirects authenticated users away from registration', function (): void {

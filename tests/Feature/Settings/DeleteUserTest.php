@@ -23,6 +23,21 @@ it('may delete user account', function (): void {
     $this->assertGuest();
 });
 
+it('validates account deletion without deleting the user', function (): void {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)
+        ->withPrecognition()
+        ->delete(route('user.destroy'), [
+            'password' => 'password',
+        ]);
+
+    $response->assertSuccessfulPrecognition();
+
+    expect($user->fresh())->not->toBeNull();
+    $this->assertAuthenticatedAs($user);
+});
+
 it('requires password to delete account', function (): void {
     $user = User::factory()->create();
 
