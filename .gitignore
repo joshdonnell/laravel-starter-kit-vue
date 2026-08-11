@@ -32,3 +32,13 @@ yarn-error.log
 /components.d.ts
 resources/js/types/typescript-transformer-manifest.json
 /resources/js/types/**/generated.d.ts
+.mcp.json
+boost.json
+CLAUDE.md
+AGENTS.md
+/.claude/skills
+/.cursor
+/.junie
+/.agents
+/.codex
+/.github/skills
