@@ -7,7 +7,7 @@
     "dev": "vp dev",
     "lint": "vp lint --fix && vp fmt resources/",
     "test:lint": "vp lint --type-aware && vp fmt --check resources/",
-    "test:types": "tsc --noEmit"
+    "test:types": "vue-tsc --noEmit"
   },
   "devDependencies": {
     "@inertiajs/core": "3.6.1",

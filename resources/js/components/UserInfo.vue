@@ -11,14 +11,10 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const { getInitials } = useInitials()
-
-// Compute whether we should show the avatar image
-const showAvatar = computed(() => props.user.avatar && props.user.avatar !== '')
 </script>
 
 <template>
   <UiAvatar class="h-8 w-8 overflow-hidden rounded-lg">
-    <UiAvatarImage v-if="showAvatar" :src="user.avatar!" :alt="user.name" />
     <UiAvatarFallback class="rounded-lg text-black dark:text-white">
       {{ getInitials(user.name) }}
     </UiAvatarFallback>
