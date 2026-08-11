@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Carbon\CarbonInterface;
 use Database\Factories\PasskeyFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Passkeys\Passkey as BasePasskey;
@@ -48,13 +49,13 @@ final class Passkey extends BasePasskey
         ];
     }
 
-    public function getCreatedAtDiffAttribute(): string
+    protected function createdAtDiff(): Attribute
     {
-        return $this->created_at->diffForHumans();
+        return Attribute::make(get: fn () => $this->created_at->diffForHumans());
     }
 
-    public function getLastUsedAtDiffAttribute(): ?string
+    protected function lastUsedAtDiff(): Attribute
     {
-        return $this->last_used_at?->diffForHumans();
+        return Attribute::make(get: fn () => $this->last_used_at?->diffForHumans());
     }
 }
