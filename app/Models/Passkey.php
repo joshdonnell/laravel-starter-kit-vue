@@ -49,12 +49,14 @@ final class Passkey extends BasePasskey
         ];
     }
 
-    protected function createdAtDiff(): Attribute
+    /** @return Attribute<string, never> */
+    public function createdAtDiff(): Attribute
     {
         return Attribute::make(get: fn () => $this->created_at->diffForHumans());
     }
 
-    protected function lastUsedAtDiff(): Attribute
+    /** @return Attribute<string|null, never> */
+    public function lastUsedAtDiff(): Attribute
     {
         return Attribute::make(get: fn () => $this->last_used_at?->diffForHumans());
     }
