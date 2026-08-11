@@ -88,6 +88,7 @@ export default defineConfig({
       },
     }),
     AutoImport({
+      dtsMode: 'overwrite',
       imports: [
         'vue',
         {

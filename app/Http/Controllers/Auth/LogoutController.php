@@ -14,6 +14,6 @@ final readonly class LogoutController
     {
         $logoutUser->handle($request);
 
-        return redirect('/');
+        return to_route('home');
     }
 }

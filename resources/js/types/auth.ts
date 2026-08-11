@@ -1,16 +1,7 @@
-export type User = {
-  id: string
-  name: string
-  email: string
-  avatar?: string
-  email_verified_at: string | null
-  created_at: string
-  updated_at: string
-  [key: string]: unknown
-}
+export type User = App.Data.UserData
 
 export type Auth = {
-  user: User
+  user: User | null
 }
 
 export type TwoFactorConfigContent = {
@@ -19,10 +10,4 @@ export type TwoFactorConfigContent = {
   buttonText: string
 }
 
-export type Passkey = {
-  id: string
-  name: string
-  authenticator: string | null
-  created_at_diff: string
-  last_used_at_diff: string | null
-}
+export type Passkey = App.Data.PasskeyData

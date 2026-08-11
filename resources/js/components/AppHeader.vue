@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { BookOpen, Folder, LayoutGrid, Menu, Search } from '@lucide/vue'
+import { navigationMenuTriggerStyle } from '@/components/ui/navigation-menu'
 import { toUrl } from '@/lib/utils'
 import { dashboard } from '@/routes'
 import type { BreadcrumbItem, NavItem } from '@/types'
@@ -13,8 +14,9 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const page = usePage()
-const auth = computed(() => page.props.auth)
+const user = computed(() => page.props.auth.user!)
 const { isCurrentUrl, whenCurrentUrl } = useCurrentUrl()
+const { getInitials } = useInitials()
 
 const activeItemStyles =
   'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100'
@@ -189,21 +191,16 @@ const rightNavItems: NavItem[] = [
                 class="relative size-10 w-auto rounded-full p-1 focus-within:ring-2 focus-within:ring-primary"
               >
                 <UiAvatar class="size-8 overflow-hidden rounded-full">
-                  <UiAvatarImage
-                    v-if="auth.user.avatar"
-                    :src="auth.user.avatar"
-                    :alt="auth.user.name"
-                  />
                   <UiAvatarFallback
                     class="rounded-lg bg-neutral-200 font-semibold text-black dark:bg-neutral-700 dark:text-white"
                   >
-                    {{ getInitials(auth.user?.name) }}
+                    {{ getInitials(user.name) }}
                   </UiAvatarFallback>
                 </UiAvatar>
               </UiButton>
             </UiDropdownMenuTrigger>
             <UiDropdownMenuContent align="end" class="w-56">
-              <UserMenuContent :user="auth.user" />
+              <UserMenuContent :user="user" />
             </UiDropdownMenuContent>
           </UiDropdownMenu>
         </div>
