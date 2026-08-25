@@ -10,4 +10,12 @@ use Laravel\Fortify\InteractsWithTwoFactorState;
 final class TwoFactorAuthenticationRequest extends FormRequest
 {
     use InteractsWithTwoFactorState;
+
+    /**
+     * @return array<string, array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [];
+    }
 }

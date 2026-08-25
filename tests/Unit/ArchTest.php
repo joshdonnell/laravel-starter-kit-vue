@@ -11,9 +11,8 @@ arch()->preset()->strict()->ignoring([
 arch()->preset()->security()->ignoring([
     'assert',
 ]);
+arch()->preset()->laravel();
 
 arch('controllers')
     ->expect('App\Http\Controllers')
     ->not->toBeUsed();
-
-//
