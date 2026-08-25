@@ -1,4 +1,2 @@
 allowBuilds:
   vue-demi: true
-overrides:
-  typescript: 6.0.3
