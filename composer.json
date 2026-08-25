@@ -87,7 +87,7 @@
       "@php artisan migrate --graceful --ansi"
     ],
     "update:requirements": [
-      "composer bump",
+      "composer bump"
     ],
     "lint": [
       "rector",
