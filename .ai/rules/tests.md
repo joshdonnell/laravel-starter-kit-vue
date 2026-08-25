@@ -5,6 +5,9 @@ paths:
 
 # Tests
 
+## Database reset
+Reset the database between tests with `RefreshDatabase`.
+
 ## Test collaborators
 Prefer real Actions, models, database records, and other first party collaborators over mocking internal classes.
 

@@ -13,8 +13,8 @@
   "require": {
     "php": "^8.5.0",
     "inertiajs/inertia-laravel": "^3.3.1",
-    "laravel/fortify": "^1.38.0",
-    "laravel/framework": "^13.25.0",
+    "laravel/fortify": "^1.39.0",
+    "laravel/framework": "^13.27.0",
     "laravel/tinker": "^3.0.2",
     "laravel/wayfinder": "^0.1.21",
     "nunomaduro/essentials": "^1.2.0",
@@ -26,21 +26,21 @@
     "driftingly/rector-laravel": "^2.5.0",
     "fakerphp/faker": "^v1.24.1",
     "larastan/larastan": "^3.10.0",
-    "laravel/boost": "^2.5.3",
+    "laravel/boost": "^2.6.0",
     "laravel/pail": "^1.2.7",
     "laravel/pao": "^1.1.4",
     "laravel/pint": "^1.30.5",
-    "mockery/mockery": "^1.6.13",
+    "mockery/mockery": "^1.6.15",
     "nunomaduro/collision": "^8.9.5",
-    "pestphp/pest": "^5.1.1",
+    "pestphp/pest": "^5.1.2",
     "pestphp/pest-plugin-agent": "^5.0",
     "pestphp/pest-plugin-browser": "^5.0.1",
     "pestphp/pest-plugin-laravel": "^5.0.1",
-    "pestphp/pest-plugin-phpstan": "^5.0.2",
-    "pestphp/pest-plugin-rector": "^5.0.3",
+    "pestphp/pest-plugin-phpstan": "^5.2.0",
+    "pestphp/pest-plugin-rector": "^5.0.4",
     "pestphp/pest-plugin-type-coverage": "^5.0.2",
-    "phpstan/phpstan": "^2.2.8",
-    "rector/rector": "^2.6.2",
+    "phpstan/phpstan": "^2.2.9",
+    "rector/rector": "^2.6.3",
     "roave/security-advisories": "dev-latest"
   },
   "autoload": {
@@ -87,8 +87,7 @@
       "@php artisan migrate --graceful --ansi"
     ],
     "update:requirements": [
-      "composer bump",
-      "pnpx npm-check-updates -u"
+      "composer bump"
     ],
     "lint": [
       "rector",
