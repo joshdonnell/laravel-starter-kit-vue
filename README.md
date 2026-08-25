@@ -80,7 +80,7 @@ You should see 100% test coverage and all quality checks passing.
 
 ### Development
 
-- `composer dev` — Starts Laravel server, queue worker, log monitoring (Pail), and Vite dev server concurrently
+- `composer dev` starts Laravel's `artisan dev` process runner, which uses Multiplex to run the server, queue worker, Pail, and Vite
 - `composer transform-types` — Manually regenerates TypeScript types from PHP Data and Enums
 
 ### Code Quality

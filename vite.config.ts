@@ -141,4 +141,17 @@ export default defineConfig({
       command: 'composer run transform-types',
     }),
   ],
+  server: {
+    watch: {
+      ignored: [
+        '**/.agents/**',
+        '**/.ai/**',
+        '**/.claude/**',
+        '**/.codex/**',
+        '**/.cursor/**',
+        '**/.junie/**',
+        '**/vendor/**',
+      ],
+    },
+  },
 })
