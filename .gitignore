@@ -33,6 +33,7 @@ yarn-error.log
 resources/js/types/typescript-transformer-manifest.json
 /resources/js/types/**/generated.d.ts
 .mcp.json
+mcp.json
 boost.json
 CLAUDE.md
 AGENTS.md
@@ -42,3 +43,4 @@ AGENTS.md
 /.agents
 /.codex
 /.github/skills
+opencode.json

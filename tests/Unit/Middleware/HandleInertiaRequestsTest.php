@@ -89,6 +89,5 @@ it('includes parent shared data', function (): void {
 
     $shared = $middleware->share($request);
 
-    // Parent Inertia middleware shares 'errors' by default
     expect($shared)->toHaveKey('errors');
 });
