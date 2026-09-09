@@ -56,12 +56,4 @@
     "lightningcss-linux-x64-gnu": "^1.33.0",
     "lightningcss-win32-x64-msvc": "^1.33.0"
   },
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "12.3.4",
-      "onFail": "download"
-    }
-  },
-  "packageManager": "pnpm@12.3.4"
 }
