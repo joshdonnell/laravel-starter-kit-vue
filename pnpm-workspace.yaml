@@ -4,3 +4,13 @@ minimumReleaseAgeExclude:
   - playwright-core@1.63.0
   - playwright@1.63.0
   - '@types/node@26.5.1'
+catalog:
+  vite: npm:@voidzero-dev/vite-plus-core@0.3.1
+  vite-plus: 0.3.1
+overrides:
+  vite@*: 'catalog:'
+peerDependencyRules:
+  allowAny:
+    - vite
+  allowedVersions:
+    vite: '*'
