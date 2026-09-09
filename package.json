@@ -55,5 +55,5 @@
     "@tailwindcss/oxide-win32-x64-msvc": "^4.3.3",
     "lightningcss-linux-x64-gnu": "^1.33.0",
     "lightningcss-win32-x64-msvc": "^1.33.0"
-  },
+  }
 }
