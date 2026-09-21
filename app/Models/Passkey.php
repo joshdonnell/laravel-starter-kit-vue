@@ -12,14 +12,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Passkeys\Passkey as BasePasskey;
 
 /**
- * @property-read string $id
- * @property-read string $user_id
- * @property-read string $name
- * @property-read string $credential_id
- * @property-read array<string, mixed> $credential
- * @property-read CarbonInterface|null $last_used_at
- * @property-read CarbonInterface $created_at
- * @property-read CarbonInterface $updated_at
+ * @property string $id
+ * @property string $user_id
+ * @property string $name
+ * @property string $credential_id
+ * @property array<string, mixed> $credential
+ * @property CarbonInterface|null $last_used_at
+ * @property CarbonInterface $created_at
+ * @property CarbonInterface $updated_at
  * @property-read string|null $authenticator
  * @property-read string $created_at_diff
  * @property-read string|null $last_used_at_diff

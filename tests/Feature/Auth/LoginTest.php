@@ -3,8 +3,6 @@
 declare(strict_types=1);
 
 use App\Models\User;
-use Illuminate\Auth\Events\Lockout;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 
 it('renders login page', function (): void {
@@ -183,23 +181,4 @@ it('clears rate limit after successful login', function (): void {
 
     $response->assertRedirectToRoute('dashboard');
     $this->assertAuthenticatedAs($user);
-});
-
-it('dispatches lockout event when rate limit is reached', function (): void {
-    Event::fake([Lockout::class]);
-
-    User::factory()->create([
-        'email' => 'test@example.com',
-        'password' => Hash::make('password'),
-    ]);
-
-    for ($attempt = 0; $attempt < 6; $attempt++) {
-        $this->fromRoute('login')
-            ->post(route('login.store'), [
-                'email' => 'test@example.com',
-                'password' => 'wrong-password',
-            ]);
-    }
-
-    Event::assertDispatched(Lockout::class);
 });

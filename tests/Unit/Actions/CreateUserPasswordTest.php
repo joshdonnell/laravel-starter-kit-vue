@@ -4,14 +4,10 @@ declare(strict_types=1);
 
 use App\Actions\CreateUserPassword;
 use App\Models\User;
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 
 it('may create a new user password', function (): void {
-    Event::fake([PasswordReset::class]);
-
     $user = User::factory()->create([
         'email' => 'test@example.com',
     ]);
@@ -29,8 +25,6 @@ it('may create a new user password', function (): void {
 
     expect($status)->toBe(Password::PASSWORD_RESET)
         ->and(Hash::check('new-password', $user->refresh()->password))->toBeTrue();
-
-    Event::assertDispatched(PasswordReset::class);
 });
 
 it('returns invalid token status for incorrect token', function (): void {

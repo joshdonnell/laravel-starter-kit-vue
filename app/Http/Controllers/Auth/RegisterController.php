@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Auth;
 
 use App\Actions\CreateUser;
+use App\Actions\CreateUserEmailVerificationNotification;
 use App\Actions\LoginUser;
 use App\Http\Requests\CreateUserRequest;
 use Illuminate\Http\RedirectResponse;
@@ -19,7 +20,7 @@ final readonly class RegisterController
         ]);
     }
 
-    public function store(CreateUserRequest $request, CreateUser $action, LoginUser $loginUser): RedirectResponse
+    public function store(CreateUserRequest $request, CreateUser $action, CreateUserEmailVerificationNotification $createUserEmailVerificationNotification, LoginUser $loginUser): RedirectResponse
     {
         /** @var array<string, mixed> $attributes */
         $attributes = $request->safe()->except(['password', 'password_confirmation']);
@@ -28,6 +29,8 @@ final readonly class RegisterController
             $attributes,
             $request->string('password')->value(),
         );
+
+        $createUserEmailVerificationNotification->handle($user);
 
         $loginUser->handle($user);
 

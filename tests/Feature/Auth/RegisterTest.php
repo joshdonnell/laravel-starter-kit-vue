@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Event;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 
 it('renders registration page', function (): void {
     $response = $this->fromRoute('home')
@@ -16,7 +16,7 @@ it('renders registration page', function (): void {
 });
 
 it('may register a new user', function (): void {
-    Event::fake([Registered::class]);
+    Notification::fake();
 
     $response = $this->fromRoute('register')
         ->post(route('register.store'), [
@@ -37,11 +37,11 @@ it('may register a new user', function (): void {
 
     $this->assertAuthenticatedAs($user);
 
-    Event::assertDispatched(Registered::class);
+    Notification::assertSentTo($user, VerifyEmail::class);
 });
 
 it('validates registration without creating a user', function (): void {
-    Event::fake([Registered::class]);
+    Notification::fake();
 
     $response = $this->withPrecognition()
         ->post(route('register.store'), [
@@ -54,7 +54,7 @@ it('validates registration without creating a user', function (): void {
     $response->assertSuccessfulPrecognition();
 
     expect(User::query()->count())->toBe(0);
-    Event::assertNotDispatched(Registered::class);
+    Notification::assertNothingSent();
 });
 
 it('validates the password before confirmation is entered', function (): void {

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Models\User;
-use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
@@ -25,8 +24,6 @@ final readonly class CreateUserPassword
                     'password' => Hash::make($password),
                     'remember_token' => Str::random(60),
                 ]);
-
-                event(new PasswordReset($user));
             }
         );
     }

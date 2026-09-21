@@ -8,16 +8,25 @@ use App\Models\User;
 
 final readonly class UpdateUser
 {
+    public function __construct(
+        private CreateUserEmailVerificationNotification $createUserEmailVerificationNotification,
+    ) {}
+
     /**
      * @param  array<string, mixed>  $attributes
      */
     public function handle(User $user, array $attributes): void
     {
-        $email = $attributes['email'] ?? null;
+        $user->fill($attributes);
 
-        $user->update([
-            ...$attributes,
-            ...$user->email === $email ? [] : ['email_verified_at' => null],
-        ]);
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+            $user->save();
+            $this->createUserEmailVerificationNotification->handle($user);
+
+            return;
+        }
+
+        $user->save();
     }
 }

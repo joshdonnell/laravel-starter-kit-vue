@@ -18,17 +18,17 @@ use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 
 /**
- * @property-read string $id
- * @property-read string $name
- * @property-read string $email
- * @property-read CarbonInterface|null $email_verified_at
- * @property-read string $password
- * @property-read string|null $remember_token
- * @property-read string|null $two_factor_secret
- * @property-read string|null $two_factor_recovery_codes
- * @property-read CarbonInterface|null $two_factor_confirmed_at
- * @property-read CarbonInterface $created_at
- * @property-read CarbonInterface $updated_at
+ * @property string $id
+ * @property string $name
+ * @property string $email
+ * @property CarbonInterface|null $email_verified_at
+ * @property string $password
+ * @property string|null $remember_token
+ * @property string|null $two_factor_secret
+ * @property string|null $two_factor_recovery_codes
+ * @property CarbonInterface|null $two_factor_confirmed_at
+ * @property CarbonInterface $created_at
+ * @property CarbonInterface $updated_at
  * @property-read Collection<int, Passkey> $passkeys
  */
 #[Hidden([

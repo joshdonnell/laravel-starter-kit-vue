@@ -3,8 +3,6 @@
 declare(strict_types=1);
 
 use App\Models\User;
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 
@@ -20,8 +18,6 @@ it('renders reset password page', function (): void {
 });
 
 it('may reset password', function (): void {
-    Event::fake([PasswordReset::class]);
-
     $user = User::factory()->create([
         'email' => 'test@example.com',
     ]);
@@ -40,8 +36,6 @@ it('may reset password', function (): void {
         ->assertSessionHas('status');
 
     expect(Hash::check('new-password', $user->refresh()->password))->toBeTrue();
-
-    Event::assertDispatched(PasswordReset::class);
 });
 
 it('validates a new password without resetting it', function (): void {

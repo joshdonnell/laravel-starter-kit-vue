@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 use App\Actions\UpdateUser;
 use App\Models\User;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Support\Facades\Notification;
 
 it('may update a user', function (): void {
+    Notification::fake();
+
     $user = User::factory()->create([
         'name' => 'Old Name',
         'email' => 'old@email.com',
@@ -19,9 +23,13 @@ it('may update a user', function (): void {
 
     expect($user->refresh()->name)->toBe('New Name')
         ->and($user->email)->toBe('old@email.com');
+
+    Notification::assertNothingSent();
 });
 
 it('resets email verification when email changes', function (): void {
+    Notification::fake();
+
     $user = User::factory()->create([
         'email' => 'old@email.com',
         'email_verified_at' => now(),
@@ -37,9 +45,13 @@ it('resets email verification when email changes', function (): void {
 
     expect($user->refresh()->email)->toBe('new@email.com')
         ->and($user->email_verified_at)->toBeNull();
+
+    Notification::assertSentTo($user, VerifyEmail::class);
 });
 
 it('keeps email verification when email stays the same', function (): void {
+    Notification::fake();
+
     $verifiedAt = now();
 
     $user = User::factory()->create([
@@ -56,4 +68,6 @@ it('keeps email verification when email stays the same', function (): void {
 
     expect($user->refresh()->email_verified_at)->not->toBeNull()
         ->and($user->name)->toBe('Updated Name');
+
+    Notification::assertNothingSent();
 });

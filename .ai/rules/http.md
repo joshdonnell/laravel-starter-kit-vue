@@ -6,7 +6,7 @@ paths:
 # HTTP
 
 ## Input validation
-Use Form Request classes for HTTP input validation. Do not validate inline in controllers.
+Use Form Request classes for HTTP input validation. Do not validate inline in controllers or in actions. Actions receive already-validated input.
 
 ## Typed request input
 Retrieve scalar HTTP input with typed request getters such as `$request->string()` and `$request->boolean()` instead of raw input access or dynamic request properties.
