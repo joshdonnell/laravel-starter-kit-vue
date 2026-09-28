@@ -1,27 +1,14 @@
 import { createInertiaApp } from '@inertiajs/vue3'
-import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
-import type { DefineComponent } from 'vue'
 import { initializeFlashToast } from '@/lib/flashToast'
-
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel'
+import { pageTitle, resolvePage, vFocus } from '@/lib/inertiaApp'
 
 void createInertiaApp({
-  title: (title) => (title ? `${title} - ${appName}` : appName),
-  resolve: (name) =>
-    resolvePageComponent(
-      `./pages/${name}.vue`,
-      import.meta.glob<DefineComponent>('./pages/**/*.vue'),
-    ),
+  title: pageTitle,
+  resolve: resolvePage,
   setup({ el, App, props, plugin }) {
     createApp({ render: () => h(App, props) })
       .use(plugin)
-      .directive('focus', {
-        mounted: (el: HTMLElement, shouldFocus) => {
-          if (shouldFocus.value !== false) {
-            el.focus()
-          }
-        },
-      })
+      .directive('focus', vFocus)
       .mount(el)
   },
   progress: {

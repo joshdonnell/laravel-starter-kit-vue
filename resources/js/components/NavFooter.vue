@@ -2,18 +2,13 @@
 import { toUrl } from '@/lib/utils'
 import type { NavItem } from '@/types'
 
-type Props = {
+defineProps<{
   items: NavItem[]
-  class?: string
-}
-
-defineProps<Props>()
+}>()
 </script>
 
 <template>
-  <UiSidebarGroup
-    :class="`group-data-[collapsible=icon]:p-0 ${$props.class || ''}`"
-  >
+  <UiSidebarGroup class="group-data-[collapsible=icon]:p-0">
     <UiSidebarGroupContent>
       <UiSidebarMenu>
         <UiSidebarMenuItem v-for="item in items" :key="item.title">

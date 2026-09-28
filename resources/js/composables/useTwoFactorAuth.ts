@@ -76,7 +76,6 @@ export const useTwoFactorAuth = (): UseTwoFactorAuthReturn => {
 
   const clearTwoFactorAuthData = (): void => {
     clearSetupData()
-    clearErrors()
     recoveryCodesList.value = []
   }
 
@@ -91,13 +90,8 @@ export const useTwoFactorAuth = (): UseTwoFactorAuthReturn => {
   }
 
   const fetchSetupData = async (): Promise<void> => {
-    try {
-      clearErrors()
-      await Promise.all([fetchQrCode(), fetchSetupKey()])
-    } catch {
-      qrCodeSvg.value = null
-      manualSetupKey.value = null
-    }
+    clearErrors()
+    await Promise.all([fetchQrCode(), fetchSetupKey()])
   }
 
   return {

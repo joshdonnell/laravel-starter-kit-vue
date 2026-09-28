@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { BookOpen, Folder, LayoutGrid, Menu, Search } from '@lucide/vue'
+import { Menu, Search } from '@lucide/vue'
 import { navigationMenuTriggerStyle } from '@/components/ui/navigation-menu'
+import { extraNavItems, mainNavItems } from '@/lib/navigation'
 import { toUrl } from '@/lib/utils'
 import { dashboard } from '@/routes'
-import type { BreadcrumbItem, NavItem } from '@/types'
+import type { BreadcrumbItem } from '@/types'
 
 type Props = {
   breadcrumbs?: BreadcrumbItem[]
@@ -16,31 +17,10 @@ const props = withDefaults(defineProps<Props>(), {
 const page = usePage()
 const user = computed(() => page.props.auth.user!)
 const { isCurrentUrl, whenCurrentUrl } = useCurrentUrl()
-const { getInitials } = useInitials()
+const resolveInitials = getInitials
 
 const activeItemStyles =
   'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100'
-
-const mainNavItems: NavItem[] = [
-  {
-    title: 'Dashboard',
-    href: dashboard(),
-    icon: LayoutGrid,
-  },
-]
-
-const rightNavItems: NavItem[] = [
-  {
-    title: 'Repository',
-    href: 'https://github.com/joshdonnell/laravel-starter-kit-vue',
-    icon: Folder,
-  },
-  {
-    title: 'Documentation',
-    href: 'https://laravel.com/docs/starter-kits#vue',
-    icon: BookOpen,
-  },
-]
 </script>
 
 <template>
@@ -83,7 +63,7 @@ const rightNavItems: NavItem[] = [
                 </nav>
                 <div class="flex flex-col space-y-4">
                   <a
-                    v-for="item in rightNavItems"
+                    v-for="item in extraNavItems"
                     :key="item.title"
                     :href="toUrl(item.href)"
                     target="_blank"
@@ -151,7 +131,7 @@ const rightNavItems: NavItem[] = [
             </UiButton>
 
             <div class="hidden space-x-1 lg:flex">
-              <template v-for="item in rightNavItems" :key="item.title">
+              <template v-for="item in extraNavItems" :key="item.title">
                 <UiTooltipProvider :delay-duration="0">
                   <UiTooltip>
                     <UiTooltipTrigger>
@@ -194,7 +174,7 @@ const rightNavItems: NavItem[] = [
                   <UiAvatarFallback
                     class="rounded-lg bg-neutral-200 font-semibold text-black dark:bg-neutral-700 dark:text-white"
                   >
-                    {{ getInitials(user.name) }}
+                    {{ resolveInitials(user.name) }}
                   </UiAvatarFallback>
                 </UiAvatar>
               </UiButton>

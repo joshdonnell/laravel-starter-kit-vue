@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { usePasskeyRegister } from '@laravel/passkeys/vue'
+import {
+  index as registerOptions,
+  store as registerStore,
+} from '@/actions/Laravel/Passkeys/Http/Controllers/PasskeyRegistrationController'
 
 const emit = defineEmits<{
   success: []
@@ -31,6 +35,10 @@ const name = ref<string>(getDefaultPasskeyName())
 const showForm = ref<boolean>(false)
 
 const { register, isLoading, error, isSupported } = usePasskeyRegister({
+  routes: {
+    options: registerOptions.url(),
+    submit: registerStore.url(),
+  },
   onSuccess: () => {
     name.value = ''
     showForm.value = false
@@ -55,43 +63,45 @@ const handleCancel = (): void => {
 </script>
 
 <template>
-  <div v-if="!isSupported" class="text-sm text-muted-foreground">
-    Passkeys are not supported in this browser.
+  <div>
+    <div v-if="!isSupported" class="text-sm text-muted-foreground">
+      Passkeys are not supported in this browser.
+    </div>
+
+    <UiButton v-else-if="!showForm" variant="outline" @click="showForm = true">
+      Add passkey
+    </UiButton>
+
+    <form
+      v-else
+      @submit="handleSubmit"
+      class="space-y-4 rounded-lg border border-border bg-muted/50 p-4"
+    >
+      <div class="grid gap-2">
+        <UiLabel for="passkey-name">Passkey name</UiLabel>
+        <UiInput
+          id="passkey-name"
+          type="text"
+          v-model="name"
+          placeholder="e.g., MacBook Pro, iPhone"
+          class="mt-1 block w-full border-foreground/20"
+          v-focus
+        />
+        <p class="text-xs text-muted-foreground">
+          A name helps you identify this passkey later.
+        </p>
+      </div>
+
+      <InputError v-if="error" :message="error" />
+
+      <div class="flex gap-2">
+        <UiButton type="submit" :disabled="isLoading || !name.trim()">
+          {{ isLoading ? 'Registering...' : 'Register passkey' }}
+        </UiButton>
+        <UiButton type="button" variant="ghost" @click="handleCancel">
+          Cancel
+        </UiButton>
+      </div>
+    </form>
   </div>
-
-  <UiButton v-else-if="!showForm" variant="outline" @click="showForm = true">
-    Add passkey
-  </UiButton>
-
-  <form
-    v-else
-    @submit="handleSubmit"
-    class="space-y-4 rounded-lg border border-border bg-muted/50 p-4"
-  >
-    <div class="grid gap-2">
-      <UiLabel for="passkey-name">Passkey name</UiLabel>
-      <UiInput
-        id="passkey-name"
-        type="text"
-        v-model="name"
-        placeholder="e.g., MacBook Pro, iPhone"
-        class="mt-1 block w-full border-foreground/20"
-        v-focus
-      />
-      <p class="text-xs text-muted-foreground">
-        A name helps you identify this passkey later.
-      </p>
-    </div>
-
-    <InputError v-if="error" :message="error" />
-
-    <div class="flex gap-2">
-      <UiButton type="submit" :disabled="isLoading || !name.trim()">
-        {{ isLoading ? 'Registering...' : 'Register passkey' }}
-      </UiButton>
-      <UiButton type="button" variant="ghost" @click="handleCancel">
-        Cancel
-      </UiButton>
-    </div>
-  </form>
 </template>

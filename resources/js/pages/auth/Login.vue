@@ -1,12 +1,16 @@
 <script setup lang="ts">
+import {
+  index as loginOptions,
+  store as loginStore,
+} from '@/actions/Laravel/Passkeys/Http/Controllers/PasskeyLoginController'
 import { register } from '@/routes'
 import { store } from '@/routes/login'
 import { request } from '@/routes/password'
 
 defineProps<{
-  status?: string
   canResetPassword: boolean
   canRegister: boolean
+  status: string | null
 }>()
 </script>
 
@@ -24,7 +28,12 @@ defineProps<{
       {{ status }}
     </div>
 
-    <PasskeyVerify />
+    <PasskeyVerify
+      :routes="{
+        options: loginOptions(),
+        submit: loginStore(),
+      }"
+    />
 
     <Form
       v-bind="store.form()"

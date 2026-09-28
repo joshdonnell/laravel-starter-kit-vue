@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
 
 it('renders login page', function (): void {
     $response = $this->fromRoute('home')
@@ -13,13 +13,12 @@ it('renders login page', function (): void {
         ->assertInertia(fn ($page) => $page
             ->component('auth/Login')
             ->has('canResetPassword')
-            ->has('status'));
+            ->where('status', null));
 });
 
 it('may create a session', function (): void {
-    $user = User::factory()->withoutTwoFactor()->create([
+    $user = User::factory()->create([
         'email' => 'test@example.com',
-        'password' => Hash::make('password'),
     ]);
 
     $response = $this->fromRoute('login')
@@ -47,9 +46,8 @@ it('validates login fields without authenticating the user', function (): void {
 });
 
 it('may create a session with remember me', function (): void {
-    $user = User::factory()->withoutTwoFactor()->create([
+    $user = User::factory()->create([
         'email' => 'test@example.com',
-        'password' => Hash::make('password'),
     ]);
 
     $response = $this->fromRoute('login')
@@ -65,12 +63,8 @@ it('may create a session with remember me', function (): void {
 });
 
 it('redirects to two-factor challenge when enabled', function (): void {
-    User::factory()->create([
+    User::factory()->withTwoFactor()->create([
         'email' => 'test@example.com',
-        'password' => Hash::make('password'),
-        'two_factor_secret' => encrypt('secret'),
-        'two_factor_recovery_codes' => encrypt(json_encode(['code1', 'code2'])),
-        'two_factor_confirmed_at' => now(),
     ]);
 
     $response = $this->fromRoute('login')
@@ -87,7 +81,6 @@ it('redirects to two-factor challenge when enabled', function (): void {
 it('fails with invalid credentials', function (): void {
     User::factory()->create([
         'email' => 'test@example.com',
-        'password' => Hash::make('password'),
     ]);
 
     $response = $this->fromRoute('login')
@@ -135,7 +128,6 @@ it('redirects authenticated users away from login', function (): void {
 it('throttles login attempts after too many failures', function (): void {
     User::factory()->create([
         'email' => 'test@example.com',
-        'password' => Hash::make('password'),
     ]);
 
     for ($attempt = 0; $attempt < 5; $attempt++) {
@@ -160,9 +152,8 @@ it('throttles login attempts after too many failures', function (): void {
 });
 
 it('clears rate limit after successful login', function (): void {
-    $user = User::factory()->withoutTwoFactor()->create([
+    $user = User::factory()->create([
         'email' => 'test@example.com',
-        'password' => Hash::make('password'),
     ]);
 
     for ($attempt = 0; $attempt < 3; $attempt++) {
@@ -176,6 +167,23 @@ it('clears rate limit after successful login', function (): void {
     $response = $this->fromRoute('login')
         ->post(route('login.store'), [
             'email' => 'test@example.com',
+            'password' => 'password',
+        ]);
+
+    $response->assertRedirectToRoute('dashboard');
+    $this->assertAuthenticatedAs($user);
+
+    expect(RateLimiter::attempts('test@example.com|127.0.0.1'))->toBe(0);
+});
+
+it('authenticates regardless of email letter case', function (): void {
+    $user = User::factory()->create([
+        'email' => 'test@example.com',
+    ]);
+
+    $response = $this->fromRoute('login')
+        ->post(route('login.store'), [
+            'email' => 'Test@Example.com',
             'password' => 'password',
         ]);
 

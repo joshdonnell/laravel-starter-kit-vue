@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import type { Props as ManagePasskeysProps } from '@/components/ManagePasskeys.vue'
-import type { Props as ManageTwoFactorProps } from '@/components/ManageTwoFactor.vue'
 import { edit, update } from '@/routes/password'
 import type { BreadcrumbItem } from '@/types'
 
-type Props = ManagePasskeysProps & ManageTwoFactorProps
-
-defineProps<Props>()
+defineProps<{
+  canManageTwoFactor: boolean
+  requiresConfirmation: boolean
+  twoFactorEnabled: boolean
+  canManagePasskeys: boolean
+  passkeys: App.Data.PasskeyData[]
+}>()
 
 const breadcrumbs: BreadcrumbItem[] = [
   {

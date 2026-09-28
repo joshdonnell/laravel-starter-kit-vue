@@ -16,8 +16,7 @@ final readonly class RegisterController
 {
     public function index(): Response
     {
-        return Inertia::render('auth/Register', [
-        ]);
+        return Inertia::render('auth/Register');
     }
 
     public function store(CreateUserRequest $request, CreateUser $action, CreateUserEmailVerificationNotification $createUserEmailVerificationNotification, LoginUser $loginUser): RedirectResponse
@@ -33,8 +32,6 @@ final readonly class RegisterController
         $createUserEmailVerificationNotification->handle($user);
 
         $loginUser->handle($user);
-
-        $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard', absolute: false));
     }

@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { KeyRound, Trash2 } from '@lucide/vue'
-import type { Passkey } from '@/types/auth'
-
 const props = defineProps<{
-  passkey: Passkey
+  passkey: App.Data.PasskeyData
 }>()
 
 const emit = defineEmits<{

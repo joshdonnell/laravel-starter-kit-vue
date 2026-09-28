@@ -16,10 +16,12 @@ final readonly class LoginController
 {
     public function index(Request $request): Response
     {
+        $status = $request->session()->get('status');
+
         return Inertia::render('auth/Login', [
             'canResetPassword' => Route::has('password.request'),
-            'status' => $request->session()->get('status'),
             'canRegister' => true,
+            'status' => is_string($status) ? $status : null,
         ]);
     }
 

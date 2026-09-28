@@ -1,28 +1,6 @@
 <script setup lang="ts">
-import { BookOpen, FolderGit2, LayoutGrid } from '@lucide/vue'
+import { extraNavItems, mainNavItems } from '@/lib/navigation'
 import { dashboard } from '@/routes'
-import type { NavItem } from '@/types'
-
-const mainNavItems: NavItem[] = [
-  {
-    title: 'Dashboard',
-    href: dashboard(),
-    icon: LayoutGrid,
-  },
-]
-
-const footerNavItems: NavItem[] = [
-  {
-    title: 'Repository',
-    href: 'https://github.com/joshdonnell/laravel-starter-kit-vue',
-    icon: FolderGit2,
-  },
-  {
-    title: 'Documentation',
-    href: 'https://laravel.com/docs/starter-kits#vue',
-    icon: BookOpen,
-  },
-]
 </script>
 
 <template>
@@ -44,9 +22,8 @@ const footerNavItems: NavItem[] = [
     </UiSidebarContent>
 
     <UiSidebarFooter>
-      <NavFooter :items="footerNavItems" />
+      <NavFooter :items="extraNavItems" />
       <NavUser />
     </UiSidebarFooter>
   </UiSidebar>
-  <slot />
 </template>

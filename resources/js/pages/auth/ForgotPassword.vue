@@ -3,7 +3,7 @@ import { login } from '@/routes'
 import { email } from '@/routes/password'
 
 defineProps<{
-  status?: string
+  status: string | null
 }>()
 </script>
 

@@ -6,13 +6,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\Actions\LogoutUser;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 
 final readonly class LogoutController
 {
-    public function __invoke(Request $request, LogoutUser $logoutUser): RedirectResponse
+    public function __invoke(LogoutUser $logoutUser): RedirectResponse
     {
-        $logoutUser->handle($request);
+        $logoutUser->handle();
 
         return to_route('home');
     }

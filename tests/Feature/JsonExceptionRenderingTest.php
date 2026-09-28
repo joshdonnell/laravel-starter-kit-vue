@@ -9,6 +9,7 @@ it('renders json for unauthenticated requests that expect json', function (): vo
 });
 
 it('redirects unauthenticated web requests to login', function (): void {
-    $this->get(route('dashboard'))
+    $this->fromRoute('home')
+        ->get(route('dashboard'))
         ->assertRedirect(route('login'));
 });

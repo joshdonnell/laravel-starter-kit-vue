@@ -6,9 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\URL;
 
 it('may verify email', function (): void {
-    $user = User::factory()->create([
-        'email_verified_at' => null,
-    ]);
+    $user = User::factory()->unverified()->create();
 
     $verificationUrl = URL::temporarySignedRoute(
         'verification.verify',
@@ -44,9 +42,7 @@ it('redirects to dashboard if already verified', function (): void {
 });
 
 it('requires valid signature', function (): void {
-    $user = User::factory()->create([
-        'email_verified_at' => null,
-    ]);
+    $user = User::factory()->unverified()->create();
 
     $invalidUrl = route('verification.verify', [
         'id' => $user->getKey(),

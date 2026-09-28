@@ -3,12 +3,9 @@
 declare(strict_types=1);
 
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 
 it('may delete user account', function (): void {
-    $user = User::factory()->create([
-        'password' => Hash::make('password'),
-    ]);
+    $user = User::factory()->create();
 
     $response = $this->actingAs($user)
         ->fromRoute('user-profile.edit')
@@ -52,9 +49,7 @@ it('requires password to delete account', function (): void {
 });
 
 it('requires correct password to delete account', function (): void {
-    $user = User::factory()->create([
-        'password' => Hash::make('password'),
-    ]);
+    $user = User::factory()->create();
 
     $response = $this->actingAs($user)
         ->fromRoute('user-profile.edit')

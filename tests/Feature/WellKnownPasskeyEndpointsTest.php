@@ -2,16 +2,12 @@
 
 declare(strict_types=1);
 
-it('advertises passkey endpoints via the well-known url', function (): void {
-    $response = $this->getJson(route('well-known.passkeys'));
+it('advertises passkey endpoints to guests via the well-known url', function (): void {
+    $response = $this->getJson('/.well-known/passkey-endpoints');
 
     $response->assertOk()
         ->assertExactJson([
-            'enroll' => route('two-factor.show'),
-            'manage' => route('two-factor.show'),
+            'enroll' => route('password.edit'),
+            'manage' => route('password.edit'),
         ]);
-});
-
-it('exposes the well-known passkey endpoints to guests', function (): void {
-    $this->getJson('/.well-known/passkey-endpoints')->assertOk();
 });

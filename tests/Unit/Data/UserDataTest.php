@@ -12,7 +12,11 @@ it('can be created with all required fields', function (): void {
         'email' => 'john@doe.com',
     ]);
 
-    expect($userData)->toBeInstanceOf(UserData::class);
+    expect($userData->toArray())->toBe([
+        'name' => 'John Doe',
+        'email' => 'john@doe.com',
+        'email_verified_at' => null,
+    ]);
 });
 
 it('errors when name is not provided', function (): void {
@@ -28,8 +32,14 @@ it('errors when email is not provided', function (): void {
 });
 
 it('can be created from a User model', function (): void {
-    $user = User::factory()->create();
-    $userData = UserData::from($user);
+    $user = User::factory()->create([
+        'name' => 'John Doe',
+        'email' => 'john@doe.com',
+    ]);
 
-    expect($userData)->toBeInstanceOf(UserData::class);
+    expect(UserData::from($user)->toArray())->toBe([
+        'name' => 'John Doe',
+        'email' => 'john@doe.com',
+        'email_verified_at' => $user->email_verified_at?->format(DATE_ATOM),
+    ]);
 });

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Actions\CreateUserEmailResetNotification;
+use App\Actions\SendPasswordResetLink;
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Notification;
@@ -15,7 +15,7 @@ it('may send password reset notification', function (): void {
         'email' => 'test@example.com',
     ]);
 
-    $action = resolve(CreateUserEmailResetNotification::class);
+    $action = resolve(SendPasswordResetLink::class);
 
     $status = $action->handle(['email' => $user->email]);
 
@@ -29,7 +29,7 @@ it('returns throttled status when too many attempts', function (): void {
         'email' => 'test@example.com',
     ]);
 
-    $action = resolve(CreateUserEmailResetNotification::class);
+    $action = resolve(SendPasswordResetLink::class);
 
     $action->handle(['email' => $user->email]);
 
@@ -39,7 +39,7 @@ it('returns throttled status when too many attempts', function (): void {
 });
 
 it('returns invalid user status for non-existent email', function (): void {
-    $action = resolve(CreateUserEmailResetNotification::class);
+    $action = resolve(SendPasswordResetLink::class);
 
     $status = $action->handle(['email' => 'nonexistent@example.com']);
 

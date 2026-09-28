@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Actions\CreateUser;
-use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 it('may create a user', function (): void {
     $action = resolve(CreateUser::class);
@@ -11,10 +11,9 @@ it('may create a user', function (): void {
     $user = $action->handle([
         'name' => 'Test User',
         'email' => 'example@email.com',
-    ], 'password');
+    ], 'password')->refresh();
 
-    expect($user)->toBeInstanceOf(User::class)
-        ->and($user->name)->toBe('Test User')
+    expect($user->name)->toBe('Test User')
         ->and($user->email)->toBe('example@email.com')
-        ->and($user->password)->not->toBe('password');
+        ->and(Hash::check('password', $user->password))->toBeTrue();
 });

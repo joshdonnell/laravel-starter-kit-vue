@@ -13,7 +13,7 @@ it('renders forgot password page', function (): void {
     $response->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('auth/ForgotPassword')
-            ->has('status'));
+            ->where('status', null));
 });
 
 it('may send password reset notification', function (): void {
@@ -30,6 +30,29 @@ it('may send password reset notification', function (): void {
 
     $response->assertRedirectToRoute('password.request')
         ->assertSessionHas('status', 'A reset link will be sent if the account exists.');
+
+    $this->get(route('password.request'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('auth/ForgotPassword')
+            ->where('status', 'A reset link will be sent if the account exists.'));
+
+    Notification::assertSentTo($user, ResetPassword::class);
+});
+
+it('sends the reset link regardless of email letter case', function (): void {
+    Notification::fake();
+
+    $user = User::factory()->create([
+        'email' => 'test@example.com',
+    ]);
+
+    $response = $this->fromRoute('password.request')
+        ->post(route('password.email'), [
+            'email' => 'Test@Example.com',
+        ]);
+
+    $response->assertRedirectToRoute('password.request');
 
     Notification::assertSentTo($user, ResetPassword::class);
 });

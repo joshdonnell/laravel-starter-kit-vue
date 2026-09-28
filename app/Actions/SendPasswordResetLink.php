@@ -6,7 +6,7 @@ namespace App\Actions;
 
 use Illuminate\Support\Facades\Password;
 
-final readonly class CreateUserEmailResetNotification
+final readonly class SendPasswordResetLink
 {
     /**
      * @param  array<string, mixed>  $credentials

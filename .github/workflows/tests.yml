@@ -48,14 +48,14 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Cache pnpm Dependencies
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: node_modules
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('package.json', 'pnpm-workspace.yaml') }}
           restore-keys: ${{ runner.os }}-pnpm-
 
       - name: Install Dependencies
@@ -82,8 +82,7 @@ jobs:
 
       - name: Get Playwright version
         id: playwright-version
-        run: echo "version=$(pnpm list @playwright/test --depth=0 2>/dev/null | grep
-          playwright | sed 's/.*@//')" >> $GITHUB_OUTPUT
+        run: echo "version=$(node -p "require('playwright/package.json').version")" >> $GITHUB_OUTPUT
 
       - name: Cache Playwright Browsers
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
@@ -104,14 +103,14 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: tmp/rector
-          key: ${{ runner.os }}-rector-${{ hashFiles('composer.lock') }}
+          key: ${{ runner.os }}-rector-${{ hashFiles('composer.json') }}
           restore-keys: ${{ runner.os }}-rector-
 
       - name: Cache PHPStan
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: tmp/phpstan
-          key: ${{ runner.os }}-phpstan-${{ hashFiles('composer.lock') }}
+          key: ${{ runner.os }}-phpstan-${{ hashFiles('composer.json') }}
           restore-keys: ${{ runner.os }}-phpstan-
 
       - name: Create Cache Directories

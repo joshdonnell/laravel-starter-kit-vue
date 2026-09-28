@@ -3,13 +3,6 @@ import { edit, update } from '@/routes/user-profile'
 import { send } from '@/routes/verification'
 import type { BreadcrumbItem } from '@/types'
 
-type Props = {
-  mustVerifyEmail: boolean
-  status?: string
-}
-
-defineProps<Props>()
-
 const breadcrumbItems: BreadcrumbItem[] = [
   {
     title: 'Profile settings',
@@ -17,8 +10,17 @@ const breadcrumbItems: BreadcrumbItem[] = [
   },
 ]
 
+const props = defineProps<{
+  status: string | null
+}>()
+
 const page = usePage()
 const user = computed(() => page.props.auth.user!)
+const verificationLinkSent = computed(
+  () =>
+    props.status ===
+    ('verification-link-sent' satisfies App.Enums.SessionStatus),
+)
 </script>
 
 <template>
@@ -71,20 +73,16 @@ const user = computed(() => page.props.auth.user!)
             <InputError class="mt-2" :message="errors.email" />
           </div>
 
-          <div v-if="mustVerifyEmail && !user.email_verified_at">
+          <div v-if="!user.email_verified_at">
             <p class="-mt-4 text-sm text-muted-foreground">
               Your email address is unverified.
-              <Link
-                :href="send()"
-                as="button"
-                class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
-              >
+              <TextLink :href="send()" as="button">
                 Click here to re-send the verification email.
-              </Link>
+              </TextLink>
             </p>
 
             <div
-              v-if="status === 'verification-link-sent'"
+              v-if="verificationLinkSent"
               class="mt-2 text-sm font-medium text-green-600"
             >
               A new verification link has been sent to your email address.

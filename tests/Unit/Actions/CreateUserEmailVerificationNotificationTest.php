@@ -10,9 +10,7 @@ use Illuminate\Support\Facades\Notification;
 it('may send email verification notification', function (): void {
     Notification::fake();
 
-    $user = User::factory()->create([
-        'email_verified_at' => null,
-    ]);
+    $user = User::factory()->unverified()->create();
 
     $action = resolve(CreateUserEmailVerificationNotification::class);
 

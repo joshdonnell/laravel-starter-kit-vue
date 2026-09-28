@@ -2,9 +2,15 @@
 import { logout } from '@/routes'
 import { send } from '@/routes/verification'
 
-defineProps<{
-  status?: string
+const props = defineProps<{
+  status: string | null
 }>()
+
+const verificationLinkSent = computed(
+  () =>
+    props.status ===
+    ('verification-link-sent' satisfies App.Enums.SessionStatus),
+)
 </script>
 
 <template>
@@ -15,7 +21,7 @@ defineProps<{
     <Head title="Email verification" />
 
     <div
-      v-if="status === 'verification-link-sent'"
+      v-if="verificationLinkSent"
       class="mb-4 text-center text-sm font-medium text-green-600"
     >
       A new verification link has been sent to the email address you provided

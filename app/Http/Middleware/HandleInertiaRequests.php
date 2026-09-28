@@ -6,7 +6,6 @@ namespace App\Http\Middleware;
 
 use App\Data\UserData;
 use App\Models\User;
-use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -20,25 +19,12 @@ final class HandleInertiaRequests extends Middleware
     protected $rootView = 'app';
 
     /**
-     * @see https://inertiajs.com/asset-versioning
-     */
-    public function version(Request $request): ?string
-    {
-        return parent::version($request);
-    }
-
-    /**
      * @see https://inertiajs.com/shared-data
      *
      * @return array<string, mixed>
      */
     public function share(Request $request): array
     {
-        $quote = Inspiring::quotes()->random();
-        assert(is_string($quote));
-
-        [$message, $author] = str($quote)->explode('-');
-
         $user = $request->user();
 
         return [

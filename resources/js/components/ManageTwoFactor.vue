@@ -2,17 +2,11 @@
 import { ShieldCheck } from '@lucide/vue'
 import { disable, enable } from '@/routes/two-factor'
 
-export type Props = {
-  canManageTwoFactor?: boolean
-  requiresConfirmation?: boolean
-  twoFactorEnabled?: boolean
-}
-
-withDefaults(defineProps<Props>(), {
-  canManageTwoFactor: false,
-  requiresConfirmation: false,
-  twoFactorEnabled: false,
-})
+defineProps<{
+  canManageTwoFactor: boolean
+  requiresConfirmation: boolean
+  twoFactorEnabled: boolean
+}>()
 
 const { hasSetupData, clearTwoFactorAuthData } = useTwoFactorAuth()
 const showSetupModal = ref<boolean>(false)

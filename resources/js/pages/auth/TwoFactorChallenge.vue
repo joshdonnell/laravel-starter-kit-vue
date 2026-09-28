@@ -38,60 +38,39 @@ const toggleRecoveryMode = (clearErrors: () => void): void => {
     <Head title="Two-factor authentication" />
 
     <div class="space-y-6">
-      <template v-if="!showRecoveryInput">
-        <Form
-          v-bind="store.form()"
-          class="space-y-4"
-          reset-on-error
-          @error="code = ''"
-          #default="{ errors, processing, clearErrors }"
+      <Form
+        v-bind="store.form()"
+        class="space-y-4"
+        reset-on-error
+        @error="code = ''"
+        #default="{ errors, processing, clearErrors }"
+      >
+        <div
+          v-if="!showRecoveryInput"
+          class="flex flex-col items-center justify-center space-y-3 text-center"
         >
           <input type="hidden" name="code" :value="code" />
-          <div
-            class="flex flex-col items-center justify-center space-y-3 text-center"
-          >
-            <div class="flex w-full items-center justify-center">
-              <UiInputOtpInputOTP
-                id="otp"
-                v-model="code"
-                :maxlength="6"
-                :disabled="processing"
-                autofocus
-              >
-                <UiInputOtpInputOTPGroup>
-                  <UiInputOtpInputOTPSlot
-                    v-for="index in 6"
-                    :key="index"
-                    :index="index - 1"
-                  />
-                </UiInputOtpInputOTPGroup>
-              </UiInputOtpInputOTP>
-            </div>
-            <InputError :message="errors.code" />
-          </div>
-          <UiButton type="submit" class="w-full" :disabled="processing"
-            >Continue</UiButton
-          >
-          <div class="text-center text-sm text-muted-foreground">
-            <span>or you can </span>
-            <button
-              type="button"
-              class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
-              @click="() => toggleRecoveryMode(clearErrors)"
+          <div class="flex w-full items-center justify-center">
+            <UiInputOtpInputOTP
+              id="otp"
+              v-model="code"
+              :maxlength="6"
+              :disabled="processing"
+              autofocus
             >
-              {{ authConfigContent.buttonText }}
-            </button>
+              <UiInputOtpInputOTPGroup>
+                <UiInputOtpInputOTPSlot
+                  v-for="index in 6"
+                  :key="index"
+                  :index="index - 1"
+                />
+              </UiInputOtpInputOTPGroup>
+            </UiInputOtpInputOTP>
           </div>
-        </Form>
-      </template>
+          <InputError :message="errors.code" />
+        </div>
 
-      <template v-else>
-        <Form
-          v-bind="store.form()"
-          class="space-y-4"
-          reset-on-error
-          #default="{ errors, processing, clearErrors }"
-        >
+        <template v-else>
           <UiInput
             name="recovery_code"
             type="text"
@@ -100,22 +79,23 @@ const toggleRecoveryMode = (clearErrors: () => void): void => {
             required
           />
           <InputError :message="errors.recovery_code" />
-          <UiButton type="submit" class="w-full" :disabled="processing"
-            >Continue</UiButton
-          >
+        </template>
 
-          <div class="text-center text-sm text-muted-foreground">
-            <span>or you can </span>
-            <button
-              type="button"
-              class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
-              @click="() => toggleRecoveryMode(clearErrors)"
-            >
-              {{ authConfigContent.buttonText }}
-            </button>
-          </div>
-        </Form>
-      </template>
+        <UiButton type="submit" class="w-full" :disabled="processing"
+          >Continue</UiButton
+        >
+
+        <div class="text-center text-sm text-muted-foreground">
+          <span>or you can </span>
+          <button
+            type="button"
+            class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
+            @click="() => toggleRecoveryMode(clearErrors)"
+          >
+            {{ authConfigContent.buttonText }}
+          </button>
+        </div>
+      </Form>
     </div>
   </AuthLayout>
 </template>

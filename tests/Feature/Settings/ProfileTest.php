@@ -14,7 +14,7 @@ it('renders profile edit page', function (): void {
     $response->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('settings/Profile')
-            ->has('status'));
+            ->where('status', null));
 });
 
 it('may update profile information', function (): void {
@@ -74,26 +74,6 @@ it('resets email verification when email changes', function (): void {
     expect($user->refresh()->email_verified_at)->toBeNull();
 });
 
-it('keeps email verification when email stays the same', function (): void {
-    $verifiedAt = now();
-
-    $user = User::factory()->create([
-        'email' => 'same@example.com',
-        'email_verified_at' => $verifiedAt,
-    ]);
-
-    $response = $this->actingAs($user)
-        ->fromRoute('user-profile.edit')
-        ->patch(route('user-profile.update'), [
-            'name' => 'New Name',
-            'email' => 'same@example.com',
-        ]);
-
-    $response->assertRedirectToRoute('user-profile.edit');
-
-    expect($user->refresh()->email_verified_at)->not->toBeNull();
-});
-
 it('requires name', function (): void {
     $user = User::factory()->create();
 
@@ -149,7 +129,7 @@ it('requires unique email except own', function (): void {
         ->assertSessionHasErrors('email');
 });
 
-it('allows keeping same email', function (): void {
+it('keeps email verification when email stays the same', function (): void {
     $user = User::factory()->create([
         'name' => 'Test User',
         'email' => 'test@example.com',
@@ -164,4 +144,21 @@ it('allows keeping same email', function (): void {
 
     $response->assertRedirectToRoute('user-profile.edit')
         ->assertSessionDoesntHaveErrors();
+
+    expect($user->refresh()->name)->toBe('Updated Name')
+        ->and($user->email_verified_at)->not->toBeNull();
+});
+
+it('rejects emails that registration would reject', function (): void {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)
+        ->fromRoute('user-profile.edit')
+        ->patch(route('user-profile.update'), [
+            'name' => 'Test User',
+            'email' => 'user@localserver',
+        ]);
+
+    $response->assertRedirectToRoute('user-profile.edit')
+        ->assertSessionHasErrors('email');
 });

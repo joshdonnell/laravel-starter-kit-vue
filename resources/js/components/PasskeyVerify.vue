@@ -3,27 +3,21 @@ import type { UrlMethodPair } from '@inertiajs/core'
 import { usePasskeyVerify } from '@laravel/passkeys/vue'
 import { KeyRound } from '@lucide/vue'
 
-type Props = {
-  routes?: {
+const props = defineProps<{
+  routes: {
     options: UrlMethodPair
     submit: UrlMethodPair
   }
   label?: string
   loadingLabel?: string
   separator?: string
-}
-
-const props = defineProps<Props>()
+}>()
 
 const { verify, isLoading, error, isSupported } = usePasskeyVerify({
-  ...(props.routes
-    ? {
-        routes: {
-          options: props.routes.options.url,
-          submit: props.routes.submit.url,
-        },
-      }
-    : {}),
+  routes: {
+    options: props.routes.options.url,
+    submit: props.routes.submit.url,
+  },
   onSuccess: (response) => {
     router.visit(response.redirect ?? '/')
   },

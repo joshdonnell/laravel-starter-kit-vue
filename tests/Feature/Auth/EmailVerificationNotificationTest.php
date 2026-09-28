@@ -9,9 +9,7 @@ use Illuminate\Support\Facades\Notification;
 it('may send verification notification', function (): void {
     Notification::fake();
 
-    $user = User::factory()->create([
-        'email_verified_at' => null,
-    ]);
+    $user = User::factory()->unverified()->create();
 
     $response = $this->actingAs($user)
         ->fromRoute('verification.notice')
@@ -19,6 +17,12 @@ it('may send verification notification', function (): void {
 
     $response->assertRedirectToRoute('verification.notice')
         ->assertSessionHas('status', 'verification-link-sent');
+
+    $this->get(route('verification.notice'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('auth/VerifyEmail')
+            ->where('status', 'verification-link-sent'));
 
     Notification::assertSentTo($user, VerifyEmail::class);
 });

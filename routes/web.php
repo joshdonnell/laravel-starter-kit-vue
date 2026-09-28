@@ -18,8 +18,8 @@ use Inertia\Inertia;
 Route::get('/', fn () => Inertia::render('Welcome'))->name('home');
 
 Route::get('.well-known/passkey-endpoints', fn () => response()->json([
-    'enroll' => route('two-factor.show'),
-    'manage' => route('two-factor.show'),
+    'enroll' => route('password.edit'),
+    'manage' => route('password.edit'),
 ]))->name('well-known.passkeys');
 
 Route::middleware(['auth', 'verified'])->group(function (): void {
@@ -28,7 +28,7 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
 
 Route::middleware('auth')->group(function (): void {
     Route::delete('user', [ProfileController::class, 'destroy'])
-        ->middleware(HandlePrecognitiveRequests::class)
+        ->middleware([HandlePrecognitiveRequests::class, 'throttle:6,1'])
         ->name('user.destroy');
 
     Route::redirect('settings', '/settings/profile');
@@ -44,8 +44,7 @@ Route::middleware('auth')->group(function (): void {
 
     Route::get('settings/appearance', fn () => Inertia::render('settings/Appearance'))->name('appearance.edit');
 
-    Route::get('settings/two-factor', [SecurityController::class, 'edit'])
-        ->name('two-factor.show');
+    Route::redirect('settings/two-factor', '/settings/password');
 });
 
 Route::middleware('guest')->group(function (): void {

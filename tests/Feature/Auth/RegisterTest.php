@@ -104,6 +104,19 @@ it('requires valid email', function (): void {
         ->assertSessionHasErrors('email');
 });
 
+it('rejects a non-string email', function (): void {
+    $response = $this->fromRoute('register')
+        ->post(route('register.store'), [
+            'name' => 'Test User',
+            'email' => ['test@example.com'],
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+
+    $response->assertRedirectToRoute('register')
+        ->assertSessionHasErrors('email');
+});
+
 it('requires unique email', function (): void {
     User::factory()->create(['email' => 'test@example.com']);
 

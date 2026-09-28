@@ -1,7 +1,3 @@
-export type UseInitialsReturn = {
-  getInitials: (fullName?: string) => string
-}
-
 function getInitial(name: string): string {
   return Array.from(name)[0] ?? ''
 }
@@ -22,8 +18,4 @@ export function getInitials(fullName?: string): string {
   }
 
   return `${getInitial(names[0])}${getInitial(names[names.length - 1])}`.toUpperCase()
-}
-
-export function useInitials(): UseInitialsReturn {
-  return { getInitials }
 }

@@ -1,17 +1,10 @@
 <script setup lang="ts">
 import { KeyRound } from '@lucide/vue'
 import { destroy } from '@/actions/Laravel/Passkeys/Http/Controllers/PasskeyRegistrationController'
-import type { Passkey } from '@/types/auth'
-
-export type Props = {
-  canManagePasskeys?: boolean
-  passkeys?: Passkey[]
-}
-
-withDefaults(defineProps<Props>(), {
-  canManagePasskeys: false,
-  passkeys: () => [],
-})
+defineProps<{
+  canManagePasskeys: boolean
+  passkeys: App.Data.PasskeyData[]
+}>()
 
 const handleDelete = (id: string, onError: () => void): void => {
   router.delete(destroy.url(id), {

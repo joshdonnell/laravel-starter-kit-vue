@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Settings;
 
 use App\Actions\UpdateUserPassword;
+use App\Data\PasskeyData;
 use App\Http\Requests\TwoFactorAuthenticationRequest;
 use App\Http\Requests\UpdateUserPasswordRequest;
 use App\Models\User;
@@ -12,10 +13,10 @@ use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Collection;
 use Inertia\Inertia;
 use Inertia\Response;
 use Laravel\Fortify\Features;
-use Laravel\Passkeys\Passkey;
 
 final readonly class SecurityController implements HasMiddleware
 {
@@ -34,6 +35,7 @@ final readonly class SecurityController implements HasMiddleware
 
         return Inertia::render('settings/Security', [
             'canManageTwoFactor' => Features::enabled(Features::twoFactorAuthentication()),
+            'requiresConfirmation' => Features::optionEnabled(Features::twoFactorAuthentication(), 'confirm'),
             'twoFactorEnabled' => $user->hasEnabledTwoFactorAuthentication(),
             'canManagePasskeys' => $canManagePasskeys,
             'passkeys' => $canManagePasskeys ? $this->passkeysFor($user) : [],
@@ -50,22 +52,16 @@ final readonly class SecurityController implements HasMiddleware
     }
 
     /**
-     * @return array<int, array<string, mixed>>
+     * @return Collection<int, PasskeyData>
      */
-    private function passkeysFor(User $user): array
+    private function passkeysFor(User $user): Collection
     {
-        return $user->passkeys()
-            ->select(['id', 'name', 'credential', 'created_at', 'last_used_at'])
-            ->latest()
-            ->get()
-            ->map(fn (Passkey $passkey): array => [
-                'id' => $passkey->id,
-                'name' => $passkey->name,
-                'authenticator' => $passkey->authenticator,
-                'created_at_diff' => $passkey->created_at?->diffForHumans() ?? '',
-                'last_used_at_diff' => $passkey->last_used_at?->diffForHumans(),
-            ])
-            ->values()
-            ->all();
+        return PasskeyData::collect(
+            $user->passkeys()
+                ->select(['id', 'name', 'credential', 'created_at', 'last_used_at'])
+                ->latest()
+                ->get(),
+            Collection::class,
+        );
     }
 }

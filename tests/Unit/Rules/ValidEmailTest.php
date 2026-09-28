@@ -93,6 +93,8 @@ it('fails with invalid email', function (string $email): void {
     '"user name"@example.com',
 
     'üñîçødé@example.com',
+    'üñîçødéx@example.com',
+    'xyz Rr@r.com',
     'δοκιμή@παράδειγμα.ελ',
     '测试@测试.中国',
     'пример@пример.рус',
@@ -104,3 +106,15 @@ it('fails with invalid email', function (string $email): void {
     'user@sub.-domain.com',
     '𝓊𝓃𝒾𝒸ℴ𝒹ℯ@𝒹ℴ𝓂𝒶𝒾𝓃.𝒸ℴ𝓂',
 ]);
+
+it('fails when the value is not a string', function (): void {
+    $rule = new ValidEmail;
+
+    $failed = false;
+
+    $rule->validate('email', ['user@example.com'], function () use (&$failed): void {
+        $failed = true;
+    });
+
+    expect($failed)->toBeTrue();
+});

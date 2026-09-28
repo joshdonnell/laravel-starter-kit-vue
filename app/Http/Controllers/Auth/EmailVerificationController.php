@@ -16,17 +16,19 @@ final readonly class EmailVerificationController
 {
     public function index(Request $request, #[CurrentUser] User $user): Response|RedirectResponse
     {
-        return $user->hasVerifiedEmail()
-            ? redirect()->intended(route('dashboard', absolute: false))
-            : Inertia::render('auth/VerifyEmail', ['status' => $request->session()->get('status')]);
-    }
-
-    public function update(EmailVerificationRequest $request, #[CurrentUser] User $user): RedirectResponse
-    {
         if ($user->hasVerifiedEmail()) {
-            return redirect()->intended(route('dashboard', absolute: false).'?verified=1');
+            return redirect()->intended(route('dashboard', absolute: false));
         }
 
+        $status = $request->session()->get('status');
+
+        return Inertia::render('auth/VerifyEmail', [
+            'status' => is_string($status) ? $status : null,
+        ]);
+    }
+
+    public function update(EmailVerificationRequest $request): RedirectResponse
+    {
         $request->fulfill();
 
         return redirect()->intended(route('dashboard', absolute: false).'?verified=1');

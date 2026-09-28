@@ -1,29 +1,32 @@
 <script setup lang="ts">
 import type { User } from '@/types'
 
-type Props = {
-  user: User
-  showEmail?: boolean
-}
+const props = withDefaults(
+  defineProps<{
+    user: User
+    showEmail?: boolean
+  }>(),
+  {
+    showEmail: false,
+  },
+)
 
-const props = withDefaults(defineProps<Props>(), {
-  showEmail: false,
-})
-
-const { getInitials } = useInitials()
+const initials = computed(() => getInitials(props.user.name))
 </script>
 
 <template>
-  <UiAvatar class="h-8 w-8 overflow-hidden rounded-lg">
-    <UiAvatarFallback class="rounded-lg text-black dark:text-white">
-      {{ getInitials(user.name) }}
-    </UiAvatarFallback>
-  </UiAvatar>
+  <div class="flex flex-1 items-center gap-2">
+    <UiAvatar class="h-8 w-8 overflow-hidden rounded-lg">
+      <UiAvatarFallback class="rounded-lg text-black dark:text-white">
+        {{ initials }}
+      </UiAvatarFallback>
+    </UiAvatar>
 
-  <div class="grid flex-1 text-left text-sm leading-tight">
-    <span class="truncate font-medium">{{ user.name }}</span>
-    <span v-if="showEmail" class="truncate text-xs text-muted-foreground">{{
-      user.email
-    }}</span>
+    <div class="grid flex-1 text-left text-sm leading-tight">
+      <span class="truncate font-medium">{{ user.name }}</span>
+      <span v-if="showEmail" class="truncate text-xs text-muted-foreground">{{
+        user.email
+      }}</span>
+    </div>
   </div>
 </template>

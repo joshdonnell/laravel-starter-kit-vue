@@ -10,21 +10,25 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use SensitiveParameter;
 
-final readonly class CreateUserPassword
+final readonly class ResetUserPassword
 {
     /**
-     * @param  array<string, mixed>  $credentials
+     * @param  array<string, mixed>  $attributes
      */
-    public function handle(array $credentials, #[SensitiveParameter] string $password): mixed
+    public function handle(#[SensitiveParameter] array $attributes): string
     {
-        return Password::reset(
-            $credentials,
-            function (User $user) use ($password): void {
+        $status = Password::reset(
+            $attributes,
+            function (User $user, #[SensitiveParameter] string $password): void {
                 $user->update([
                     'password' => Hash::make($password),
                     'remember_token' => Str::random(60),
                 ]);
             }
         );
+
+        assert(is_string($status));
+
+        return $status;
     }
 }

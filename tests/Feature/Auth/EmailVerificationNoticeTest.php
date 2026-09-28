@@ -5,9 +5,7 @@ declare(strict_types=1);
 use App\Models\User;
 
 it('renders verify email page', function (): void {
-    $user = User::factory()->create([
-        'email_verified_at' => null,
-    ]);
+    $user = User::factory()->unverified()->create();
 
     $response = $this->actingAs($user)
         ->fromRoute('home')
@@ -16,7 +14,7 @@ it('renders verify email page', function (): void {
     $response->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('auth/VerifyEmail')
-            ->has('status'));
+            ->where('status', null));
 });
 
 it('redirects verified users to dashboard', function (): void {

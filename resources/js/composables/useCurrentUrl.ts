@@ -1,17 +1,13 @@
 import type { InertiaLinkProps } from '@inertiajs/vue3'
-import type { ComputedRef, DeepReadonly } from 'vue'
 import { toUrl } from '@/lib/utils'
 
 export type UseCurrentUrlReturn = {
-  currentUrl: DeepReadonly<ComputedRef<string>>
   isCurrentUrl: (
     urlToCheck: NonNullable<InertiaLinkProps['href']>,
-    currentUrl?: string,
     startsWith?: boolean,
   ) => boolean
   isCurrentOrParentUrl: (
     urlToCheck: NonNullable<InertiaLinkProps['href']>,
-    currentUrl?: string,
   ) => boolean
   whenCurrentUrl: <T, F = null>(
     urlToCheck: NonNullable<InertiaLinkProps['href']>,
@@ -34,10 +30,9 @@ const currentUrlReactive = computed(
 export function useCurrentUrl(): UseCurrentUrlReturn {
   function isCurrentUrl(
     urlToCheck: NonNullable<InertiaLinkProps['href']>,
-    currentUrl?: string,
     startsWith: boolean = false,
   ) {
-    const urlToCompare = currentUrl ?? currentUrlReactive.value
+    const urlToCompare = currentUrlReactive.value
     const urlString = toUrl(urlToCheck)
 
     const comparePath = (path: string): boolean =>
@@ -58,9 +53,8 @@ export function useCurrentUrl(): UseCurrentUrlReturn {
 
   function isCurrentOrParentUrl(
     urlToCheck: NonNullable<InertiaLinkProps['href']>,
-    currentUrl?: string,
   ) {
-    return isCurrentUrl(urlToCheck, currentUrl, true)
+    return isCurrentUrl(urlToCheck, true)
   }
 
   function whenCurrentUrl(
@@ -72,7 +66,6 @@ export function useCurrentUrl(): UseCurrentUrlReturn {
   }
 
   return {
-    currentUrl: readonly(currentUrlReactive),
     isCurrentUrl,
     isCurrentOrParentUrl,
     whenCurrentUrl,

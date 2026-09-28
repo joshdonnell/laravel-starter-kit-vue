@@ -6,7 +6,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-final class UserPasswordResetRequest extends FormRequest
+final class SendPasswordResetLinkRequest extends FormRequest
 {
     /**
      * @return array<string, array<int, string>>
