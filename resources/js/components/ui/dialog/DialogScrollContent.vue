@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DialogContentEmits, DialogContentProps } from "reka-ui"
+import type { DialogContentEmits, DialogContentProps, PointerDownOutsideEvent } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"
 import { X } from "@lucide/vue"
@@ -30,7 +30,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
           )
         "
         v-bind="{ ...$attrs, ...forwarded }"
-        @pointer-down-outside="(event) => {
+        @pointer-down-outside="(event: PointerDownOutsideEvent) => {
           const originalEvent = event.detail.originalEvent;
           const target = originalEvent.target as HTMLElement;
           if (originalEvent.offsetX > target.clientWidth || originalEvent.offsetY > target.clientHeight) {

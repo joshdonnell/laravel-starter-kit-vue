@@ -30,7 +30,7 @@ defineProps<{
             type="email"
             name="email"
             autocomplete="off"
-            autofocus
+            v-focus
             placeholder="email@example.com"
             @change="validate('email')"
           />

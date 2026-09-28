@@ -12,7 +12,7 @@
   "devDependencies": {
     "@inertiajs/core": "^3.7.1",
     "@laravel/vite-plugin-wayfinder": "^0.1.10",
-    "@types/node": "^26.6.2",
+    "@types/node": "^26.6.3",
     "@vitejs/plugin-vue": "^6.0.9",
     "npm-check-updates": "^23.1.0",
     "playwright": "^1.63.0",
@@ -25,7 +25,7 @@
   "dependencies": {
     "@inertiajs/vue3": "^3.7.1",
     "@laravel/passkeys": "^0.4.0",
-    "@lucide/vue": "^1.47.0",
+    "@lucide/vue": "^1.48.0",
     "@tailwindcss/vite": "^4.3.3",
     "@vueuse/core": "^15.0.0",
     "@vueuse/integrations": "^15.0.0",
@@ -48,9 +48,9 @@
     "vue-sonner": "^2.0.9"
   },
   "optionalDependencies": {
-    "@laravel/multiplex": "^0.4.3",
-    "@rollup/rollup-linux-x64-gnu": "^4.63.4",
-    "@rollup/rollup-win32-x64-msvc": "^4.63.4",
+    "@laravel/multiplex": "^0.4.4",
+    "@rollup/rollup-linux-x64-gnu": "^4.63.5",
+    "@rollup/rollup-win32-x64-msvc": "^4.63.5",
     "@tailwindcss/oxide-linux-x64-gnu": "^4.3.3",
     "@tailwindcss/oxide-win32-x64-msvc": "^4.3.3",
     "lightningcss-linux-x64-gnu": "^1.33.0",

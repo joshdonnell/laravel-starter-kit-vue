@@ -59,8 +59,9 @@ jobs:
           restore-keys: ${{ runner.os }}-pnpm-
 
       - name: Install Dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
-          --no-progress
+        run: |
+          composer install --no-interaction --prefer-dist --optimize-autoloader --no-progress --no-scripts
+          composer run-script post-autoload-dump
 
       - name: Copy Environment File
         run: cp .env.example .env
@@ -102,19 +103,19 @@ jobs:
       - name: Cache Rector
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: /tmp/rector
+          path: tmp/rector
           key: ${{ runner.os }}-rector-${{ hashFiles('composer.lock') }}
           restore-keys: ${{ runner.os }}-rector-
 
       - name: Cache PHPStan
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: /tmp/phpstan
+          path: tmp/phpstan
           key: ${{ runner.os }}-phpstan-${{ hashFiles('composer.lock') }}
           restore-keys: ${{ runner.os }}-phpstan-
 
       - name: Create Cache Directories
-        run: mkdir -p /tmp/rector /tmp/phpstan
+        run: mkdir -p tmp/rector tmp/phpstan
 
       - name: Tests
         run: composer test

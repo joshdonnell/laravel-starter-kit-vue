@@ -15,6 +15,13 @@ void createInertiaApp({
   setup({ el, App, props, plugin }) {
     createApp({ render: () => h(App, props) })
       .use(plugin)
+      .directive('focus', {
+        mounted: (el: HTMLElement, shouldFocus) => {
+          if (shouldFocus.value !== false) {
+            el.focus()
+          }
+        },
+      })
       .mount(el)
   },
   progress: {

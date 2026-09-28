@@ -44,7 +44,7 @@ return RectorConfig::configure()
         laravel: true,
     )
     ->withCache(
-        cacheDirectory: '/tmp/rector',
+        cacheDirectory: __DIR__.'/tmp/rector',
         cacheClass: FileCacheStorage::class,
     )
     ->withSkip([

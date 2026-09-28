@@ -18,4 +18,4 @@ parameters:
 
     level: max
 
-    tmpDir: /tmp/phpstan
+    tmpDir: tmp/phpstan
