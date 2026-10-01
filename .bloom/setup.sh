@@ -21,6 +21,7 @@ SITE="my-app-$(printf '%s' "$BLOOM_WORKSPACE_ID" | tr -cd '[:alnum:]' | cut -c1-
 herd link "$SITE"
 herd secure "$SITE"
 set_env APP_URL "https://$SITE.test"
+echo "https://$SITE.test" > "$BLOOM_URL_FILE"
 
 # Use a SQLite database inside this workspace so the main checkout is untouched.
 # Only create the file if it doesn't exist, so setup can run again.
